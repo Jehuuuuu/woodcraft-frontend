@@ -1,12 +1,72 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import {useRouter} from 'next/navigation';
+import { getCsrfToken, login, register } from '@/utils/api';
+import {
+    Alert,
+    AlertDescription,
+    AlertTitle,
+  } from "@/components/ui/alert"
+
+
 
 export default function Login() {
+    
     const [activeTab, setActiveTab] = useState('customer');
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+
+    const router = useRouter();
+    
+
+    const handleLogin = async (e) => { 
+        e.preventDefault();
+        try {
+            await getCsrfToken();
+            const response = await login(email, password);
+            if (response.success) {
+                router.push('/');  
+            }
+        }catch (error) {
+            setError(error.message);
+        }
+    }
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        try {
+            await getCsrfToken();
+            const response = await register(first_name, last_name, email, password);
+            if (response.success) {
+                const loginResponse = await login(email, password);
+                if(loginResponse.success){
+                    router.push('/');
+                }else{
+                    setError('Login failed');
+                }
+            } else {
+                setError('Registration failed');
+            }
+        } catch (error) {
+            setError(error.message || 'Registration failed. Please try again.');
+        }
+    }
+
+    function AlertMessage(){
+        return (
+           <Alert>
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription> 
+           </Alert>
+        )
+     }
     
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[var(--background)]">
+        <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ">
+           
             <div className="max-w-md w-full space-y-8">
                 <div className="text-center">
                     <h1 className="text-3xl font-serif">
@@ -38,14 +98,14 @@ export default function Login() {
                         Admin
                     </button>
                 </div>
-                
+                {error !== null ? <AlertMessage/> : null } 
                 {/* Customer Login Form */}
                 {activeTab === 'customer' && (
                     <div className="mt-8 bg-white p-8 rounded-lg shadow">
                         <h2 className="text-2xl font-serif font-medium mb-2">Customer Login</h2>
                         <p className="text-sm text-gray-600 mb-6">Enter your email and password to access your account</p>
                         
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleLogin}>
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                                 <input
@@ -54,6 +114,8 @@ export default function Login() {
                                     type="email"
                                     autoComplete="email"
                                     placeholder="you@example.com"
+                                    value={email}
+                                    onChange = {(e) => setEmail(e.target.value)}
                                     required
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                 />
@@ -68,6 +130,8 @@ export default function Login() {
                                     id="password"
                                     name="password"
                                     type="password"
+                                    value = {password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     autoComplete="current-password"
                                     required
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
@@ -92,14 +156,16 @@ export default function Login() {
                         <h2 className="text-2xl font-serif font-medium mb-2">Create Account</h2>
                         <p className="text-sm text-gray-600 mb-6">Fill in your details to create a new account</p>
                         
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleSignup}>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
                                     <input
-                                        id="firstName"
-                                        name="firstName"
+                                        id="first_name"
+                                        name="first_name"
                                         type="text"
+                                        value={first_name}
+                                        onChange={(e) => setFirstName(e.target.value)}
                                         required
                                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                     />
@@ -110,6 +176,8 @@ export default function Login() {
                                         id="lastName"
                                         name="lastName"
                                         type="text"
+                                        value={last_name}
+                                        onChange={(e) => setLastName(e.target.value)}
                                         required
                                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                     />
@@ -123,6 +191,8 @@ export default function Login() {
                                     name="email"
                                     type="email"
                                     autoComplete="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     required
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                 />
@@ -135,6 +205,8 @@ export default function Login() {
                                     name="password"
                                     type="password"
                                     autoComplete="new-password"
+                                    value = {password}
+                                    onChange = {(e) => setPassword(e.target.value)}
                                     required
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                 />
@@ -207,3 +279,4 @@ export default function Login() {
         </div>
     );
 }
+ 

@@ -1,5 +1,6 @@
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import NavigationWrapper from "../components/layouts/NavigationWrapper";
 import Header from "../components/home/Header";
 import Footer from "../components/home/Footer";
 
@@ -22,14 +23,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className}}`}
-      >
-        <Header />
-        <main>
-          {children}
-        </main>
-        <Footer />
+      <body className={`${inter.className}}`}>
+        <NavigationWrapper>
+          <main>{children}</main>
+        </NavigationWrapper>
       </body>
     </html>
   );

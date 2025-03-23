@@ -1,7 +1,36 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
+import {getUser, logout, getCsrfToken} from '@/utils/api';
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+        const response = await getUser();
+        if (response.email){
+          setUser(response);
+        }else{
+          setUser(null);
+        }
+      }
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try{
+      await getCsrfToken();
+      await logout();
+      setUser(null);
+      router.push('/');
+    }catch (error) {
+      console.error('Error during logout:', error);}
+  }
   return (
     <header className="flex justify-between items-center py-4 px-8 md:px-16 bg-white">
       <div className="flex items-center">
@@ -20,6 +49,7 @@ export default function Header() {
       <div className="flex items-center space-x-4">
         <Link href="#" className="text-gray-700 hover:text-[#8B4513]">
           <div className="relative">
+            
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
@@ -31,9 +61,16 @@ export default function Header() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
         </Link>
-        <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors">
-          Login
-        </Link>
+          <p>{user !== null  ? `Welcome, ${user.firstName}`: ""}</p>
+          {user !== null ? (
+            <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors" onClick={handleLogout}>
+              Logout
+            </Link>
+          ) : (
+            <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors">
+              Login
+            </Link>
+          )}
       </div>
     </header>
   );

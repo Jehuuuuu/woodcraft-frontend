@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 export default function HeroSection() {
   return (
-    <section className="py-16 px-8 md:px-16 bg[var(--light-bg)] overflow-hidden">
+    <section className="py-16 px-8 md:px-16 bg-[#fbf9f7] overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="text-center">
           <span className="inline-block px-4 py-1 bg-[#f0e6d9] text-[#8B4513] rounded-full text-sm mb-4">
             Handcrafted with Passion & Precision
           </span>
-          
+        
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium text-[#3c2415] mb-4">
             Timeless Woodcraft
             <span className="block text-[var(--primary-color)]">Artistry for Your Home</span>

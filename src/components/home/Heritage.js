@@ -1,6 +1,6 @@
 export default function Heritage() {
   return (
-    <section className="py-16 px-8 md:px-16 bg-[hsl(30,10%,15%)]">
+    <section className="py-16 px-8 md:px-16 bg-[#faf8f5] ">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div>
           <span className="inline-block text-[#8B4513] mb-2">Our Heritage</span>
