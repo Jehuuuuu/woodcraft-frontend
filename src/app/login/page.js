@@ -8,11 +8,12 @@ import {
     AlertDescription,
     AlertTitle,
   } from "@/components/ui/alert"
-
+import { SyncLoader } from 'react-spinners';
+import { CircleAlert } from "lucide-react";
 
 
 export default function Login() {
-    
+    const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('customer');
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
@@ -21,23 +22,34 @@ export default function Login() {
     const [error, setError] = useState(null);
 
     const router = useRouter();
-    
+    const override = {
+        display: "block",
+        margin: "0 auto",
+        borderColor: "rgba(0, 0, 0, 0.3)",
+        backgroundSize: "100%",
+    };
 
     const handleLogin = async (e) => { 
         e.preventDefault();
+        setLoading(true);
         try {
             await getCsrfToken();
             const response = await login(email, password);
             if (response.success) {
                 router.push('/');  
+            }else{
+                setError('Invalid email or password');
             }
         }catch (error) {
             setError(error.message);
+        }finally{
+            setLoading(false);
         }
     }
     const handleSignup = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             await getCsrfToken();
             const response = await register(first_name, last_name, email, password);
             if (response.success) {
@@ -48,18 +60,28 @@ export default function Login() {
                     setError('Login failed');
                 }
             } else {
-                setError('Registration failed');
+                setError('Email Already Exists');
             }
         } catch (error) {
             setError(error.message || 'Registration failed. Please try again.');
+        } finally {
+            setLoading(false);
         }
     }
 
     function AlertMessage(){
         return (
-           <Alert>
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription> 
+           <Alert className={"bg-red-900"}>
+            <div className = {"flex items-center gap-3"}>
+                <div>
+                    <CircleAlert size={40} strokeWidth={2} color='#ffffff'/>
+                </div>
+                <div>
+                    <AlertTitle className={"text-white text-lg"}>Error</AlertTitle> 
+                    <AlertDescription className={"text-white text-nowrap"}>{error}</AlertDescription>
+                </div>
+                
+            </div>
            </Alert>
         )
      }
@@ -120,7 +142,18 @@ export default function Login() {
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                 />
                             </div>
-                            
+                            {loading && (
+                                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] w-screen h-screen">
+                                    <SyncLoader
+                                        color="#8B4513"
+                                        loading={loading}
+                                        cssOverride={override}
+                                        size={12}
+                                        aria-label="Loading Spinner"
+                                        data-testid="loader"
+                                    />
+                                </div>
+                            )}
                             <div>
                                 <div className="flex items-center justify-between">
                                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
@@ -197,7 +230,18 @@ export default function Login() {
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                 />
                             </div>
-                            
+                            {loading && (
+                                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] w-screen h-screen">
+                                    <SyncLoader
+                                        color="#8B4513"
+                                        loading={loading}
+                                        cssOverride={override}
+                                        size={12}
+                                        aria-label="Loading Spinner"
+                                        data-testid="loader"
+                                    />
+                                </div>
+                            )}
                             <div>
                                 <label htmlFor="signupPassword" className="block text-sm font-medium text-gray-700">Password</label>
                                 <input
@@ -242,7 +286,18 @@ export default function Login() {
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
                                 />
                             </div>
-                            
+                            {loading && (
+                                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] w-screen h-screen">
+                                    <SyncLoader
+                                        color="#8B4513"
+                                        loading={loading}
+                                        cssOverride={override}
+                                        size={12}
+                                        aria-label="Loading Spinner"
+                                        data-testid="loader"
+                                    />
+                                </div>
+                            )}
                             <div>
                                 <div className="flex items-center justify-between">
                                     <label htmlFor="adminPassword" className="block text-sm font-medium text-gray-700">Password</label>
