@@ -91,3 +91,21 @@ export const generate3dModel = async (design_description, decoration_type, mater
         throw error;
     }
 }
+
+export const fetchProducts = async () => {
+    try {
+        return fetchWithCredentials('/products');
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error;
+    }
+}
+
+export const fetchCategories = async() => {
+    try {
+        return fetchWithCredentials('/categories'); 
+    }catch (error) {    
+        console.error('Error fetching categories:', error);
+        throw error;
+    }
+}
