@@ -79,3 +79,15 @@ export const getUser = async () => {
         console.error('Error fetching user:', error);
         throw error;}
 }
+
+export const generate3dModel = async (design_description, decoration_type, material, height, width, thickness) => {
+   try{
+        return fetchWithCredentials('/generate_3d_model', {
+            method: "POST",
+            body: JSON.stringify({ design_description, decoration_type, material, height, width, thickness }), 
+        })
+    }catch (error){
+        console.error('Error generating 3d model:', error);
+        throw error;
+    }
+}

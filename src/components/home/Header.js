@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {getUser, logout, getCsrfToken} from '@/utils/api';
 import { useRouter } from "next/navigation";
+import {toast} from 'sonner'
 
 export default function Header() {
   const [user, setUser] = useState(null);
@@ -28,6 +29,7 @@ export default function Header() {
       await logout();
       setUser(null);
       router.push('/');
+      toast.success('You have been logged out') 
     }catch (error) {
       console.error('Error during logout:', error);}
   }
@@ -41,7 +43,7 @@ export default function Header() {
       
       <nav className="hidden md:flex space-x-6">
         <Link href="#" className="text-gray-700 hover:text-[#8B4513]">Catalog</Link>
-        <Link href="#" className="text-gray-700 hover:text-[#8B4513]">3D Configurator</Link>
+        <Link href="/configurator" className="text-gray-700 hover:text-[#8B4513]">3D Configurator</Link>
         <Link href="/about" className="text-gray-700 hover:text-[#8B4513]">About</Link>
         <Link href="/contact" className="text-gray-700 hover:text-[#8B4513]">Contact</Link>
       </nav>

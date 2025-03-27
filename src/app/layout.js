@@ -1,8 +1,7 @@
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import NavigationWrapper from "../components/layouts/NavigationWrapper";
-import Header from "../components/home/Header";
-import Footer from "../components/home/Footer";
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,6 +25,7 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className}}`}>
         <NavigationWrapper>
           <main>{children}</main>
+          <Toaster richColors/>
         </NavigationWrapper>
       </body>
     </html>

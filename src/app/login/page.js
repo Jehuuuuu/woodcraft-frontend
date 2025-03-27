@@ -10,6 +10,7 @@ import {
   } from "@/components/ui/alert"
 import { SyncLoader } from 'react-spinners';
 import { CircleAlert } from "lucide-react";
+import { toast } from "sonner"
 
 
 export default function Login() {
@@ -26,7 +27,6 @@ export default function Login() {
         display: "block",
         margin: "0 auto",
         borderColor: "rgba(0, 0, 0, 0.3)",
-        backgroundSize: "100%",
     };
 
     const handleLogin = async (e) => { 
@@ -37,6 +37,7 @@ export default function Login() {
             const response = await login(email, password);
             if (response.success) {
                 router.push('/');  
+                toast.success("Login successful");
             }else{
                 setError('Invalid email or password');
             }
@@ -56,6 +57,7 @@ export default function Login() {
                 const loginResponse = await login(email, password);
                 if(loginResponse.success){
                     router.push('/');
+                    toast.success("Registration successful");
                 }else{
                     setError('Login failed');
                 }
