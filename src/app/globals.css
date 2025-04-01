@@ -7,7 +7,7 @@
   --primary-color: rgb(139,90, 43);
   --white: #FFFFFF;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #fbf9f7;
   --foreground: oklch(0.147 0.004 49.25);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.147 0.004 49.25);

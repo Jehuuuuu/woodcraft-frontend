@@ -46,7 +46,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Contact Information & Form Section */}
-      <section className="py-16 px-8 md:px-16 bg-white">
+      <section className="py-16 px-8 md:px-16 ">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Contact Information */}
           <div>
