@@ -2,7 +2,8 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import NavigationWrapper from "../components/layouts/NavigationWrapper";
 import { Toaster } from "@/components/ui/sonner"
-import { Suspense } from "react";
+import AuthProvider from "@/utils/authentication";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -24,10 +25,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className}}`}>
         
-          <NavigationWrapper>
-            <main>{children}</main>
-            <Toaster richColors/>
-          </NavigationWrapper>
+          <AuthProvider>
+            <NavigationWrapper>
+              <main>{children}</main>
+              <Toaster richColors/>
+            </NavigationWrapper>
+          </AuthProvider>
         
       </body>
     </html>

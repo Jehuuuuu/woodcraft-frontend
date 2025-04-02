@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import {useRouter} from 'next/navigation';
 import { getCsrfToken, login, register } from '@/utils/api';
 import {
@@ -11,11 +11,12 @@ import {
 import { SyncLoader } from 'react-spinners';
 import { CircleAlert } from "lucide-react";
 import { toast } from "sonner"
-
+import { useAuth } from "@/utils/authentication";
 
 export default function Login() {
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('customer');
+    const {user, setUser} = useAuth();
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -36,6 +37,7 @@ export default function Login() {
             await getCsrfToken();
             const response = await login(email, password);
             if (response.success) {
+                setUser(response);
                 router.push('/');  
                 toast.success("Login successful");
             }else{

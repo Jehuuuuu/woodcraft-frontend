@@ -7,21 +7,11 @@ import {getUser, logout, getCsrfToken} from '@/utils/api';
 import { useRouter } from "next/navigation";
 import {toast} from 'sonner'
 import { ShoppingCart } from 'lucide-react';
-export default function Header() {
-  const [user, setUser] = useState(null);
-  const router = useRouter();
+import { useAuth } from "@/utils/authentication";
 
-  useEffect(() => {
-    const fetchUser = async () => {
-        const response = await getUser();
-        if (response.email){
-          setUser(response);
-        }else{
-          setUser(null);
-        }
-      }
-    fetchUser();
-  }, []);
+export default function Header() {
+  const {user, setUser} = useAuth();
+  const router = useRouter();
 
   const handleLogout = async () => {
     try{
