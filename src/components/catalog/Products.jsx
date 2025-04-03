@@ -168,7 +168,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
             <div className="mb-6">
               <h3 className="text-base font-medium mb-2">Materials</h3>
               <div className="space-y-2">
-        {["Oak", "Walnut", "Pine", "Mahogany"].map(material => (
+        {["Oak", "Walnut", "Maple", "Pine", "Mahogany"].map(material => (
           <div 
             key={material} 
             className={`cursor-pointer py-1 px-2 rounded hover:bg-gray-100 ${
@@ -235,7 +235,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
               <div key={product.id} className="group relative">
                 <div className="relative aspect-square overflow-hidden rounded-md bg-gray-100">
                   <Image
-                    src={product.image ? `http://localhost:8000${product.image}` : "/placeholder.svg"}
+                    src={product.image ? `https://woodcraft-backend.onrender.com${product.image}` : "/placeholder.svg"}
                     alt={product.name}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
