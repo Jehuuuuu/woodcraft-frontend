@@ -18,10 +18,10 @@ import { ErrorBoundary } from "react-error-boundary"
 import { LoaderCircle, Eye, ShoppingCart } from 'lucide-react';
 import Model from "@/components/configurator/Model"
 import {useRouter} from 'next/navigation'
-import { useAuth } from "@/utils/authentication";
 import {getCookie, setCookie, deleteCookie} from 'cookies-next/client';
+import {toast} from "sonner";
 
-export default function ConfiguratorClient({initialUser}){
+export default function ConfiguratorClient(){
     const [formData, setFormData] = useState({
         material: "oak",
         decoration_type: "minimal",
@@ -30,20 +30,13 @@ export default function ConfiguratorClient({initialUser}){
         thickness: 15,
         design_description: "",
       })
-      const router = useRouter();
-      const {user, setUser} = useAuth();
       const [error, setError] = useState(null);
       const [loading, setLoading] = useState(false);
       const [modelUrl, setModelUrl] = useState(null);
       const [modelImage, setModelImage] = useState(null);
       const [showPreview, setShowPreview] = useState(true);
       const [loadingCookies, setLoadingCookies] = useState(true)
-      // useEffect(() => {
-      //   if (initialUser) {
-      //     setUser(initialUser);
-      //   }
-      // }, [initialUser, setUser]);
-      
+
       useEffect(() => {
         const savedModelUrl = getCookie('modelUrl');
         const savedModelImage = getCookie('modelImage');
@@ -51,6 +44,7 @@ export default function ConfiguratorClient({initialUser}){
 
         if (savedModelUrl) {
           setModelUrl(savedModelUrl); 
+          setShowPreview(true)
         }
         if (savedModelImage) {
           setModelImage(savedModelImage); 
@@ -58,18 +52,24 @@ export default function ConfiguratorClient({initialUser}){
         if (savedFormData) {
           try {
             const parsedFormData = JSON.parse(savedFormData);
-            setFormData(prevFormData => ({
-              ...prevFormData,
-              ...parsedFormData  
-            }));
+            if (!parsedFormData.material) {
+              parsedFormData.material = "oak";
+            }
             
+            const updatedFormData = {
+              ...formData,  
+              ...parsedFormData,
+            };
+
+            setFormData(updatedFormData);
+
           } catch(error) {
-            console.error("Error parsing formData from cookies:", error);
           }
         }
         setLoadingCookies(false)
         // if (savedModelUrl) {
-        //   deleteCookie('modelURL'); 
+        //   deleteCookie('modelURL')
+        //   setModelUrl(null); 
         // }
         // if (savedModelImage) {
         //   deleteCookie('modelImage'); 
@@ -107,44 +107,29 @@ export default function ConfiguratorClient({initialUser}){
               setCookie('modelImage', modelData.thumbnail, { maxAge: 60 * 60 * 24, path: '/' });
             }
             setCookie('formData', JSON.stringify(formData), { maxAge: 60 * 60 * 24, path: '/' });
-        
+            console.log("FormSubmitted:", formData)
           } else {
-            const errorMessage = response.error || "Failed to generate model";
-            setError(errorMessage);
-            toast.error(errorMessage) 
+            if (error.message && error.message.includes('timeout')) {
+              const timeoutMessage = "Connection to 3D model service timed out. Please try again later.";
+              setError(timeoutMessage);
+              toast.error(timeoutMessage);
+            } else {
+              const errorMessage = error.message || "An unexpected error occurred";
+              setError(errorMessage);
+              toast.error(errorMessage);
+            }
           }
         } catch (error) {
           console.error("Error during model generation:", error);
           const errorMessage = error.message || "An unexpected error occurred";
           setError(errorMessage);
           toast.error(errorMessage) 
+          
         } 
         finally {
           setLoading(false);
           document.getElementById('submit').disabled=false;
         }
-      }
-      if (!user){
-        return (
-            <div className="flex justify-center container bg-[var(--background)] py-8">
-            <Card>
-              <CardContent>
-                <div className="flex flex-col items-center justify-center">
-                  <h2 className="text-2xl font-bold mb-2">You are not logged in</h2>
-                  <p className="text-base max-w-150 text-center">Our 3D Product Configurator allows you to customize wooden handicrafts with interactive controls. Please log in to access this feature.</p>
-                  <div className = "grid grid-cols-2 gap-2">
-                    <Button className="mt-4 bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors" onClick={() => router.push("/login")}>
-                      Login
-                    </Button>
-                    <Button className="mt-4 border border-[#8B4513] bg-white text-[#8B4513] hover:bg-[#f0e6d9] transition-colors" onClick={() => router.push("/")}>
-                      Back to Home
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div> 
-          )
       }
       return(
         <div className="container py-8 px-16 bg-[var(--background)]">
@@ -250,7 +235,15 @@ export default function ConfiguratorClient({initialUser}){
                         </div>
                       </Html>
                     ) : (
-                      <Model material={formData.material} scale={5} position={[0, -1, 0]} modelUrl={modelUrl} />
+                      <Model 
+                        material={formData.material} 
+                        width={formData.width}
+                        height={formData.height}
+                        thickness={formData.thickness}
+                        scale={5} 
+                        position={[0, -1, 0]} 
+                        modelUrl={modelUrl} 
+                      />
                     )}
                   </ErrorBoundary>
                   <ContactShadows position={[0, -1.5, 0]} opacity={0.4} scale={10} blur={1.5} far={2} />
@@ -309,9 +302,17 @@ export default function ConfiguratorClient({initialUser}){
                           <Label htmlFor="material" className="text-base">
                             Wood Material
                           </Label>
-                          <Select value={formData.material} onValueChange={(value) => handleChange("material", value)} disabled={loadingCookies}>
+                          <Select 
+                            key={formData.material}
+                                defaultValue={formData.material}
+                                value={formData.material} 
+                                onValueChange={(value) => handleChange("material", value)} 
+                                disabled={loadingCookies}
+                              >
                             <SelectTrigger className="mt-1.5 w-full border-[var(--border-color)] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]">
-                              <SelectValue placeholder="Select material" />
+                            <SelectValue placeholder="Select material">
+                      {formData.material ? formData.material.charAt(0).toUpperCase() + formData.material.slice(1) : "Select material"}
+                    </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="oak">Oak</SelectItem>

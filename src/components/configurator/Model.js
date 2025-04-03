@@ -24,7 +24,7 @@ export default function Model({ material, modelUrl, ...props }) {
       
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 1500);
       
       return () => clearTimeout(timer);
     }, [camera, modelUrl]);
@@ -39,10 +39,22 @@ export default function Model({ material, modelUrl, ...props }) {
           else if (material === "maple") node.material.color.set("#e8d4ad");
           else if (material === "mahogany") node.material.color.set("#C04000");
           else if (material === "pine") node.material.color.set("#d9c7a0");
+          
+          // Apply scaling based on dimensions if they exist
+          if (props.width && props.height && props.thickness) {
+            // Normalize dimensions to reasonable scale factors
+            const baseSize = 30; // baseline size in cm
+            const scaleX = props.width / baseSize;
+            const scaleY = props.height / baseSize;
+            const scaleZ = props.thickness / baseSize;
+            
+            // Apply non-uniform scaling to the mesh
+            node.scale.set(scaleX, scaleY, scaleZ);
+          }
         }
       });
       return cloned;
-    }, [scene, material]);
+    }, [scene, material, props.width, props.height, props.thickness]);
   
     if (isLoading) {
       return (

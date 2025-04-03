@@ -5,7 +5,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Our Story Section */}
-      <section className="py-16 px-8 md:px-16 bg-white">
+      <section className="py-22 px-8 md:px-16 bg-white">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="inline-block text-[#8B4513] mb-2">Our Journey</span>

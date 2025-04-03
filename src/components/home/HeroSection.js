@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function HeroSection() {
   return (
     <section className="py-16 px-8 md:px-16 bg-[#fbf9f7] overflow-hidden">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto pt-10 ">
         <div className="text-center">
           <span className="inline-block px-4 py-1 bg-[#f0e6d9] text-[#8B4513] rounded-full text-sm mb-4">
             Handcrafted with Passion & Precision
@@ -15,7 +15,7 @@ export default function HeroSection() {
           </h1>   
           
           <p className="text-brown-700 py-2 mb-5 max-w-2xl text-lg  mx-auto">
-            Discover our collection of bespoke wooden furniture and decor,
+            Discover our collection of bespoke wooden decorations,
             each piece telling a unique story of craftsmanship and heritage.
           </p>
           

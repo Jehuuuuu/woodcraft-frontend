@@ -6,6 +6,7 @@ export const AuthContext = createContext(null)
 
 export default function AuthProvider({children}) {
     const [user, setUser] = useState(null)
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     useEffect(() => {
         const fetchUser = async() => {
             try{
@@ -18,13 +19,15 @@ export default function AuthProvider({children}) {
             }catch (error) {
                 console.error('Error fetching user:', error);
                 setUser(null);
+            }finally {
+                setIsAuthenticated(true);
             }
         }
         fetchUser();
     }, []);
     return (
         <AuthContext.Provider value = {{user, setUser}}>
-            {children}
+           {isAuthenticated && children}
         </AuthContext.Provider>
     )
 }

@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 export default function ProductCatalog({ products = [], categories = []}) {
   const [favorites, setFavorites] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedMaterial, setSelectedMaterial] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [priceRange, setPriceRange] = useState([0]);
   const [inStock, setInStock] = useState(false);
@@ -19,37 +20,37 @@ export default function ProductCatalog({ products = [], categories = []}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   
-  const maxPrice = 1000; // Set your max price here
+  const maxPrice = 10000; 
 
-  // Update filtered products when filters change
   useEffect(() => {
     let filtered = [...products];
     
-    // Filter by category
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(product => 
-        selectedCategories.includes(product.category.id)
+        selectedCategories.includes(product.category)
       );
     }
     
-    // Filter by price
+    if (selectedMaterial.length > 0) {
+      filtered = filtered.filter(product =>
+        selectedMaterial.includes(product.default_material)
+      );
+    }
+
     if (priceRange[0] > 0) {
       filtered = filtered.filter(product => 
-        parseFloat(product.price) <= (priceRange[0] / 100) * maxPrice
+        parseFloat(product.price) >= (priceRange[0] / 100) * maxPrice
       );
     }
     
-    // Filter by stock
     if (inStock) {
       filtered = filtered.filter(product => product.stock > 0);
     }
     
-    // Filter by sale
     if (onSale) {
       filtered = filtered.filter(product => product.originalPrice);
     }
     
-    // Filter by search
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(product => 
@@ -59,8 +60,8 @@ export default function ProductCatalog({ products = [], categories = []}) {
     }
     
     setFilteredProducts(filtered);
-  }, [selectedCategories, priceRange, inStock, onSale, searchQuery, products]);
-
+  }, [selectedCategories, priceRange, inStock, onSale, searchQuery, selectedMaterial, products]);
+  
   const toggleFavorite = (productId) => {
     setFavorites(prev => 
       prev.includes(productId) 
@@ -77,6 +78,14 @@ export default function ProductCatalog({ products = [], categories = []}) {
     );
   };
 
+  const toggleMaterial = (material) => {
+    setSelectedMaterial(prev =>
+      prev.includes(material)
+       ? prev.filter(m => m !== material)
+        : [...prev, material]
+    );
+  }
+  
   const resetFilters = () => {
     setSelectedCategories([]);
     setPriceRange([0]);
@@ -88,7 +97,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
   return (
       <div className="flex flex-col md:flex-row gap-6">
         {/* Mobile filter toggle */}
-        <div className="md:hidden flex justify-between items-center mb-4">
+        <div className="gap-2 md:hidden flex justify-between items-center mb-4">
           <Button 
             variant="outline" 
             onClick={() => setShowFilters(!showFilters)}
@@ -100,7 +109,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
             placeholder="Search products..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-[200px]"
+            className="max-w-[300px] "
           />
         </div>
 
@@ -159,10 +168,17 @@ export default function ProductCatalog({ products = [], categories = []}) {
             <div className="mb-6">
               <h3 className="text-base font-medium mb-2">Materials</h3>
               <div className="space-y-2">
-                <div className="cursor-pointer py-1 px-2 rounded hover:bg-gray-100">Oak</div>
-                <div className="cursor-pointer py-1 px-2 rounded hover:bg-gray-100">Walnut</div>
-                <div className="cursor-pointer py-1 px-2 rounded hover:bg-gray-100">Pine</div>
-                <div className="cursor-pointer py-1 px-2 rounded hover:bg-gray-100">Mahogany</div>
+        {["Oak", "Walnut", "Pine", "Mahogany"].map(material => (
+          <div 
+            key={material} 
+            className={`cursor-pointer py-1 px-2 rounded hover:bg-gray-100 ${
+              selectedMaterial.includes(material) ? 'bg-gray-100 font-medium' : ''
+            }`}
+            onClick={() => toggleMaterial(material)}
+          >
+            {material}
+          </div>
+        ))}
               </div>
             </div>
             
@@ -195,12 +211,12 @@ export default function ProductCatalog({ products = [], categories = []}) {
         {/* Main content */}
         <div className="flex-1">
           {/* Desktop search and view options */}
-          <div className="hidden md:flex justify-between items-center mb-6">
+          <div className="hidden md:flex items-center mb-6">
             <Input 
               placeholder="Search products..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="max-w-[90%]"
+              className="max-w-[100%] mr-4"
             />
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="border-gray-300">
@@ -219,7 +235,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
               <div key={product.id} className="group relative">
                 <div className="relative aspect-square overflow-hidden rounded-md bg-gray-100">
                   <Image
-                    src={product.image || "/placeholder.svg"}
+                    src={product.image ? `http://localhost:8000${product.image}` : "/placeholder.svg"}
                     alt={product.name}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
@@ -241,7 +257,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
                     variant="ghost"
                     size="icon"
                     className={`absolute top-2 right-2 rounded-full bg-white/80 p-1.5 backdrop-blur-sm transition-colors hover:bg-white ${
-                      favorites.includes(product.id) ? 'text-red-500' : 'text-gray-700'
+                      favorites.includes(product.id) ? 'text-[var(--primary-color)]' : 'text-gray-700'
                     }`}
                     onClick={() => toggleFavorite(product.id)}
                   >
