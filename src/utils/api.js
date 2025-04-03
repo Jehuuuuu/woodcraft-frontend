@@ -19,6 +19,24 @@ const fetchWithCredentials = async (url, options = {}) => {
     }
 };
 
+// New function for proxied API calls through Next.js API routes
+const fetchWithProxy = async (proxyEndpoint, body, method = "POST") => {
+    try {
+        const res = await fetch(`/api/${proxyEndpoint}`, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error(`Error fetching with proxy (${proxyEndpoint}):`, error);
+        throw error;
+    }
+};
+
 export const getCsrfToken = async () => {
     try {
         return fetchWithCredentials('/set-csrf-token');
@@ -83,10 +101,15 @@ export const getUser = async () => {
 
 export const generate3dModel = async (design_description, decoration_type, material, height, width, thickness) => {
    try{
-        return fetchWithCredentials('/generate_3d_model', {
-            method: "POST",
-            body: JSON.stringify({ design_description, decoration_type, material, height, width, thickness }), 
-        })
+        // Use the proxy endpoint instead of direct API call
+        return fetchWithProxy('proxy-model-generation', { 
+            design_description, 
+            decoration_type, 
+            material, 
+            height, 
+            width, 
+            thickness 
+        });
     }catch (error){
         console.error('Error generating 3d model:', error);
         throw error;
