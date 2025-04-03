@@ -10,9 +10,20 @@ export async function POST(request) {
       body: JSON.stringify(body),
     });
     
-    const data = await response.json();
+    // Check content type to determine how to handle the response
+    const contentType = response.headers.get('content-type');
+    let responseData;
     
-    return new Response(JSON.stringify(data), {
+    if (contentType && contentType.includes('application/json')) {
+      // Handle JSON response
+      responseData = await response.json();
+    } else {
+      // Handle text response
+      const textData = await response.text();
+      responseData = { message: textData, isError: !response.ok };
+    }
+    
+    return new Response(JSON.stringify(responseData), {
       status: response.status,
       headers: {
         'Content-Type': 'application/json',
@@ -20,7 +31,10 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error('Error proxying model generation request:', error);
-    return new Response(JSON.stringify({ error: 'Failed to proxy request' }), {
+    return new Response(JSON.stringify({ 
+      error: 'Failed to proxy request', 
+      message: error.message 
+    }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
