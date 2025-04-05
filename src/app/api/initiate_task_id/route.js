@@ -1,14 +1,7 @@
-export const config = {
-  maxDuration: 60, // Increase the timeout to 60 seconds (only works on certain Vercel plans)
-};
-
 export async function POST(request) {
   try {
     const body = await request.json();
-    
-    console.log("Proxying model generation request to backend...");
-    
-    const response = await fetch('https://woodcraft-backend.onrender.com/api/generate_3d_model', {
+    const response = await fetch('http://localhost:8000/api/initiate_task_id', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

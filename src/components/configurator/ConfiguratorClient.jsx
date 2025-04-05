@@ -13,11 +13,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { getCsrfToken, generate3dModel } from "@/utils/api"
+import { getCsrfToken, initiateModelGeneration, checkTaskStatus } from "@/utils/api"
 import { ErrorBoundary } from "react-error-boundary"
 import { LoaderCircle, Eye, ShoppingCart } from 'lucide-react';
 import Model from "@/components/configurator/Model"
-import {useRouter} from 'next/navigation'
 import {getCookie, setCookie, deleteCookie} from 'cookies-next/client';
 import {toast} from "sonner";
 
@@ -32,10 +31,10 @@ export default function ConfiguratorClient(){
       })
       const [error, setError] = useState(null);
       const [loading, setLoading] = useState(false);
+      const [modelStatus, setModelStatus] = useState(null);
       const [modelUrl, setModelUrl] = useState(null);
       const [modelImage, setModelImage] = useState(null);
       const [showPreview, setShowPreview] = useState(true);
-      const [loadingCookies, setLoadingCookies] = useState(true)
 
       useEffect(() => {
         const savedModelUrl = getCookie('modelUrl');
@@ -66,7 +65,6 @@ export default function ConfiguratorClient(){
           } catch(error) {
           }
         }
-        setLoadingCookies(false)
         // if (savedModelUrl) {
         //   deleteCookie('modelURL')
         //   setModelUrl(null); 
@@ -88,49 +86,64 @@ export default function ConfiguratorClient(){
       const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
+        setModelStatus("Generating your model...");
         setError(null)
         setShowPreview(true)
         document.getElementById('submit').disabled=true;
         try {
           await getCsrfToken();
-          const response = await generate3dModel(formData.design_description, formData.decoration_type, formData.material, formData.height, formData.width, formData.thickness);
-          
-          if (response.success) {
-            const modelData = response.model_data
-            if (modelData?.rendered_model) {
-              setModelUrl(modelData.rendered_model);
-              setCookie('modelUrl', modelData.rendered_model, { maxAge: 60 * 60 * 24, path: '/' });
-              toast.success("Model generated successfully")
-            }
-            if (modelData?.thumbnail) {
-              setModelImage(modelData.thumbnail);
-              setCookie('modelImage', modelData.thumbnail, { maxAge: 60 * 60 * 24, path: '/' });
-            }
-            setCookie('formData', JSON.stringify(formData), { maxAge: 60 * 60 * 24, path: '/' });
-            console.log("FormSubmitted:", formData)
-          } else {
-            if (error.message && error.message.includes('timeout')) {
-              const timeoutMessage = "Connection to 3D model service timed out. Please try again later.";
-              setError(timeoutMessage);
-              toast.error(timeoutMessage);
-            } else {
-              const errorMessage = error.message || "An unexpected error occurred";
-              setError(errorMessage);
-              toast.error(errorMessage);
-            }
+          const response = await initiateModelGeneration(formData.design_description, formData.decoration_type, formData.material, formData.height, formData.width, formData.thickness);
+
+          if (!response.success){
+            toast.error(response.message);
+            setError(response.message);
+            setLoading(false);
+            document.getElementById('submit').disabled = false;
+            return;
           }
-        } catch (error) {
-          console.error("Error during model generation:", error);
-          const errorMessage = error.message || "An unexpected error occurred";
-          setError(errorMessage);
-          toast.error(errorMessage) 
-          
-        } 
-        finally {
-          setLoading(false);
-          document.getElementById('submit').disabled=false;
+          const taskId = response.task_id;
+          let pollCount = 0;
+          const maxPolls = 50;
+
+          const pollTaskStatus = setInterval(
+            async () => {
+              pollCount++;
+              if (pollCount > maxPolls) {
+                clearInterval(pollTaskStatus);
+                setError("Model generation is taking longer than expected. Please try again later.");
+                setLoading(false);
+                document.getElementById('submit').disabled = false;
+                return;
+              }
+
+              const statusResponse = await checkTaskStatus(taskId);
+
+              if (statusResponse.task_status === 'Success') {
+                  clearInterval(pollTaskStatus);
+                  const modelData = statusResponse.data
+                  setModelUrl(modelData.model_url);
+                  setModelImage(modelData.thumbnail_url);
+                  setCookie('modelUrl', modelData.model_url, { maxAge: 60 * 60 * 24, path: '/' });
+                  setCookie('modelImage', modelData.thumbnail_url, { maxAge: 60 * 60 * 24, path: '/' });
+                  setCookie('formData', JSON.stringify(formData), { maxAge: 60 * 60 * 24, path: '/' });
+                  setLoading(false);
+                  document.getElementById('submit').disabled = false;
+                  setModelStatus("Model Generation Complete");
+                  toast.success("Model generation complete.");
+              }else if (statusResponse.task_status === 'Generating') {
+                setModelStatus(statusResponse.message || "Generating your model...");
+              }
+            }, 5000)} 
+            catch (error) {
+            console.error("Error during model generation:", error);
+            const errorMessage = "An unexpected error occurred";
+            setError(errorMessage);
+            toast.error(errorMessage);
+            setLoading(false);
+            document.getElementById('submit').disabled = false;
+          } 
         }
-      }
+      
       return(
         <div className="container py-8 px-16 bg-[var(--background)]">
              <div className="mb-5">
@@ -206,7 +219,7 @@ export default function ConfiguratorClient(){
                   <ErrorBoundary 
                     fallback={
                       <Html position={[0, 0, 0]} center>
-                        <div className="bg-white/80 p-4 rounded-md shadow-md text-center">
+                        <div className=" p-4 border-0 text-center w-[100vw]">
                           <p className="text-red-600 font-medium mb-2">Failed to load 3D model</p>
                           <button 
                             className="px-3 py-1 bg-[var(--primary-color)] text-white rounded-md hover:bg-[var(--primary-color)]/80"
@@ -232,6 +245,9 @@ export default function ConfiguratorClient(){
                             aria-label="Loading Spinner"
                             data-testid="loader"
                           />
+                        </div>
+                        <div className="w-[100vw] text-center">
+                          <p>{modelStatus}</p>
                         </div>
                       </Html>
                     ) : (
@@ -307,7 +323,6 @@ export default function ConfiguratorClient(){
                                 defaultValue={formData.material}
                                 value={formData.material} 
                                 onValueChange={(value) => handleChange("material", value)} 
-                                disabled={loadingCookies}
                               >
                             <SelectTrigger className="mt-1.5 w-full border-[var(--border-color)] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]">
                             <SelectValue placeholder="Select material">
@@ -502,7 +517,7 @@ export default function ConfiguratorClient(){
           
         </div>
       );
-}
+    };
 const getMaterialPrice = (material) => {
     const prices = {
       oak: 180,     // Premium hardwood

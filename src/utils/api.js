@@ -1,5 +1,7 @@
-// const API_URL = "http://localhost:8000/api";  
-const API_URL = "https://woodcraft-backend.onrender.com/api";  
+import { serializeUseCacheCacheStore } from "next/dist/server/resume-data-cache/cache-store";
+
+const API_URL = "http://localhost:8000/api";  
+// const API_URL = "https://woodcraft-backend.onrender.com/api";  
 
 const fetchWithCredentials = async (url, options = {}) => {
     try{
@@ -20,7 +22,7 @@ const fetchWithCredentials = async (url, options = {}) => {
 };
 
 // New function for proxied API calls through Next.js API routes
-const fetchWithProxy = async (proxyEndpoint, body, method = "POST") => {
+const fetchWithProxy = async (proxyEndpoint, body, method) => {
     try {
         const res = await fetch(`/api/${proxyEndpoint}`, {
             method,
@@ -99,21 +101,42 @@ export const getUser = async () => {
         throw error;}
 }
 
-export const generate3dModel = async (design_description, decoration_type, material, height, width, thickness) => {
+export const initiateModelGeneration = async (design_description, decoration_type, material, height, width, thickness) => {
    try{
-        // Use the proxy endpoint instead of direct API call
-        return fetchWithProxy('proxy-model-generation', { 
-            design_description, 
-            decoration_type, 
-            material, 
-            height, 
-            width, 
-            thickness 
-        });
+        const response = await fetchWithProxy('/initiate_task_id', {
+            design_description,
+            decoration_type,
+            material,
+            height,
+            width,
+            thickness,
+        }, 'POST');
+        return {
+            success: response.success,
+            message: response.message,
+            task_id: response.task_id,
+        }
     }catch (error){
         console.error('Error generating 3d model:', error);
         throw error;
     }
+}
+
+export const checkTaskStatus = async (task_id) => {
+   try {
+        // Use GET with query parameters instead of POST with body
+        const response = await fetch(`/api/get_task_status?task_id=${task_id}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const data = await response.json();
+        return data;
+   } catch (error) {
+        console.error('Error checking task status:', error);
+        throw error;
+   }
 }
 
 export const fetchProducts = async () => {

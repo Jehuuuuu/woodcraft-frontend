@@ -8,7 +8,7 @@ export default function Model({ material, modelUrl, ...props }) {
     const [isLoading, setIsLoading] = useState(true);
     const defaultModelUrl = "/assets/3d/sample_model.glb";  
     useGLTF.preload(defaultModelUrl);
-    // Use a proxy URL for external models to avoid CORS issues
+    
     const proxyUrl = modelUrl ? `/api/proxy-model?url=${encodeURIComponent(modelUrl)}` : defaultModelUrl;
     
     const { scene } = useGLTF(proxyUrl, true, undefined, () => {
