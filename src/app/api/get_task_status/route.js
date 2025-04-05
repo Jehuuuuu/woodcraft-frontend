@@ -16,7 +16,7 @@ export async function GET(request) {
       });
     }
     
-    const response = await fetch(`http://localhost:8000/api/get_task_status/${task_id}`, {
+    const response = await fetch(`https://woodcraft-backend.onrender.com/api/get_task_status/${task_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

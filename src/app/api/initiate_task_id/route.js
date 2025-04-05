@@ -1,7 +1,7 @@
 export async function POST(request) {
   try {
     const body = await request.json();
-    const response = await fetch('http://localhost:8000/api/initiate_task_id', {
+    const response = await fetch('https://woodcraft-backend.onrender.com/api/initiate_task_id', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
