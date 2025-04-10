@@ -145,8 +145,8 @@ export default function ConfiguratorClient(){
         }
       
       return(
-        <div className="container py-8 px-16 bg-[var(--background)]">
-             <div className="mb-5">
+        <div className="container py-22 px-8 bg-[var(--background)] lg:px-16">
+            <div className="mb-5">
             <h2 className="text-2xl font-bold mb-3">How It Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card className="border border-[var(--primary-color)]">
@@ -246,7 +246,7 @@ export default function ConfiguratorClient(){
                             data-testid="loader"
                           />
                         </div>
-                        <div className="w-[100vw] text-center">
+                        <div className="w-[100vw] text-center mt-4">
                           <p>{modelStatus}</p>
                         </div>
                       </Html>
@@ -257,7 +257,7 @@ export default function ConfiguratorClient(){
                         height={formData.height}
                         thickness={formData.thickness}
                         scale={5} 
-                        position={[0, -1, 0]} 
+                        position={[0, 0.5, 0]} 
                         modelUrl={modelUrl} 
                       />
                     )}

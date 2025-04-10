@@ -13,7 +13,7 @@ export default function ConfiguratorPage() {
   const router = useRouter();
   if (!user){
     return (
-        <div className="pt-22 pb-8 flex justify-center container mx-auto bg-[var(--background)] ">
+        <div className="pt-22 px-8 pb-8 flex justify-center container mx-auto bg-[var(--background)] ">
         <Card>
           <CardContent>
             <div className="flex flex-col items-center justify-center">
