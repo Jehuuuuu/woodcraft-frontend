@@ -1,7 +1,6 @@
 import LoginPage from '@/components/login/login';
 import { getCSRFToken } from '@/utils/api'
 
-
 export default async function Login() {
   try{
     const csrfToken = await getCSRFToken();
