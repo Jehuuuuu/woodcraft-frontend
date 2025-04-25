@@ -1,28 +1,31 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from 'next/image';
 import Link from 'next/link';
-import {getUser, logout, getCsrfToken} from '@/utils/api';
 import { useRouter } from "next/navigation";
 import {toast} from 'sonner'
 import { ShoppingCart, Menu, X } from 'lucide-react';
-import { useAuth } from "@/utils/authentication";
+import { useAuthStore } from "@/store/authStore";
 
 export default function Header() {
-  const {user, setUser} = useAuth();
+  const {user, isAuthenticated, logout, fetchUser} = useAuthStore();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleLogout = async () => {
+  // useEffect(() => 
+  // void fetchUser(),
+  // [fetchUser])
+
+  const handleLogout = async () => { 
     try{
-      await getCsrfToken();
       await logout();
-      setUser(null);
       router.push('/');
-      toast.success('You have been logged out') 
+      toast.success('You have been logged out successfully');
+      
     }catch (error) {
-      console.error('Error during logout:', error);}
+      console.error('Error during logout:', error);
+      toast.error('Failed to logout. Please try again.'); 
+    }
   }
   
   const toggleMobileMenu = () => {
@@ -60,7 +63,7 @@ export default function Header() {
         </div>
         <div className="hidden lg:flex items-center gap-4 ">
           <p>{user !== null  ? `Welcome, ${user.firstName}`: ""}</p>
-          {user !== null ? (
+          {user !== null && isAuthenticated ? (
             <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors" onClick={handleLogout}>
               Logout
             </Link>
@@ -95,7 +98,6 @@ export default function Header() {
           <nav className="flex flex-col p-4 space-y-4">
             <Link href="/catalog" className="py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setMobileMenuOpen(false)}>Catalog</Link>
             <Link href="/configurator" className="py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setMobileMenuOpen(false)}>3D Configurator</Link>
-            <Link href="/custom-design" className="py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setMobileMenuOpen(false)}>Custom Design</Link>
             <Link href="/about" className="py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setMobileMenuOpen(false)}>About</Link>
             <Link href="/contact" className="py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
           </nav>
