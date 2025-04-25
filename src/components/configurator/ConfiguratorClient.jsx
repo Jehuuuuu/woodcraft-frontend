@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { SyncLoader } from 'react-spinners';
 import { Button } from "@/components/ui/button"
@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { initiateModelGeneration, checkTaskStatus } from "@/utils/api"
+import { getCsrfToken, initiateModelGeneration, checkTaskStatus } from "@/utils/api"
 import { ErrorBoundary } from "react-error-boundary"
 import { LoaderCircle, Eye, ShoppingCart } from 'lucide-react';
 import Model from "@/components/configurator/Model"
