@@ -54,9 +54,10 @@ export default function LoginPage() {
         try {
             setLoading(true);
             const response = await register(first_name, last_name, registerEmail, registerPassword);
-            if (response.ok){
-                toast.success('Registration successful. You can now log in.');
-                router.push('/login');  
+            if (response.success){
+                await login(registerEmail, registerPassword);
+                toast.success('Registration successful. You are now logged in.');
+                router.push('/');  
             }else{
                 setError(response.error || 'Registration failed. Please try again.');
             }

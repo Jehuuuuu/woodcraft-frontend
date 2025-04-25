@@ -26,25 +26,25 @@ export const useAuthStore = create(persist((set, get) => ({
 user: null,
 isAuthenticated: false,
 
-// setCsrfToken: async() => {
-//     try{
-//         const response = await fetch(`${API_URL}/set-csrf-token`,{
-//             method: "GET",
-//             headers:{
-//                 "Content-Type": "application/json"
-//             },
-//             credentials: "include"
-//         });
-//         const data = await response.json();
-//         return data.csrf_token
-//     } catch (error) {
-//         console.error("Error setting CSRF token:", error);
-//     }
-// },
+setCsrfToken: async() => {
+    try{
+        const response = await fetch(`${API_URL}/set-csrf-token`,{
+            method: "GET",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            credentials: "include"
+        });
+        const data = await response.json();
+        return data.csrf_token
+    } catch (error) {
+        console.error("Error setting CSRF token:", error);
+    }
+},
 
 login: async (email, password) => {
     try {
-        const csrfToken = getCSRFTokenfromCookie();
+        const csrfToken = await get().setCsrfToken()
         
         if (!csrfToken) {
             console.error("CSRF token not found after attempting to set it");
@@ -86,7 +86,7 @@ login: async (email, password) => {
 logout: async () => {
     let csrfToken;
     try {
-        csrfToken = getCSRFTokenfromCookie();
+      csrfToken = await get().setCsrfToken()
     } catch (error) {
         console.warn("CSRF token not found before logout attempt:", error.message);
         csrfToken = null; 
@@ -121,13 +121,13 @@ logout: async () => {
     }
 },
 register: async (first_name, last_name, email, password) => {
-    const csrfToken =  getCSRFTokenfromCookie();
+    const csrfToken = await get().setCsrfToken()
     if (!csrfToken){
         console.error("CSRF token not found.")
         return;
     }
     try{
-        await fetch(`${API_URL}/register`,{
+        const response =  await fetch(`${API_URL}/register`,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -136,6 +136,8 @@ register: async (first_name, last_name, email, password) => {
             credentials: "include",
             body: JSON.stringify({first_name, last_name, email, password}),
         });
+        const data = await response.json();
+        return data;
     }catch(error){
         console.error("Error registering user:", error);
     }
