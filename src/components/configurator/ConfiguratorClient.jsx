@@ -91,7 +91,6 @@ export default function ConfiguratorClient(){
         setShowPreview(true)
         document.getElementById('submit').disabled=true;
         try {
-          await getCsrfToken();
           const response = await initiateModelGeneration(formData.design_description, formData.decoration_type, formData.material, formData.height, formData.width, formData.thickness);
 
           if (!response.success){
