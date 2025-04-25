@@ -3,13 +3,13 @@ import { SyncLoader } from 'react-spinners';
 import { Suspense } from "react"
 import ConfiguratorClient from "@/components/configurator/ConfiguratorClient"
 // import { getUser } from "@/utils/api";
+import {useAuth} from "@/utils/authentication"
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from '@/store/authStore';
 
 export default function ConfiguratorPage() {
-  const {user} = useAuthStore();
+  const {user, setUser} = useAuth();
   const router = useRouter();
   if (!user){
     return (
