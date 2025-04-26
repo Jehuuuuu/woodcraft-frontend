@@ -6,15 +6,22 @@ import { useRouter } from "next/navigation";
 import {toast} from 'sonner'
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useAuthStore } from "@/store/authStore";
+import { SyncLoader } from "react-spinners";
 
 export default function Header() {
   const {user, isAuthenticated, logout, fetchUser} = useAuthStore();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => 
-  // void fetchUser(),
-  // [fetchUser])
+  useEffect(() => {
+    const loadUserData = async () => {
+      await fetchUser();
+      setIsLoading(false);
+    };
+    
+    loadUserData();
+  }, [fetchUser]);
 
   const handleLogout = async () => { 
     try{
@@ -32,13 +39,24 @@ export default function Header() {
     setMobileMenuOpen(!mobileMenuOpen);
   }
   return (
+    
     <header className="fixed z-9999 w-[100vw] flex justify-between items-center py-4 px-8 md:px-16 bg-white">
       <div className="flex items-center">
         <Link href="/" className="text-[#8B4513] font-serif">
           <h1 className="text-xl md:text-2xl font-bold">Hufano <span className="font-light">Handicraft</span></h1>
         </Link>
       </div>
-      
+      {isLoading && (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] w-screen h-screen">
+          <SyncLoader
+              color="#8B4513"
+              loading={isLoading}
+              size={12}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+          />
+      </div>
+     )} 
       {/* Desktop Navigation */}
       <nav className="hidden lg:flex space-x-6">
         <Link href="/catalog" className="text-gray-700 hover:text-[#8B4513]">Catalog</Link>
@@ -62,15 +80,19 @@ export default function Header() {
           </Link>
         </div>
         <div className="hidden lg:flex items-center gap-4 ">
-          <p>{user !== null && isAuthenticated  ? `Welcome, ${user.firstName}`: ""}</p>
-          {user !== null  ? (
-            <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors" onClick={handleLogout}>
-              Logout
-            </Link>
-          ) : (
-            <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors">
-              Login
-            </Link>
+          {!isLoading && (
+            <>
+              <p>{user !== null && isAuthenticated ? `Welcome, ${user.firstName}`: ""}</p>
+              {user !== null ? (
+                <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors" onClick={handleLogout}>
+                  Logout
+                </Link>
+              ) : (
+                <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors">
+                  Login
+                </Link>
+              )}
+            </>
           )}
         </div>
         

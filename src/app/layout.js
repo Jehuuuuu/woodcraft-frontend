@@ -23,12 +23,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className}}`}>
-        
             <NavigationWrapper>
               <main>{children}</main>
               <Toaster richColors/>
             </NavigationWrapper>
-        
       </body>
     </html>
   );

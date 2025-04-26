@@ -13,14 +13,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { getCsrfToken, initiateModelGeneration, checkTaskStatus } from "@/utils/api"
+import { initiateModelGeneration, checkTaskStatus } from "@/utils/api"
 import { ErrorBoundary } from "react-error-boundary"
 import { LoaderCircle, Eye, ShoppingCart } from 'lucide-react';
 import Model from "@/components/configurator/Model"
 import {getCookie, setCookie, deleteCookie} from 'cookies-next/client';
 import {toast} from "sonner";
 
-export default function ConfiguratorClient(user){
+export default function ConfiguratorClient(props){
+    const user = props.user;
     const [formData, setFormData] = useState({
         material: "oak",
         decoration_type: "minimal",
@@ -165,7 +166,7 @@ export default function ConfiguratorClient(user){
             </Card>
           </div>
         );
-      }else{
+      }else if (user !== null){
         return(
           <div className="container py-22 px-8 bg-[var(--background)] lg:px-16">
               <div className="mb-5">

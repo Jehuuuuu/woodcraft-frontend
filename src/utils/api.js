@@ -48,13 +48,13 @@ export const register = async (first_name, last_name, email, password) => {
     }
 };
 
-// export const getUser = async () => {
-//     try {
-//         return fetchWithCredentials('/user');
-//     } catch (error) {
-//         console.error('Error fetching user:', error);
-//         throw error;}
-// }
+export const getUser = async () => {
+    try {
+        return fetchWithCredentials('/user');
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error;}
+}
 
 export const initiateModelGeneration = async (design_description, decoration_type, material, height, width, thickness) => {
    try{
