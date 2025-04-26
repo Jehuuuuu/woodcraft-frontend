@@ -73,7 +73,9 @@ login: async (email, password) => {
         const data = await response.json();
         if (data.success) {
             set({
-                user: data,
+                email: data.user.email,
+                firstName: data.user.first_name,
+                lastName: data.user.last_name,
                 isAuthenticated: true,
             });
         }
@@ -112,9 +114,7 @@ logout: async () => {
         if (!response.ok) {
             // Log backend errors like 401 Unauthorized
             console.error(`Backend logout failed: ${response.status} ${response.statusText}`);
-            // You might want to read the response body for more details if available
-            // const errorData = await response.text(); // or response.json() if applicable
-            // console.error("Backend error details:", errorData);
+
         }
     } catch (error){
         console.error("Error logging out:", error);

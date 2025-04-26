@@ -62,7 +62,7 @@ export default function Header() {
           </Link>
         </div>
         <div className="hidden lg:flex items-center gap-4 ">
-          <p>{user !== null  ? `Welcome, ${user.firstName}`: ""}</p>
+          <p>{user !== null && isAuthenticated  ? `Welcome, ${user.firstName}`: ""}</p>
           {user !== null  ? (
             <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors" onClick={handleLogout}>
               Logout
@@ -103,7 +103,7 @@ export default function Header() {
           </nav>
           
           <div className="absolute bottom-0 left-0 right-0 p-4">
-            {user !== null ? (
+            {user !== null && isAuthenticated ? (
               <button 
                 onClick={() => {
                   handleLogout();
