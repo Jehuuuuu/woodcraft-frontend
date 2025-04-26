@@ -122,7 +122,7 @@ logout: async () => {
     }
 },
 register: async (first_name, last_name, email, password) => {
-    const csrfToken = await get().setCsrfToken()
+    const csrfToken = await get().setCsrfToken();
     if (!csrfToken){
         console.error("CSRF token not found.")
         return;
@@ -144,7 +144,7 @@ register: async (first_name, last_name, email, password) => {
     }
 },
 fetchUser: async() => {
-    const csrfToken = getCSRFTokenfromCookie();
+    const csrfToken = await get().setCsrfToken()
     try{
         const response = await fetch(`${API_URL}/user`,{
             method: "GET",
