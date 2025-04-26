@@ -3,12 +3,14 @@ const API_URL = "https://woodcraft-backend.onrender.com/api";
 
 const fetchWithCredentials = async (url, options = {}) => {
     try{
+        const csrfToken = await getCSRFToken();
         const res = await fetch(`${API_URL}${url}`, {
             ...options,
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
                 ...options.headers,
+                "X-CSRFToken": csrfToken,
             },
         })
         const data = await res.json();
@@ -32,6 +34,24 @@ const fetchWithProxy = async (proxyEndpoint, body, method) => {
         return data;
     } catch (error) {
         console.error(`Error fetching with proxy (${proxyEndpoint}):`, error);
+        throw error;
+    }
+};
+
+const getCSRFToken = async () => {
+    try {
+        const response = await fetch('https://woodcraft-backend.onrender.com/api/set-csrf-token',{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        });
+        const data = await response.json();
+        return data.csrf_token;
+        
+    } catch (error) {
+        console.error('Error fetching CSRF token:', error);
         throw error;
     }
 };
