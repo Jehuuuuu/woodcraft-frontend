@@ -72,10 +72,11 @@ login: async (email, password) => {
         
         const data = await response.json();
         if (data.success) {
+           const user_data = { email: data.user.email,
+                        firstName: data.user.first_name,
+                        lastName: data.user.last_name}
             set({
-                email: data.user.email,
-                firstName: data.user.first_name,
-                lastName: data.user.last_name,
+                user: user_data,
                 isAuthenticated: true,
             });
         }
