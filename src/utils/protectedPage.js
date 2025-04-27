@@ -1,8 +1,9 @@
-import { getServerSession } from "./authentication";
-import { redirect } from "next/navigation";
-
+import { redirect } from "next/navigation"
+;
+import { cookies } from "next/headers";
 export default async function ProtectedPage({ children }) {
-  const session = await getServerSession();
+  const cookieStore = cookies()
+  const session = await cookieStore.get('sessionid');
   
   if(session === null){
     redirect("/login");

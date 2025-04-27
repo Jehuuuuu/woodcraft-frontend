@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
+import { Eye, ShoppingCart } from 'lucide-react';
 
 export default function ProductCatalog({ products = [], categories = []}) {
   const [favorites, setFavorites] = useState([]);
@@ -19,7 +20,8 @@ export default function ProductCatalog({ products = [], categories = []}) {
   const [onSale, setOnSale] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  
+  const [hoveredProductId, setHoveredProductId] = useState(null);
+
   const maxPrice = 10000; 
 
   useEffect(() => {
@@ -232,13 +234,18 @@ export default function ProductCatalog({ products = [], categories = []}) {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.map((product) => (
-              <div key={product.id} className="group relative">
+              <div 
+                key={product.id} 
+                className="group relative p-5 rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-white hover:shadow-md"
+                onMouseEnter={() => setHoveredProductId(product.id)}
+                onMouseLeave={() => setHoveredProductId(null)}
+              >
                 <div className="relative aspect-square overflow-hidden rounded-md bg-gray-100">
                   <Image
                     src={product.image ? `https://woodcraft-backend.onrender.com${product.image}` : "/placeholder.svg"}
                     alt={product.name}
                     fill
-                    className="object-cover transition-transform group-hover:scale-105"
+                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                   />
                   
                   {product.isNew && (
@@ -264,7 +271,33 @@ export default function ProductCatalog({ products = [], categories = []}) {
                     <Heart className={favorites.includes(product.id) ? 'fill-current' : ''} size={20} />
                   </Button>
                 </div>
-                
+                <div 
+                  className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-2 transition-opacity duration-300 ${
+                    hoveredProductId === product.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <div className='mb-10 flex gap-2'>
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      className="rounded-full h-10 w-10"
+                      // onClick={handleQuickView}
+                    >
+                      <Eye className="h-10 w-5" />
+                      <span className="sr-only">Quick view</span>
+                    </Button>
+                    <Button
+                      size="icon"
+                      className="rounded-full h-10 w-10 bg-[var(--primary-color)] hover:bg-[var(--primary-color)]/90"
+                      // onClick={handleAddToCart}
+                      disabled={inStock === 0}
+                    >
+                      <ShoppingCart className="h-5 w-5" />
+                      <span className="sr-only">Add to cart</span>
+                    </Button>
+                  </div>
+                </div>
+      
                 <div className="mt-3">
                   <Badge variant="outline">{categories.find((category)=> category.id === product.category).name}</Badge>
                   <Link href={`/product/${product.id}`} className="mt-1 block">
