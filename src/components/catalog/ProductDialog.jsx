@@ -1,3 +1,4 @@
+"use client"
 import {
     Dialog,
     DialogContent,
@@ -11,9 +12,14 @@ import { Button } from "../ui/button"
 import { useState } from "react"
 import { Plus, Minus, Star, StarHalf } from "lucide-react"
 import { toast } from "sonner"
-  
+import { useAuthStore } from "@/store/authStore"
+import { useRouter } from "next/navigation"
+import { getCSRFTokenfromCookie } from "@/store/authStore"
 export default function ProductDialog({product, category, open, onOpenChange}){
   const [quantity, setQuantity] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const {user, setCsrfToken, isAuthenticated} = useAuthStore()
+  const router = useRouter()
 
   const incrementQuantity = () => {
     setQuantity(prev => prev + 1)
@@ -22,7 +28,35 @@ export default function ProductDialog({product, category, open, onOpenChange}){
   const decrementQuantity = () => {
     setQuantity(prev => prev > 1 ? prev - 1 : 1)
   }
-
+  
+  const addToCart = async (user, product_id, quantity) => {
+    try {
+        setLoading(true)
+        const token = await setCsrfToken();
+        const response = await fetch("https://woodcraft-backend.onrender.com/api/add_to_cart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": token
+            },
+            credentials: "include", 
+            body: JSON.stringify({
+                user,
+                product_id,
+                quantity
+            })
+        })
+        
+        const data = await response.json()
+        console.log("Response data:", data)
+        toast.success(`Added ${quantity} of ${product?.name} to cart`);
+    } catch (error) {
+        console.error("Error adding to cart:", error)
+        toast.error(`Error adding to cart: ${error.message}`)
+    } finally {
+        setLoading(false)
+    }
+  }
   const sampleReviews = [
     {
       id: 1,
@@ -120,16 +154,25 @@ export default function ProductDialog({product, category, open, onOpenChange}){
                         </Button>
                       </div>
                     </div>
-                    
+                    {loading && <p className="text-sm text-gray-500">Adding to cart...</p>}
                     <Button 
                       variant="outline" 
                       className="mt-auto bg-[var(--primary-color)] text-white"
+                      disabled={loading}
                       onClick={() => {
-                        // Add to cart logic here with quantity
-                        toast(`Added ${quantity} of ${product?.name} to cart`);
+                        if (user === null){
+                          toast.error("Please login to add items to cart");
+                          router.push("/login");
+                        } else {
+                          addToCart(user?.id, product?.id, quantity);
+                          if(loading === false){
+                            onOpenChange();
+                          }
+                          setQuantity(1);
+                        }
                       }}
                     >
-                      Add to Cart
+                      {loading ? "Adding..." : "Add to Cart"}
                     </Button>
                 </div>
             </div>

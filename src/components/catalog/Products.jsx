@@ -97,7 +97,6 @@ export default function ProductCatalog({ products = [], categories = []}) {
     setOnSale(false);
     setSearchQuery('');
   };
-  console.log(selectedCategory)
   return (
       <div className="flex flex-col md:flex-row gap-6">
         {/* Mobile filter toggle */}

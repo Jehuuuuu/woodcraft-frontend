@@ -21,7 +21,18 @@ export const getCSRFTokenfromCookie = () => {
     }
     return cookieValue
   }
-
+// const setCookieHeader = async() => {
+//     try{
+//         const response = await fetch(`${API_URL}/csrf`,
+//         {
+//             method: "POST",
+//             credentials: "include",
+//         })
+//         return response;
+//     } catch (error) {
+//         console.error("Error setting CSRF cookie:", error);
+//     }
+// }
 export const useAuthStore = create(persist((set, get) => ({
 user: null,
 isAuthenticated: false,
@@ -72,7 +83,8 @@ login: async (email, password) => {
         
         const data = await response.json();
         if (data.success) {
-           const user_data = { email: data.user.email,
+           const user_data = { id:  data.user.id,
+                        email: data.user.email,
                         firstName: data.user.firstName,
                         lastName: data.user.lastName}
             set({
@@ -159,11 +171,6 @@ fetchUser: async() => {
             set({
                 user: data,
                 isAuthenticated: true,
-            })
-        }else{
-            set({
-                user: null,
-                isAuthenticated: false,
             })
         }
     }catch(error){
