@@ -9,7 +9,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Eye, ShoppingCart } from 'lucide-react';
-
+import ProductDialog from './ProductDialog';
 export default function ProductCatalog({ products = [], categories = []}) {
   const [favorites, setFavorites] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -21,7 +21,9 @@ export default function ProductCatalog({ products = [], categories = []}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProductId, setHoveredProductId] = useState(null);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const maxPrice = 10000; 
 
   useEffect(() => {
@@ -95,7 +97,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
     setOnSale(false);
     setSearchQuery('');
   };
-
+  console.log(selectedCategory)
   return (
       <div className="flex flex-col md:flex-row gap-6">
         {/* Mobile filter toggle */}
@@ -119,7 +121,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
         <div className={`${showFilters ? 'block' : 'hidden'} md:block md:w-64 flex-shrink-0`}>
           <div className="bg-white p-4 rounded-lg shadow-sm">
             <div className="flex justify-between items-center md:hidden">
-              <h2 className="text-lg font-medium">Filters</h2>
+              <h1 className="text-lg font-medium">Filters</h1>
               <Button variant="ghost" size="sm" onClick={() => setShowFilters(false)}>
                 <X size={18} />
               </Button>
@@ -281,12 +283,18 @@ export default function ProductCatalog({ products = [], categories = []}) {
                       size="icon"
                       variant="secondary"
                       className="rounded-full h-10 w-10"
-                      // onClick={handleQuickView}
+                      onClick={()=> {
+                        setSelectedProduct(product)
+                        setSelectedCategory(categories.find((category)=> category.id === product.category)?.name)
+                        setIsOpen(true)
+                      }}
+
                     >
-                      <Eye className="h-10 w-5" />
+                        <Eye className="h-10 w-5" />
                       <span className="sr-only">Quick view</span>
                     </Button>
-                    <Button
+                    
+                        <Button
                       size="icon"
                       className="rounded-full h-10 w-10 bg-[var(--primary-color)] hover:bg-[var(--primary-color)]/90"
                       // onClick={handleAddToCart}
@@ -297,9 +305,9 @@ export default function ProductCatalog({ products = [], categories = []}) {
                     </Button>
                   </div>
                 </div>
-      
+               
                 <div className="mt-3">
-                  <Badge variant="outline">{categories.find((category)=> category.id === product.category).name}</Badge>
+                  <Badge variant="outline">{categories.find((category)=> category.id === product.category)?.name}</Badge>
                   <Link href={`/product/${product.id}`} className="mt-1 block">
                     <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
                   </Link>
@@ -315,8 +323,10 @@ export default function ProductCatalog({ products = [], categories = []}) {
                     <p className="mt-1 text-sm text-amber-600">Only {product.stock} left in stock</p>
                   )}
                 </div>
+                
               </div>
             ))}
+           
           </div>
           
           {filteredProducts.length === 0 && (
@@ -325,6 +335,12 @@ export default function ProductCatalog({ products = [], categories = []}) {
               <p className="text-sm text-gray-400">Try adjusting your filters</p>
             </div>
           )}
+          <ProductDialog
+            product={selectedProduct}
+            category={selectedCategory}
+            open={isOpen}
+            onOpenChange={setIsOpen}
+              /> 
         </div>
       </div>
   );

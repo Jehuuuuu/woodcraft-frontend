@@ -37,7 +37,7 @@ export default function LoginPage() {
         try {
             const success = await login(email, password);
             if (success){
-                router.push('/');
+                router.back();
                 toast.success('Login successful');
             } else{
                 setError('Please check your credentials and try again.');
