@@ -262,7 +262,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
                     </Badge>
                   )}
                   
-                  <Button
+                  {/* <Button
                     variant="ghost"
                     size="icon"
                     className={`absolute top-2 right-2 rounded-full bg-white/80 p-1.5 backdrop-blur-sm transition-colors hover:bg-white ${
@@ -271,7 +271,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
                     onClick={() => toggleFavorite(product.id)}
                   >
                     <Heart className={favorites.includes(product.id) ? 'fill-current' : ''} size={20} />
-                  </Button>
+                  </Button> */}
                 </div>
                 <div 
                   className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-2 transition-opacity duration-300 ${

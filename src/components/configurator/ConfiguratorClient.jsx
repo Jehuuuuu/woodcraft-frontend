@@ -19,6 +19,7 @@ import { LoaderCircle, Eye, ShoppingCart } from 'lucide-react';
 import Model from "@/components/configurator/Model"
 import {getCookie, setCookie, deleteCookie} from 'cookies-next/client';
 import {toast} from "sonner";
+import { redirect } from "next/navigation";
 
 export default function ConfiguratorClient(props){
     const user = props.user;
@@ -522,8 +523,14 @@ export default function ConfiguratorClient(props){
                           Final price may vary based on additional customizations and material availability.
                         </p>
                       </div>
-      
-                      <Button type="submit" id="submit" size="lg" className="bg-[var(--primary-color)] text-white hover:bg-[var(--primary-hover)] transition-colors">
+                      
+                      <Button 
+                        disabled={!formData.design_description} 
+                        type="submit" 
+                        id="submit" 
+                        size="lg" 
+                        className="bg-[var(--primary-color)] text-white hover:bg-[var(--primary-hover)] transition-colors"
+                      >
                         {loading && (<LoaderCircle className="animate-spin" size="sm" />)}
                         <Eye />
                         Preview Design
