@@ -1,68 +1,196 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Minus, Trash2 } from 'lucide-react';
 import { toast } from "sonner";
-
+import useSWR, { mutate } from 'swr';
+import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 export default function CartItems() {
-  // Dummy cart data
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Artisan Oak Coffee Table',
-      price: 199.99,
-      image: '/oak-table.jpg',
-      quantity: 1,
-      material: 'Oak'
-    },
-    {
-      id: 2,
-      name: 'Walnut Dining Chair',
-      price: 249.99,
-      image: '/walnut-chair.jpg',
-      quantity: 2,
-      material: 'Walnut'
-    },
-    {
-      id: 3,
-      name: 'Handcrafted Wooden Bowl',
-      price: 89.99,
-      image: '/wooden-bowl.jpg',
-      quantity: 1,
-      material: 'Maple'
+  const { user, setCsrfToken } = useAuthStore();
+  const [cartItems, setCartItems] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const router = useRouter();
+  // Define the cart URL as a constant for reuse
+  const cartUrl = user?.id ? `https://woodcraft-backend.onrender.com/api/cart?user=${user.id}` : null;
+
+  const fetcher = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  }
+  
+  const { data, error, isLoading, mutate } = useSWR(cartUrl, fetcher);
+  
+  useEffect(() => {
+    if (data) {
+      setCartItems(data.cart_items || []);
+      setTotalItems(data.total_items || 0);
+      setTotalPrice(parseFloat(data.total_price) || 0);
     }
-  ]);
+  }, [data]);
 
-  const incrementQuantity = (id) => {
-    setCartItems(prev => 
-      prev.map(item => 
+  if (error) {
+    console.error(error);
+    toast.error("Error fetching cart items, please try again later.");
+  }
+
+  const incrementQuantity = async (id) => {
+    if (isUpdating) return;
+    
+    try {
+      setIsUpdating(true);
+      
+      const updatedItems = cartItems.map(item => 
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-    toast(`Item quantity increased`);
+      );
+      
+      const item = cartItems.find(item => item.cart_item_id_num === id);
+      
+      const csrfToken = await setCsrfToken();
+      const quantity = item.quantity + 1;
+      console.log(quantity)
+      
+
+      const response = await fetch(`https://woodcraft-backend.onrender.com/api/update_cart_item/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          quantity
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update quantity');
+      }
+      
+      mutate();
+      await useAuthStore.getState().getCartItems();
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+      toast.error("Failed to update quantity");
+      mutate();
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
-  const decrementQuantity = (id) => {
-    setCartItems(prev => 
-      prev.map(item => 
-        item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-      )
-    );
-    toast(`Item quantity decreased`);
+  const decrementQuantity = async (id) => {
+    if (isUpdating) return;
+    
+    try {
+      setIsUpdating(true);
+      
+      const item = cartItems.find(item => item.cart_item_id_num === id);
+      
+      if (item.quantity <= 1) {
+        setIsUpdating(false);
+        return;
+      }
+      
+      const updatedItems = cartItems.map(item => 
+        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+      );
+      
+      const csrfToken = await setCsrfToken();
+      const quantity = item.quantity - 1;
+      const response = await fetch(`https://woodcraft-backend.onrender.com/api/update_cart_item/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            quantity
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update quantity');
+      }
+      
+      if (!response.ok) {
+        throw new Error('Failed to update quantity');
+      }
+      
+      mutate();
+      await useAuthStore.getState().getCartItems();
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+      toast.error("Failed to update quantity");
+      mutate();
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
-  const removeItem = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-    toast(`Item removed from cart`);
+  const removeItem = async (id) => {
+    if (isUpdating) return;
+    
+    try {
+      setIsUpdating(true);
+      
+      // Optimistically update UI
+      const updatedItems = cartItems.filter(item => item.id !== id);
+      
+      // Make API call to remove the item
+      const csrfToken = await setCsrfToken();
+      const response = await fetch(`https://woodcraft-backend.onrender.com/api/delete_cart_item/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          cart_item_id: id
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to remove item');
+      }
+      
+      // Revalidate the cart data
+      mutate();
+      await useAuthStore.getState().getCartItems();
+      toast.success('Item removed from cart');
+    } catch (error) {
+      console.error('Error removing item:', error);
+      toast.error("Failed to remove item");
+      mutate();
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return totalPrice || cartItems.reduce((total, item) => 
+      total + (parseFloat(item.price) * item.quantity), 0);
   };
 
-  if (cartItems.length === 0) {
+  if (isLoading) {
+    return (
+      <Card className="w-full">
+        <CardContent className="p-6">
+          <div className="flex flex-col items-center justify-center py-12">
+            <p>Loading your cart...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!cartItems || cartItems.length === 0) {
     return (
       <Card className="w-full">
         <CardContent className="p-6">
@@ -74,7 +202,7 @@ export default function CartItems() {
             </div>
             <h3 className="text-xl font-medium text-[#3c2415] mb-2">Your cart is empty</h3>
             <p className="text-gray-600 mb-6 text-center">Looks like you haven't added any items to your cart yet.</p>
-            <Button className="bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors">
+            <Button className="bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors" onClick = {() => router.push("/catalog") }>
               Continue Shopping
             </Button>
           </div>
@@ -85,10 +213,10 @@ export default function CartItems() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-serif font-bold text-[#3c2415]">Your Cart ({cartItems.length} items)</h2>
-      
-      {cartItems.map(item => (
-        <Card key={item.id} className="w-full">
+      <h2 className="text-2xl font-serif font-bold text-[#3c2415]">Your Cart ({totalItems} items)</h2>
+    
+      {cartItems.map((item, index) => (
+        <Card key={index} className="w-full">
           <CardContent className="p-4">
             <div className="flex flex-col sm:flex-row items-center gap-4">
               {/* Product Image */}
@@ -98,9 +226,9 @@ export default function CartItems() {
               
               {/* Product Details */}
               <div className="flex-1">
-                <h3 className="text-lg font-medium text-[#3c2415]">{item.name}</h3>
-                <p className="text-sm text-gray-600">Material: {item.material}</p>
-                <p className="text-[#8B4513] font-bold mt-1">₱{item.price.toFixed(2)}</p>
+                <h3 className="text-lg font-medium text-[#3c2415]">{item.product_name}</h3>
+                {item.material && <p className="text-sm text-gray-600">Material: {item.material}</p>}
+                <p className="text-[#8B4513] font-bold mt-1">₱{parseFloat(item.price).toFixed(2)}</p>
               </div>
               
               {/* Quantity Controls */}
@@ -109,7 +237,7 @@ export default function CartItems() {
                   variant="outline" 
                   size="icon" 
                   className="h-8 w-8 rounded-md"
-                  onClick={() => decrementQuantity(item.id)}
+                  onClick={() => decrementQuantity(item.cart_item_id_num)}
                 >
                   <Minus size={16} />
                 </Button>
@@ -118,7 +246,7 @@ export default function CartItems() {
                   variant="outline" 
                   size="icon" 
                   className="h-8 w-8 rounded-md"
-                  onClick={() => incrementQuantity(item.id)}
+                  onClick={() => incrementQuantity(item.cart_item_id_num)}
                 >
                   <Plus size={16} />
                 </Button>
@@ -126,7 +254,7 @@ export default function CartItems() {
               
               {/* Item Total */}
               <div className="text-right min-w-[80px]">
-                <p className="font-bold text-[#3c2415]">₱{(item.price * item.quantity).toFixed(2)}</p>
+                <p className="font-bold text-[#3c2415]">₱{parseFloat(item.total_price).toFixed(2)}</p>
               </div>
               
               {/* Remove Button */}
@@ -134,7 +262,7 @@ export default function CartItems() {
                 variant="ghost" 
                 size="icon" 
                 className="text-gray-500 hover:text-red-500"
-                onClick={() => removeItem(item.id)}
+                onClick={() => removeItem(item.cart_item_id_num)}
               >
                 <Trash2 size={18} />
               </Button>
@@ -172,7 +300,8 @@ export default function CartItems() {
             </div>
           </div>
           
-          <Button className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors">
+          <Button className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors"
+          onClick = {() => toast.info("TODO: add stripe and gcash checkout api")}>
             Proceed to Checkout
           </Button>
         </CardContent>

@@ -29,7 +29,7 @@ export default function ProductDialog({product, category, open, onOpenChange}){
     setQuantity(prev => prev > 1 ? prev - 1 : 1)
   }
   
-  const addToCart = async (user, product_id, quantity) => {
+ const addToCart = async (user, product_id, quantity) => {
     try {
         setLoading(true)
         const token = await setCsrfToken();
@@ -48,8 +48,8 @@ export default function ProductDialog({product, category, open, onOpenChange}){
         })
         
         const data = await response.json()
-        console.log("Response data:", data)
         toast.success(`Added ${quantity} of ${product?.name} to cart`);
+        await useAuthStore.getState().getCartItems();
     } catch (error) {
         console.error("Error adding to cart:", error)
         toast.error(`Error adding to cart: ${error.message}`)

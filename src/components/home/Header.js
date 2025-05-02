@@ -9,19 +9,19 @@ import { useAuthStore } from "@/store/authStore";
 import { SyncLoader } from "react-spinners";
 
 export default function Header() {
-  const {user, isAuthenticated, logout, fetchUser} = useAuthStore();
+  const {user, isAuthenticated, logout, fetchUser, totalCartItems, getCartItems} = useAuthStore();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
     const loadUserData = async () => {
-      await fetchUser();
-      setIsLoading(false);
+      const data = await getCartItems();
+      setIsLoading(false);    
     };
-    
     loadUserData();
-  }, [fetchUser]);
+  }, [getCartItems]);
 
   const handleLogout = async () => { 
     try{
@@ -38,6 +38,8 @@ export default function Header() {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   }
+
+
   return (
     
     <header className="fixed z-9999 w-[100vw] flex justify-between items-center py-4 px-8 md:px-16 bg-white">
@@ -66,10 +68,10 @@ export default function Header() {
       </nav>
       
       <div className="flex items-center space-x-4">
-        <Link href="#" className="text-gray-700 hover:text-[#8B4513]">
+        <Link href="/cart" className="text-gray-700 hover:text-[#8B4513]">
           <div className="relative">
             <ShoppingCart />
-            <span className="absolute -top-2 -right-2 bg-[#8B4513] text-white text-xs rounded-full h-4 w-5 flex items-center justify-center">0</span>
+            <span className="absolute -top-2 -right-2 bg-[#8B4513] text-white text-xs rounded-full h-4 w-5 flex items-center justify-center">{totalCartItems}</span>
           </div>
         </Link>
         <div className="relative">
@@ -150,3 +152,4 @@ export default function Header() {
     </header>
   );
 }
+

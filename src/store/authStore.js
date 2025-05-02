@@ -36,6 +36,7 @@ export const getCSRFTokenfromCookie = () => {
 export const useAuthStore = create(persist((set, get) => ({
 user: null,
 isAuthenticated: false,
+totalCartItems: 0,
 
 setCsrfToken: async() => {
     try{
@@ -62,8 +63,6 @@ login: async (email, password) => {
             return false;
         }
         
-        console.log("Using CSRF token for login:", csrfToken);
-        
         const response = await fetch(`${API_URL}/login`, {
             method: "POST",
             headers: {
@@ -87,10 +86,16 @@ login: async (email, password) => {
                         email: data.user.email,
                         firstName: data.user.firstName,
                         lastName: data.user.lastName}
+            
             set({
                 user: user_data,
                 isAuthenticated: true,
             });
+            
+            const cartItems = await get().getCartItems()  
+            set({
+                totalCartItems: cartItems.total_items,
+            })     
         }
         return data.success;
     } catch(error) {
@@ -123,9 +128,9 @@ logout: async () => {
         set({
             user: null,
             isAuthenticated: false,
+            totalCartItems: 0,
         });
         if (!response.ok) {
-            // Log backend errors like 401 Unauthorized
             console.error(`Backend logout failed: ${response.status} ${response.statusText}`);
 
         }
@@ -173,10 +178,44 @@ fetchUser: async() => {
                 isAuthenticated: true,
             })
         }
+        return data
     }catch(error){
         console.error("Error fetching user:", error);
     }
 },
+getCartItems: async() => {
+      const csrfToken = await get().setCsrfToken()
+      const user = get().user; 
+
+      if (!user || user.id === undefined){
+          console.log("User not available or missing ID, cannot fetch cart.");
+          set({ totalCartItems: 0 }); // Reset cart items if no user
+          return { success: false, total_items: 0, isAuthenticated: false };
+      }
+      try{
+          const response = await fetch(`${API_URL}/cart?user=${user.id}`,{
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRFToken": csrfToken,
+              },
+              credentials: "include"
+          })
+          const data = await response.json();
+          if (response.ok && data) {
+              set({ totalCartItems: data.total_items || 0 });
+              return data; // Return the fetched data
+          } else {
+              console.error("Failed to fetch cart items:", data);
+              set({ totalCartItems: 0 }); // Reset on error
+              return { success: false, total_items: 0 };
+          }
+      } catch(error){
+          console.error("Error fetching cart items:", error);
+          set({ totalCartItems: 0 }); // Reset on exception
+          return { success: false, total_items: 0 };
+      }
+  },
 }),
 {
     name: "auth-storage",
