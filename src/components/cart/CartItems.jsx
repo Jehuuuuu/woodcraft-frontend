@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Minus, Trash2 } from 'lucide-react';
 import { toast } from "sonner";
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 export default function CartItems() {
@@ -15,7 +15,7 @@ export default function CartItems() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
-  // Define the cart URL as a constant for reuse
+
   const cartUrl = user?.id ? `https://woodcraft-backend.onrender.com/api/cart?user=${user.id}` : null;
 
   const fetcher = async (url) => {
@@ -71,7 +71,6 @@ export default function CartItems() {
       if (!response.ok) {
         throw new Error('Failed to update quantity');
       }
-      
       mutate();
       await useAuthStore.getState().getCartItems();
     } catch (error) {

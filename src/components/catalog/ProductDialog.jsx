@@ -14,11 +14,11 @@ import { Plus, Minus, Star, StarHalf } from "lucide-react"
 import { toast } from "sonner"
 import { useAuthStore } from "@/store/authStore"
 import { useRouter } from "next/navigation"
-import { getCSRFTokenfromCookie } from "@/store/authStore"
+
 export default function ProductDialog({product, category, open, onOpenChange}){
   const [quantity, setQuantity] = useState(1)
   const [loading, setLoading] = useState(false)
-  const {user, setCsrfToken, isAuthenticated} = useAuthStore()
+  const {user, setCsrfToken,} = useAuthStore()
   const router = useRouter()
 
   const incrementQuantity = () => {

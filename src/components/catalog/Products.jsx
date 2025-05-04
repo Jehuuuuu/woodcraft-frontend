@@ -10,6 +10,9 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Eye, ShoppingCart } from 'lucide-react';
 import ProductDialog from './ProductDialog';
+import { useAuthStore } from '@/store/authStore';
+import { toast } from 'sonner';
+
 export default function ProductCatalog({ products = [], categories = []}) {
   const [favorites, setFavorites] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -24,6 +27,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const {user, setCsrfToken} = useAuthStore();
   const maxPrice = 10000; 
 
   useEffect(() => {
@@ -97,6 +101,29 @@ export default function ProductCatalog({ products = [], categories = []}) {
     setOnSale(false);
     setSearchQuery('');
   };
+  
+  const handleAddToCart = async (user, product_id, quantity) => {
+    try{
+      const csrfToken = await setCsrfToken();
+      const response =  await fetch("https://woodcraft-backend.onrender.com/api/add_to_cart",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          user, product_id, quantity
+        })
+      })
+      toast.success("Product added to cart");
+      await useAuthStore.getState().getCartItems();
+    }catch(error){
+      console.error("Error adding to cart:", error);
+      toast.error("Error adding to cart. Please try again");
+    }
+  }
+  
   return (
       <div className="flex flex-col md:flex-row gap-6">
         {/* Mobile filter toggle */}
@@ -296,7 +323,9 @@ export default function ProductCatalog({ products = [], categories = []}) {
                         <Button
                       size="icon"
                       className="rounded-full h-10 w-10 bg-[var(--primary-color)] hover:bg-[var(--primary-color)]/90"
-                      // onClick={handleAddToCart}
+                      onClick={() => {
+                          handleAddToCart(user?.id, product?.id, 1)
+                      }}
                       disabled={inStock === 0}
                     >
                       <ShoppingCart className="h-5 w-5" />

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import {toast} from 'sonner'
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useAuthStore } from "@/store/authStore";
-import { SyncLoader } from "react-spinners";
 
 export default function Header() {
   const {user, isAuthenticated, logout, fetchUser, totalCartItems, getCartItems} = useAuthStore();
@@ -17,48 +16,38 @@ export default function Header() {
 
   useEffect(() => {
     const loadUserData = async () => {
-      const data = await getCartItems();
-      setIsLoading(false);    
+      setIsLoading(true);
+      await fetchUser(); 
+      await getCartItems(); 
+      setIsLoading(false);
     };
     loadUserData();
-  }, [getCartItems]);
+  }, [fetchUser, getCartItems]); 
 
-  const handleLogout = async () => { 
+  const handleLogout = async () => {
     try{
       await logout();
       router.back();
       toast.success('You have been logged out successfully');
-      
     }catch (error) {
       console.error('Error during logout:', error);
-      toast.error('Failed to logout. Please try again.'); 
+      toast.error('Failed to logout. Please try again.');
     }
   }
-  
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   }
 
 
   return (
-    
-    <header className="fixed z-9999 w-[100vw] flex justify-between items-center py-4 px-8 md:px-16 bg-white">
+    <header className="fixed z-50 w-full flex justify-between items-center py-4 px-8 md:px-16 bg-white shadow-sm"> {/* Adjusted z-index and added shadow */}
       <div className="flex items-center">
         <Link href="/" className="text-[#8B4513] font-serif">
           <h1 className="text-xl md:text-2xl font-bold">Hufano <span className="font-light">Handicraft</span></h1>
         </Link>
       </div>
-      {isLoading && (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] w-screen h-screen">
-          <SyncLoader
-              color="#8B4513"
-              loading={isLoading}
-              size={12}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-          />
-      </div>
-     )} 
+
       {/* Desktop Navigation */}
       <nav className="hidden lg:flex space-x-6">
         <Link href="/catalog" className="text-gray-700 hover:text-[#8B4513]">Catalog</Link>
@@ -66,12 +55,16 @@ export default function Header() {
         <Link href="/about" className="text-gray-700 hover:text-[#8B4513]">About</Link>
         <Link href="/contact" className="text-gray-700 hover:text-[#8B4513]">Contact</Link>
       </nav>
-      
+
       <div className="flex items-center space-x-4">
         <Link href="/cart" className="text-gray-700 hover:text-[#8B4513]">
           <div className="relative">
             <ShoppingCart />
-            <span className="absolute -top-2 -right-2 bg-[#8B4513] text-white text-xs rounded-full h-4 w-5 flex items-center justify-center">{totalCartItems}</span>
+            {isLoading ? (
+              <span className="absolute -top-2 -right-2 bg-gray-300 animate-pulse rounded-full h-4 w-5"></span>
+            ) : (
+              <span className="absolute -top-2 -right-2 bg-[#8B4513] text-white text-xs rounded-full h-4 w-5 flex items-center justify-center">{totalCartItems}</span>
+            )}
           </div>
         </Link>
         <div className="relative">
@@ -82,11 +75,16 @@ export default function Header() {
           </Link>
         </div>
         <div className="hidden lg:flex items-center gap-4 ">
-          {!isLoading && (
+          {isLoading ? (
+            <>
+              <div className="h-5 w-24 bg-gray-300 rounded animate-pulse"></div>
+              <div className="h-10 w-20 bg-gray-300 rounded animate-pulse"></div>
+            </>
+          ) : (
             <>
               <p>{user !== null && isAuthenticated ? `Welcome, ${user.firstName}`: ""}</p>
               {user !== null ? (
-                <Link href="/login" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors" onClick={handleLogout}>
+                <Link href="#" className="bg-[var(--primary-color)] text-white px-4 py-2 rounded hover:bg-[var(--secondary-color)] transition-colors" onClick={handleLogout}>
                   Logout
                 </Link>
               ) : (
@@ -97,19 +95,19 @@ export default function Header() {
             </>
           )}
         </div>
-        
+
         {/* Mobile Menu Button */}
-        <button 
-          className="lg:hidden text-gray-700 focus:outline-none" 
+        <button
+          className="lg:hidden text-gray-700 focus:outline-none"
           onClick={toggleMobileMenu}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
-      
+
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-white lg:hidden">
+        <div className="fixed inset-0 z-40 bg-white lg:hidden"> {/* Adjusted z-index */}
           <div className="flex justify-between items-center p-4 border-b border-gray-200">
             <Link href="/" className="text-[#8B4513] font-serif" onClick={() => setMobileMenuOpen(false)}>
               <h1 className="text-xl font-bold">Hufano <span className="font-light">Handicraft</span></h1>
@@ -126,25 +124,32 @@ export default function Header() {
             <Link href="/contact" className="py-2 text-gray-700 hover:text-[#8B4513]" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
           </nav>
           
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            {user !== null && isAuthenticated ? (
-              <button 
-                onClick={() => {
-                  handleLogout();
-                  setMobileMenuOpen(false);
-                }} 
-                className="w-full bg-[#8B4513] text-white py-3 rounded text-center font-medium"
-              >
-                Logout
-              </button>
+          {/* Mobile Login/Logout Skeleton */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200"> {/* Added border */}
+            {isLoading ? (
+              <div className="h-12 w-full bg-gray-300 rounded animate-pulse"></div>
             ) : (
-              <Link 
-                href="/login" 
-                className="block w-full bg-[#8B4513] text-white py-3 rounded text-center font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Login
-              </Link>
+              <>
+                {user !== null && isAuthenticated ? (
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full bg-[#8B4513] text-white py-3 rounded text-center font-medium"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="block w-full bg-[#8B4513] text-white py-3 rounded text-center font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                )}
+              </>
             )}
           </div>
         </div>
