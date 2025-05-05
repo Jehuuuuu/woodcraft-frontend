@@ -220,7 +220,13 @@ export default function CartItems() {
             <div className="flex flex-col sm:flex-row items-center gap-4">
               {/* Product Image */}
               <div className="relative h-24 w-24 bg-gray-100 rounded-md flex items-center justify-center">
-                <span className="text-[var(--primary-color)]">Image</span>
+              <Image
+                    src={item.product_image ? `https://woodcraft-backend.onrender.com${item.product_image}` : "/placeholder.svg"}
+                    alt={item.product_name}
+                    fill
+                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105 rounded-md"
+                  />
+                  
               </div>
               
               {/* Product Details */}

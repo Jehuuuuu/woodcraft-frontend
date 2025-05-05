@@ -1,12 +1,48 @@
 export async function POST(request) {
   try {
     const body = await request.json();
+    
+    // First get the CSRF token
+    const csrfResponse = await fetch('https://woodcraft-backend.onrender.com/api/set-csrf-token', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Referer': 'https://woodcraft-frontend.vercel.app'
+      },
+      credentials: 'include'
+    });
+    
+    // Extract cookies from the response
+    const cookies = csrfResponse.headers.get('set-cookie');
+    
+    // Extract the CSRF token from the response
+    const csrfData = await csrfResponse.json();
+    const csrfToken = csrfData.csrf_token;
+    
+    if (!csrfToken) {
+      console.error("Failed to get CSRF token");
+      return new Response(JSON.stringify({ 
+        error: 'CSRF token not available',
+        message: 'Could not retrieve CSRF token from server'
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+    
+    // Now make the actual API call with the token and cookies
     const response = await fetch('https://woodcraft-backend.onrender.com/api/initiate_task_id', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Referer': 'https://woodcraft-frontend.vercel.app',
+        'Cookie': cookies // Forward the cookies from the first request
       },
       body: JSON.stringify(body),
+      credentials: 'include'
     });
     
     console.log("Received response from backend:", response.status);

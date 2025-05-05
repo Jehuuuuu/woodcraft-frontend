@@ -15,14 +15,16 @@ import { Slider } from "@/components/ui/slider"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { initiateModelGeneration, checkTaskStatus } from "@/utils/api"
 import { ErrorBoundary } from "react-error-boundary"
-import { LoaderCircle, Eye, ShoppingCart } from 'lucide-react';
+import { LoaderCircle, Eye, ShoppingCart, Send } from 'lucide-react';
 import Model from "@/components/configurator/Model"
 import {getCookie, setCookie, deleteCookie} from 'cookies-next/client';
 import {toast} from "sonner";
 import { redirect } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
 
 export default function ConfiguratorClient(props){
     const user = props.user;
+    const {setCsrfToken} = useAuthStore();
     const [formData, setFormData] = useState({
         material: "oak",
         decoration_type: "minimal",
@@ -77,7 +79,7 @@ export default function ConfiguratorClient(props){
         // if (savedFormData) {
         //   deleteCookie('formData');
         // }
-      },[])
+      }, [])  
 
       const handleChange = (field, value) => {
         setFormData((prev) => ({
@@ -93,11 +95,12 @@ export default function ConfiguratorClient(props){
         setShowPreview(true)
         document.getElementById('submit').disabled=true;
         try {
-          const response = await initiateModelGeneration(formData.design_description, formData.decoration_type, formData.material, formData.height, formData.width, formData.thickness);
+          const response = await initiateModelGeneration( formData.design_description, formData.decoration_type, formData.material, formData.height, formData.width, formData.thickness);
 
           if (!response.success){
-            toast.error(response.message);
+            toast.error("Error generating model. Please try again later.");
             setError(response.message);
+            console.error(error);
             setLoading(false);
             document.getElementById('submit').disabled = false;
             return;
@@ -137,13 +140,63 @@ export default function ConfiguratorClient(props){
             }, 5000)} 
             catch (error) {
             console.error("Error during model generation:", error);
-            const errorMessage = "An unexpected error occurred";
-            setError(errorMessage);
-            toast.error(errorMessage);
+            toast.error("Error during model generation. Please try again later");
             setLoading(false);
             document.getElementById('submit').disabled = false;
           } 
         }
+
+        const handleProposeDesign = async (user_id, material, decoration_type, design_description, estimated_price, model_url, model_image ) => {
+            try{
+              if(!user_id){
+                toast.error("Invalid user ID. Please login and try again");
+                return;
+              }
+              if (!material || !decoration_type || !design_description || !estimated_price || !model_url || !model_image){
+                console.error("All fields are required. Please fill in all the details.");
+                return;
+              }
+              const csrfToken = await setCsrfToken();
+              const response = await fetch("https://woodcraft-backend.onrender.com/api/create_design",
+                {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "X-CSRFToken": csrfToken,
+                    },
+          
+                    body: JSON.stringify({
+                      user_id,
+                      material,
+                      decoration_type,
+                      design_description,
+                      estimated_price,
+                      model_url,
+                      model_image
+                    }),
+                    credentials: "include"
+                }
+              )
+              if (response.ok) {
+                toast.success("Design proposal submitted successfully.", {
+                  action: {
+                    label: "View in Profile",
+                    onClick: () => redirect("/profile")
+                  },
+                  duration: 5000
+                });
+              }else{
+                const data = await response.json();
+                toast.error("Failed to submit design proposal. Please try again later.");
+                console.error(data.message);
+                console.log(data); 
+              }
+            } catch (error) {
+              console.error("Error during design proposal:", error);
+              toast.error("An error occurred while proposing the design.");
+            }
+        }
+
       if (user === null){
         return (
           <div className="pt-22 px-8 pb-8 flex justify-center container mx-auto bg-[var(--background)] ">
@@ -535,9 +588,16 @@ export default function ConfiguratorClient(props){
                         <Eye />
                         Preview Design
                       </Button>
-                      <Button disabled type="submit" id="submit" size="lg" className="bg-[var(--primary-color)] text-white hover:bg-[var(--primary-hover)] transition-colors">
-                      <ShoppingCart />
-                        Add to Cart
+
+                      <Button disabled={!modelUrl} 
+                      size="lg" className="bg-[var(--primary-color)] text-white hover:bg-[var(--primary-hover)] transition-colors"
+                      type = "button"
+                      onClick = {() => {
+                        const estimated_price = (((formData.width * formData.height * formData.thickness) / 1000) * getMaterialPrice(formData.material)).toFixed(2);
+                        handleProposeDesign(user?.id, formData.material, formData.decoration_type, formData.design_description, estimated_price, modelUrl, modelImage)
+                      }}>
+                      <Send />
+                        Propose Design
                       </Button>
                     </div>
                   </form>
