@@ -6,12 +6,12 @@ import Footer from '../home/Footer';
 export default function NavigationWrapper({ children }) {
   const pathname = usePathname();
   const isLoginPage = pathname === '/login';
-
+  const isAdminPage = pathname.startsWith('/admin');
   return (
     <>
-      {!isLoginPage && <Header />}
+      {!isLoginPage && !isAdminPage && <Header />}
       {children}
-      {!isLoginPage && <Footer />}
+      {!isLoginPage && !isAdminPage && <Footer />}
     </>
   );
 }

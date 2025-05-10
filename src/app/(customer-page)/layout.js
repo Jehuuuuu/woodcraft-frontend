@@ -1,6 +1,6 @@
 import { Inter, Playfair_Display } from "next/font/google";
-import "./globals.css";
-import NavigationWrapper from "../components/layouts/NavigationWrapper";
+import "../globals.css"
+import NavigationWrapper from "../../components/layouts/NavigationWrapper";
 import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({

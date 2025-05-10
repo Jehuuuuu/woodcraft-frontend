@@ -260,7 +260,7 @@ export default function ProfileComponent({ userDesigns = [], isLoading = true })
                               <span className="font-medium">Type:</span> {design.decoration_type}
                             </div>
                             <div>
-                              <span className="font-medium">Price:</span> ${design.estimated_price?.toFixed(2)}
+                              <span className="font-medium">Price:</span> ₱{design.estimated_price?.toFixed(2)}
                             </div>
                             <div>
                               <span className="font-medium">Status:</span> {design.status ? design.status : "Pending"}
