@@ -1,8 +1,10 @@
 import { Inter, Playfair_Display } from "next/font/google";
 import "../../globals.css";
 import "../../admin.css";
-import NavigationWrapper from "@/components/layouts/NavigationWrapper";
 import { Toaster } from "@/components/ui/sonner"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/admin/dashboard/app-sidebar"
+import { SiteHeader } from "@/components/admin/dashboard/site-header"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,10 +26,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className}}`}>
-            <NavigationWrapper>
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "calc(var(--spacing) * 64)",
+            "--header-height": "calc(var(--spacing) * 12)"
+        }
+        }>
+        <AppSidebar variant="inset" />
+        <SidebarInset>
+          <SiteHeader />
               <main>{children}</main>
               <Toaster richColors/>
-            </NavigationWrapper>
+        </SidebarInset>
+      </SidebarProvider>
       </body>
     </html>
   );

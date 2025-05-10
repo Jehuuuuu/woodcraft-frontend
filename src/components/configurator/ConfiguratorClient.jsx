@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { initiateModelGeneration, checkTaskStatus } from "@/utils/api"
+import { initiateModelGeneration, checkTaskStatus } from "@/actions/api"
 import { ErrorBoundary } from "react-error-boundary"
 import { LoaderCircle, Eye, ShoppingCart, Send } from 'lucide-react';
 import Model from "@/components/configurator/Model"

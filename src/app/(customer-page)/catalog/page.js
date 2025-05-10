@@ -1,5 +1,5 @@
 import ProductCatalog from "@/components/catalog/Products"
-import { fetchCategories, fetchProducts } from "@/utils/api"
+import { fetchCategories, fetchProducts } from "@/actions/api"
 
 export default async function Catalog() {
     let categories = [];
