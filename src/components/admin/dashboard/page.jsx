@@ -19,7 +19,7 @@ export default function AdminDashboard(props) {
           {
             "--sidebar-width": "calc(var(--spacing) * 64)",
             "--header-height": "calc(var(--spacing) * 12)"
-          }
+        }
         }>
         <AppSidebar variant="inset" />
         <SidebarInset>

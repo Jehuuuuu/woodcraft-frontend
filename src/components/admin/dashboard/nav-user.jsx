@@ -28,12 +28,25 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-
+import { useAuthStore } from "@/store/authStore"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 export function NavUser({
   user
 }) {
-  const { isMobile } = useSidebar()
-
+  const { isMobile } = useSidebar();
+  const { logout } = useAuthStore();
+  const router = useRouter();
+  const handleLogout = async() => {
+    try{
+      await logout();
+      router.push('/');
+      toast.success('You have been logged out successfully')
+    }catch(error){
+      console.error(error)
+      toast.error("Failed to logout. Please try again.")
+    }
+  }
   return (
     (<SidebarMenu>
       <SidebarMenuItem>
@@ -92,7 +105,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <IconLogout />
-              Log out
+             <button onClick={handleLogout}>Logout</button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -27,7 +27,7 @@ export default function Header() {
   const handleLogout = async () => {
     try{
       await logout();
-      router.back();
+      router.push('/');
       toast.success('You have been logged out successfully');
     }catch (error) {
       console.error('Error during logout:', error);
@@ -50,6 +50,7 @@ export default function Header() {
 
       {/* Desktop Navigation */}
       <nav className="hidden lg:flex space-x-6">
+        {user?.is_admin && (<Link href="/admin" className="text-gray-700 hover:text-[#8B4513]">Dashboard</Link>)}
         <Link href="/catalog" className="text-gray-700 hover:text-[#8B4513]">Catalog</Link>
         <Link href="/configurator" className="text-gray-700 hover:text-[#8B4513]">3D Configurator</Link>
         <Link href="/about" className="text-gray-700 hover:text-[#8B4513]">About</Link>
