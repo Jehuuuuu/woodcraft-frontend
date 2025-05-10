@@ -15,9 +15,9 @@ export default function CartItems() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
-
-  const cartUrl = user?.id ? `https://woodcraft-backend.onrender.com/api/cart?user=${user.id}` : null;
-
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
+  const cartUrl = user?.id ? `${apiURL}/cart?user=${user.id}` : null;
+  
   const fetcher = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
@@ -56,7 +56,7 @@ export default function CartItems() {
       console.log(quantity)
       
 
-      const response = await fetch(`https://woodcraft-backend.onrender.com/api/update_cart_item/${id}`, {
+      const response = await fetch(`${apiURL}/update_cart_item/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ export default function CartItems() {
       
       const csrfToken = await setCsrfToken();
       const quantity = item.quantity - 1;
-      const response = await fetch(`https://woodcraft-backend.onrender.com/api/update_cart_item/${id}`, {
+      const response = await fetch(`${apiURL}/update_cart_item/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ export default function CartItems() {
       
       // Make API call to remove the item
       const csrfToken = await setCsrfToken();
-      const response = await fetch(`https://woodcraft-backend.onrender.com/api/delete_cart_item/${id}`, {
+      const response = await fetch(`${apiURL}/delete_cart_item/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

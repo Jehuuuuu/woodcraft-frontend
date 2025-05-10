@@ -20,7 +20,7 @@ export default function ProductDialog({product, category, open, onOpenChange}){
   const [loading, setLoading] = useState(false)
   const {user, setCsrfToken,} = useAuthStore()
   const router = useRouter()
-
+  const apiURL = process.env.NEXT_PUBLIC_API_URL
   const incrementQuantity = () => {
     setQuantity(prev => prev + 1)
   }
@@ -33,7 +33,7 @@ export default function ProductDialog({product, category, open, onOpenChange}){
     try {
         setLoading(true)
         const token = await setCsrfToken();
-        const response = await fetch("https://woodcraft-backend.onrender.com/api/add_to_cart", {
+        const response = await fetch(`${apiURL}/add_to_cart`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 export async function GET(request) {
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   try {
-    // Extract task_id from URL query parameters
     const { searchParams } = new URL(request.url);
     const task_id = searchParams.get('task_id');
     
@@ -16,7 +16,7 @@ export async function GET(request) {
       });
     }
     
-    const response = await fetch(`https://woodcraft-backend.onrender.com/api/get_task_status/${task_id}`, {
+    const response = await fetch(`${apiURL}/get_task_status/${task_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

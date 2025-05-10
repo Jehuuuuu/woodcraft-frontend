@@ -39,7 +39,7 @@ export default function ConfiguratorClient(props){
       const [modelUrl, setModelUrl] = useState(null);
       const [modelImage, setModelImage] = useState(null);
       const [showPreview, setShowPreview] = useState(true);
-
+      const apiURL = process.env.NEXT_PUBLIC_API_URL;
       useEffect(() => {
         const savedModelUrl = getCookie('modelUrl');
         const savedModelImage = getCookie('modelImage');
@@ -157,7 +157,7 @@ export default function ConfiguratorClient(props){
                 return;
               }
               const csrfToken = await setCsrfToken();
-              const response = await fetch("https://woodcraft-backend.onrender.com/api/create_design",
+              const response = await fetch(`${apiURL}/create_design`,
                 {
                     method: "POST",
                     headers: {

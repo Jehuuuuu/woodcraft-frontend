@@ -29,7 +29,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const {user, setCsrfToken} = useAuthStore();
   const maxPrice = 10000; 
-
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     let filtered = [...products];
     
@@ -105,7 +105,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
   const handleAddToCart = async (user, product_id, quantity) => {
     try{
       const csrfToken = await setCsrfToken();
-      const response =  await fetch("https://woodcraft-backend.onrender.com/api/add_to_cart",{
+      const response =  await fetch(`${apiURL}/add_to_cart`,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,4 @@
-// const API_URL = "http://localhost:8000/api";  
-const API_URL = "https://woodcraft-backend.onrender.com/api";  
+const API_URL = process.env.NEXT_PUBLIC_API_URL;  
 
 const fetchWithCredentials = async (url, options = {}) => {
     try{
@@ -40,7 +39,7 @@ const fetchWithProxy = async (proxyEndpoint, body, method) => {
 
 const getCSRFToken = async () => {
     try {
-        const response = await fetch('https://woodcraft-backend.onrender.com/api/set-csrf-token',{
+        const response = await fetch(`${API_URL}/set-csrf-token`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",

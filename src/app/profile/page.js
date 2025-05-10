@@ -10,7 +10,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const [userDesigns, setUserDesigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     if (!isAuthenticated && user === null) {
       router.push('/login');
@@ -24,7 +24,7 @@ export default function ProfilePage() {
       setIsLoading(true);
       const csrfToken = await setCsrfToken();
       
-      const response = await fetch(`https://woodcraft-backend.onrender.com/api/get_customer_designs?user_id=${user.id}`, {
+      const response = await fetch(`${apiURL}/get_customer_designs?user_id=${user.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
