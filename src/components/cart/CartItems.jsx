@@ -8,12 +8,17 @@ import { toast } from "sonner";
 import useSWR from 'swr';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
 export default function CartItems() {
   const { user, setCsrfToken } = useAuthStore();
   const [cartItems, setCartItems] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
   const router = useRouter();
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const cartUrl = user?.id ? `${apiURL}/cart?user=${user.id}` : null;
@@ -177,6 +182,43 @@ export default function CartItems() {
       total + (parseFloat(item.price) * item.quantity), 0);
   };
 
+  const handleCheckout = async () => {
+    try {
+        setIsProcessingCheckout(true);
+        toast.info("Proceeding to checkout...");
+
+        const response = await fetch(`${apiURL}/create-checkout-session`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': await setCsrfToken(),
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                user_id: user?.id,
+                success_url: `${window.location.origin}/checkout/success`,
+                cancel_url: `${window.location.origin}/checkout/cancel`,
+            }),
+        });
+
+        const { url, session_id } = await response.json();
+
+        if (response.ok && url) {
+            // Redirect to Stripe Checkout
+            window.location.href = url;
+        } else {
+            toast.error("Could not initiate checkout. Please try again.");
+        }
+    } catch (error) {
+        console.error("Checkout error:", error);
+        toast.error("An error occurred during checkout. Please try again.");
+    } finally {
+        setIsProcessingCheckout(false);
+    }
+};
+
+
+
   if (isLoading) {
     return (
       <Card className="w-full">
@@ -305,10 +347,13 @@ export default function CartItems() {
             </div>
           </div>
           
-          <Button className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors"
-          onClick = {() => toast.info("TODO: add stripe and gcash checkout api")}>
-            Proceed to Checkout
-          </Button>
+          <Button 
+          className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors"
+          onClick={handleCheckout}
+          disabled={isUpdating || isProcessingCheckout || cartItems.length === 0}
+        >
+          {isProcessingCheckout ? "Processing..." : "Proceed to Checkout"}
+        </Button>
         </CardContent>
       </Card>
     </div>

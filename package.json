@@ -30,6 +30,7 @@
     "@radix-ui/react-tooltip": "^1.2.6",
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.0",
+    "@stripe/stripe-js": "^7.3.0",
     "@tabler/icons-react": "^3.31.0",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.8.4",
