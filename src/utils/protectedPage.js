@@ -1,12 +1,12 @@
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-export default async function ProtectedPage({ children }) {
-  const cookieStore = cookies()
-  const session = await cookieStore.get('sessionid');
-  console.log(session)
-  if(session === null){
-    redirect("/login");
-  }
-
+"use client"
+import { useAuthStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
+export default function ProtectedPage({ children }) {
+  const { user } = useAuthStore();
+  const router = useRouter();
+  if(!user){
+    router.push("/login")
+    return null;
+  } 
   return children;
 }

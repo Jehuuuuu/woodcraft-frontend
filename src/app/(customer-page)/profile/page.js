@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from "@/store/authStore";
 import ProfileComponent from "@/components/profile/ProfileComponent";
+import ProtectedPage from '@/utils/protectedPage';
 
 export default function ProfilePage() {
   const { fetchUserDesigns } = useAuthStore();
@@ -18,5 +19,9 @@ export default function ProfilePage() {
     fetchData();
   })
   
-  return <ProfileComponent userDesigns={data} isLoading={isLoading} />;
+  return (
+  <ProtectedPage>
+  <ProfileComponent userDesigns={data} isLoading={isLoading} />
+  </ProtectedPage>
+  )
 }

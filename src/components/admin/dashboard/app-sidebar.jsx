@@ -32,16 +32,54 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { SyncLoader } from "react-spinners"
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+};
 
 export function AppSidebar({
   ...props
 }) {
+  const router = useRouter();
   const { user } = useAuthStore();
-  
-  const data = {
+  const [loading, setLoading] = useState(true); 
+
+  useEffect( () => {
+    if (!user) {
+      if (useAuthStore.persist.hasHydrated() && !user) { 
+        router.push("/login");
+      }
+    }
+    setLoading(false);
+  }, [user, router])
+
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-white flex items-center justify-center z-[9999] w-screen h-screen">
+        <SyncLoader
+          color="#8B4513"
+          loading={loading}
+          cssOverride={override}
+          size={12}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+    const data = {
     user: {
-      name: user?.firstName + user?.lastName || "" ,
-      email: user?.email || "",
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+      email: user.email || "",
       avatar: "/avatars/shadcn.jpg",
     },
     navMain: [
