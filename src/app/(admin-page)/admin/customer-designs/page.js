@@ -1,5 +1,5 @@
 import { fetchCustomerDesigns } from "@/actions/api"
-import CustomerDesignsTable from "@/components/admin/customer-designs/page";
+import CustomerDesignsTable from "@/components/admin/customer-designs/CustomerDesignsTable";
 import { CustomerDesignColumns } from "./customer-designs-columns";
 export default async function CustomerDesignsPage() {
     const data = await fetchCustomerDesigns();
