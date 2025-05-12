@@ -49,10 +49,11 @@ export function AppSidebar({
   const [loading, setLoading] = useState(true); 
 
   useEffect( () => {
-    if (!user) {
+    if (!user || !user?.isAdmin) {
         router.push("/login");
     }else{
-        setLoading(false);
+        setLoading(false)
+        router.push('/admin');
     }
   }, [user, router])
 
