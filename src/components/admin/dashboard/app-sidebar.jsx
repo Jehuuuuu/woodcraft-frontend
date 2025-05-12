@@ -42,7 +42,7 @@ export function AppSidebar({
     user: {
       name: user?.firstName + " " + user?.lastName,
       email: user.email,
-      avatar: "/avatars/shadcn.j  pg",
+      avatar: "/avatars/shadcn.jpg",
     },
     navMain: [
       {
