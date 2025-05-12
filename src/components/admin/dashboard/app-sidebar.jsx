@@ -50,11 +50,10 @@ export function AppSidebar({
 
   useEffect( () => {
     if (!user) {
-      if (useAuthStore.persist.hasHydrated() && !user) { 
         router.push("/login");
-      }
+    }else{
+        setLoading(false);
     }
-    setLoading(false);
   }, [user, router])
 
 
