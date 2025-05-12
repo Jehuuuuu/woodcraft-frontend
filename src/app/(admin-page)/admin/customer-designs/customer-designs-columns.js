@@ -149,22 +149,25 @@ export const CustomerDesignColumns = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const design = row.original;
-      const [message, setMessage] = useState('');
-      const [finalPrice, setFinalPrice] = useState('');
-      const [open, setOpen] = useState(false);
-      const [open2, setOpen2] = useState(false);
-      const [isLoading, setIsLoading] = useState(false);
-      const { setCsrfToken } = useAuthStore();
-      const router = useRouter();
-      const open3DModel = () => {
-        if (design.model_url) {
-          window.open(design.model_url, '_blank');
-        } else {
-          console.error('No 3D model URL available');
-        }
-      };
-      
+      // Convert this to a proper React component
+      const ActionCell = () => {
+        const design = row.original;
+        const [message, setMessage] = useState('');
+        const [finalPrice, setFinalPrice] = useState('');
+        const [open, setOpen] = useState(false);
+        const [open2, setOpen2] = useState(false);
+        const [isLoading, setIsLoading] = useState(false);
+        const { setCsrfToken } = useAuthStore();
+        const router = useRouter();
+
+        const open3DModel = () => {
+          if (design.model_url) {
+            window.open(design.model_url, '_blank');
+          } else {
+            console.error('No 3D model URL available');
+          }
+        };
+        
       const openImage = () => {
         if (design.model_image) {
           window.open(design.model_image, '_blank');
@@ -322,7 +325,8 @@ export const CustomerDesignColumns = [
           </DropdownMenuContent>
         </DropdownMenu>
       )
-    },
+    }
+    return <ActionCell />;
   },
-
+  }
 ]
