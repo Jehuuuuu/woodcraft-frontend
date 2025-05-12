@@ -12,8 +12,11 @@ import { Eye, ShoppingCart } from 'lucide-react';
 import ProductDialog from './ProductDialog';
 import { useAuthStore } from '@/store/authStore';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+
 
 export default function ProductCatalog({ products = [], categories = []}) {
+  const router = useRouter();
   const [favorites, setFavorites] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedMaterial, setSelectedMaterial] = useState([]);
@@ -104,6 +107,11 @@ export default function ProductCatalog({ products = [], categories = []}) {
   
   const handleAddToCart = async (user, product_id, quantity) => {
     try{
+      if(!user){
+        toast.error("Please login to add to cart");
+        router.push("/login");
+        return;
+      }
       const csrfToken = await setCsrfToken();
       const response =  await fetch(`${apiURL}/add_to_cart`,{
         method: "POST",

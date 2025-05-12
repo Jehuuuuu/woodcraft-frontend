@@ -1,57 +1,22 @@
 "use client";
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from "@/store/authStore";
 import ProfileComponent from "@/components/profile/ProfileComponent";
 
 export default function ProfilePage() {
-  const { user, isAuthenticated, setCsrfToken } = useAuthStore();
-  const router = useRouter();
-  const [userDesigns, setUserDesigns] = useState([]);
+  const { fetchUserDesigns } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
+  const [data, setData] = useState([]);
   useEffect(() => {
-    if (!isAuthenticated && user === null) {
-      router.push('/login');
-    } else if (user) {
-      fetchUserDesigns();
-    }
-  }, [isAuthenticated, user, router]);
-
-  const fetchUserDesigns = async () => {
-    try {
-      setIsLoading(true);
-      const csrfToken = await setCsrfToken();
-      
-      const response = await fetch(`${apiURL}/get_customer_designs?user_id=${user.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken
-        },
-        credentials: 'include'
-      });
-      
-      const data = await response.json();
-      
-      if (Array.isArray(data)) {
-        setUserDesigns(data);
-      } else if (data.success === false) {
-        console.error("Failed to fetch designs:", data.message);
-      } else {
-        console.error("Unexpected response format:", data);
-      }
-    } catch (error) {
-      console.error("Error fetching customer designs:", error);
-    } finally {
+    const fetchData = async () => {
+      const data =  await fetchUserDesigns();
+      setData(data);
       setIsLoading(false);
-    }
-  };
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
-  return <ProfileComponent userDesigns={userDesigns} isLoading={isLoading} />;
+      return data;
+    };
+    fetchData();
+  })
+  
+  return <ProfileComponent userDesigns={data} isLoading={isLoading} />;
 }

@@ -10,10 +10,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export function NavMain({
-  items
-}) {
+export function NavMain({items}) 
+{
+  const path = usePathname();
   return (
     (<SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -30,12 +31,15 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
+              <Link href={item.url}>
+              <SidebarMenuButton tooltip={item.title} isActive={path === item.url}>
+                 
                 {item.icon && <item.icon />}
-                <Link href={item.url}>
+              
                 <span>{item.title}</span>
-                </Link>
+                
               </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>

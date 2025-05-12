@@ -216,6 +216,41 @@ getCartItems: async() => {
           return { success: false, total_items: 0 };
       }
   },
+  fetchUserDesigns: async () => {
+      const csrfToken = await get().setCsrfToken();
+      const user = get().user;
+      
+      if (!user || !user.id) {
+          console.error("User not found or missing ID");
+          return [];
+      }
+  
+      try {
+          const response = await fetch(`${API_URL}/get_customer_designs?user_id=${user.id}`, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': csrfToken
+              },
+              credentials: 'include'
+          });
+          
+          const data = await response.json();
+          
+          if (Array.isArray(data)) {
+              return data;
+          } else if (data.success === false) {
+              console.error("Failed to fetch designs:", data.message);
+              return [];
+          } else {
+              console.error("Unexpected response format:", data);
+              return [];
+          }
+      } catch (error) {
+          console.error("Error fetching customer designs:", error);
+          return [];
+      }
+  }
 }),
 {
     name: "auth-storage",

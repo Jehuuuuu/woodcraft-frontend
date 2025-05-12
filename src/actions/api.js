@@ -1,16 +1,17 @@
 "use server"
+
+import { revalidatePath } from "next/cache";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;  
 
 const fetchWithCredentials = async (url, options = {}) => {
     try{
-        const csrfToken = await getCSRFToken();
         const res = await fetch(`${API_URL}${url}`, {
             ...options,
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
                 ...options.headers,
-                "X-CSRFToken": csrfToken,
             },
         })
         const data = await res.json();
@@ -131,3 +132,13 @@ export const fetchCategories = async() => {
         throw error;
     }
 }
+
+export const fetchCustomerDesigns = async () => {
+    try{
+        return fetchWithCredentials('/get_all_customer_designs');
+    } catch (error) {
+        console.error('Error fetching customer designs:', error);
+        throw error;
+    }
+}
+

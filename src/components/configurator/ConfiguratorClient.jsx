@@ -146,7 +146,7 @@ export default function ConfiguratorClient(props){
           } 
         }
 
-        const handleProposeDesign = async (user_id, material, decoration_type, design_description, estimated_price, model_url, model_image ) => {
+        const handleProposeDesign = async (user_id, material, decoration_type, design_description, width, height, thickness, estimated_price, model_url, model_image ) => {
             try{
               if(!user_id){
                 toast.error("Invalid user ID. Please login and try again");
@@ -170,6 +170,9 @@ export default function ConfiguratorClient(props){
                       material,
                       decoration_type,
                       design_description,
+                      width,
+                      height,
+                      thickness,
                       estimated_price,
                       model_url,
                       model_image
@@ -594,7 +597,7 @@ export default function ConfiguratorClient(props){
                       type = "button"
                       onClick = {() => {
                         const estimated_price = (((formData.width * formData.height * formData.thickness) / 1000) * getMaterialPrice(formData.material)).toFixed(2);
-                        handleProposeDesign(user?.id, formData.material, formData.decoration_type, formData.design_description, estimated_price, modelUrl, modelImage)
+                        handleProposeDesign(user?.id, formData.material, formData.decoration_type, formData.design_description, formData.width, formData.height, formData.thickness, estimated_price, modelUrl, modelImage)
                       }}>
                       <Send />
                         Propose Design

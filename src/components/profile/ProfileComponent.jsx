@@ -260,10 +260,15 @@ export default function ProfileComponent({ userDesigns = [], isLoading = true })
                               <span className="font-medium">Type:</span> {design.decoration_type}
                             </div>
                             <div>
-                              <span className="font-medium">Price:</span> ₱{design.estimated_price?.toFixed(2)}
+                              <span className="font-medium">Price:</span> ₱{design.final_price ? design.final_price.toFixed(2) : design.estimated_price?.toFixed(2)}
                             </div>
                             <div>
                               <span className="font-medium">Status:</span> {design.status ? design.status : "Pending"}
+                            </div>
+                            <div className="col-span-2">
+                                {design.status === 'rejected' && (
+                                    <p className='font-medium'>Message: {design.notes}</p>
+                                )}
                             </div>
                           </div>
                           <div className="flex gap-2 mt-2">
@@ -276,8 +281,8 @@ export default function ProfileComponent({ userDesigns = [], isLoading = true })
                             >
                               View 3D Model
                             </Button>
-                            <Button disabled size="sm" className="flex-1 bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors">
-                              <ShoppingCart size={14} className="mr-1" /> Order
+                            <Button disabled={design.status === 'rejected'} size="sm" className="flex-1 bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors">
+                              <ShoppingCart size={14} className="mr-1" /> Add to Cart
                             </Button>
                           </div>
                         </CardContent>
