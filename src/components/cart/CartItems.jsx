@@ -186,10 +186,11 @@ export default function CartItems() {
     try {
         setIsProcessingCheckout(true);
         toast.info("Proceeding to checkout...");
-        const successUrl = encodeURI(`${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
-        const cancelUrl = encodeURI(`${window.location.origin}/checkout/cancel`);
-        console.log(successUrl)
-        console.log(cancelUrl)
+        
+        // Fix: Use the exact format Stripe expects for the session ID placeholder
+        const successUrl = "https://woodcraft-frontend.vercel.app/checkout/success?session_id={CHECKOUT_SESSION_ID}";
+        const cancelUrl = "https://woodcraft-frontend.vercel.app/checkout/cancel";
+
         const response = await fetch(`${apiURL}/create-checkout-session`, {
             method: 'POST',
             headers: {
@@ -205,12 +206,13 @@ export default function CartItems() {
         });
 
         const data = await response.json();
-        const url = data.url;
-        console.log(url)
-        if (response.ok && url) {
+        console.log("Checkout response:", data);
+        
+        if (response.ok && data.url) {
             // Redirect to Stripe Checkout
-            window.location.href = url;
+            window.location.href = data.url;
         } else {
+            console.error("Checkout error:", data.error);
             toast.error("Could not initiate checkout. Please try again.");
         }
     } catch (error) {
