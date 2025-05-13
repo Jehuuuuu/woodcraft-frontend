@@ -10,8 +10,8 @@ export default function CheckoutCancelPage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-20 text-center">
-      <h1 className="text-3xl font-bold text-red-600 mb-4">Payment Cancelled</h1>
+    <div className="container mx-auto pt-30 pb-18 text-center">
+      <h1 className="text-3xl font-bold mb-4">Payment Cancelled</h1>
       <p className="text-lg mb-6">Your payment was not completed. Your cart has not been changed.</p>
       <Link href="/cart" legacyBehavior>
         <a className="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 mr-4">
