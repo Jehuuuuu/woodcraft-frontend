@@ -186,7 +186,10 @@ export default function CartItems() {
     try {
         setIsProcessingCheckout(true);
         toast.info("Proceeding to checkout...");
-
+        const successUrl = encodeURI(`${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
+        const cancelUrl = encodeURI(`${window.location.origin}/checkout/cancel`);
+        console.log(successUrl)
+        console.log(cancelUrl)
         const response = await fetch(`${apiURL}/create-checkout-session`, {
             method: 'POST',
             headers: {
@@ -196,13 +199,14 @@ export default function CartItems() {
             credentials: 'include',
             body: JSON.stringify({
                 user_id: user?.id,
-                success_url: `${window.location.origin}/checkout/success`,
-                cancel_url: `${window.location.origin}/checkout/cancel`,
+                success_url: successUrl,
+                cancel_url: cancelUrl
             }),
         });
 
-        const { url, session_id } = await response.json();
-
+        const data = await response.json();
+        const url = data.url;
+        console.log(url)
         if (response.ok && url) {
             // Redirect to Stripe Checkout
             window.location.href = url;
