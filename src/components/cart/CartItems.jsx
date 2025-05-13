@@ -186,8 +186,7 @@ export default function CartItems() {
     try {
         setIsProcessingCheckout(true);
         toast.info("Proceeding to checkout...");
-        
-        // Fix: Use the exact format Stripe expects for the session ID placeholder
+
         const successUrl = "https://woodcraft-frontend.vercel.app/checkout/success?session_id={CHECKOUT_SESSION_ID}";
         const cancelUrl = "https://woodcraft-frontend.vercel.app/checkout/cancel";
 
