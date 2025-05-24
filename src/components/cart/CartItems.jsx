@@ -9,6 +9,9 @@ import useSWR from 'swr';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -18,6 +21,7 @@ export default function CartItems() {
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [currency, setCurrency] = useState('PHP');
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
   const router = useRouter();
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -199,6 +203,7 @@ export default function CartItems() {
             credentials: 'include',
             body: JSON.stringify({
                 user_id: user?.id,
+                currency: currency,
                 success_url: successUrl,
                 cancel_url: cancelUrl
             }),
@@ -351,14 +356,49 @@ export default function CartItems() {
               </span>
             </div>
           </div>
-          
-          <Button 
-          className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors"
-          onClick={handleCheckout}
-          disabled={isUpdating || isProcessingCheckout || cartItems.length === 0}
-        >
-          {isProcessingCheckout ? "Processing..." : "Proceed to Checkout"}
-        </Button>
+
+        <Dialog>
+          <DialogTrigger className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors py-2 px-4 rounded-md">
+            Proceed to Checkout
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Select Product Currency</DialogTitle>
+              <DialogDescription>
+                Please select your preferred currency for checkout. This will determine the currency used for your payment.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4 mx-auto">
+              <RadioGroup defaultValue="PHP" onValueChange={(value) => setCurrency(value)}>
+                <div className="flex items-center space-x-3 mb-3">
+                  <RadioGroupItem value="PHP" id="php" />
+                  <span className="text-xl">🇵🇭</span>
+                  <Label htmlFor="php" className="font-medium">Philippines (PHP ₱)</Label>
+                </div>
+                <div className="flex items-center space-x-3 mb-3">
+                  <RadioGroupItem value="USD" id="usd" />
+                  <span className="text-xl">🇺🇸</span>
+                  <Label htmlFor="usd" className="font-medium">United States (USD $)</Label>
+                </div>
+                <div className="flex items-center space-x-3 mb-3">
+                  <RadioGroupItem value="CAD" id="cad" />
+                  <span className="text-xl">🇨🇦</span>
+                  <Label htmlFor="cad" className="font-medium">Canada (CAD $)</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <DialogFooter>
+              <Button 
+                className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors"
+                onClick={handleCheckout}
+                disabled={isUpdating || isProcessingCheckout || cartItems.length === 0}
+              >
+              {isProcessingCheckout ? "Processing..." :  ` Checkout with ${currency}`}
+               
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         </CardContent>
       </Card>
     </div>
