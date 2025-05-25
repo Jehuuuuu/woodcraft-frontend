@@ -15,13 +15,22 @@ import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import getSymbolFromCurrency from 'currency-symbol-map'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 export default function ProfileComponent() {
   const { user, setCsrfToken } = useAuthStore();
   const router = useRouter();
   const [isRendering, setIsRendering] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [userDesigns, setUserDesigns] = useState([{}]);
   const [activeTab, setActiveTab] = useState("profile");
   const [profileData, setProfileData] = useState({
     firstName: '',
@@ -41,15 +50,16 @@ export default function ProfileComponent() {
 
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const designsUrl = user?.id ? `${apiURL}/get_customer_designs?user=${user.id}` : null;
-
+  const ordersURL = user?.id ? `${apiURL}/get_customer_orders?user_id=${user.id}` : null;
   const fetcher = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
     return data;
   };
 
-  const { data, error, isLoading, mutate } = useSWR(designsUrl, fetcher);
-
+  const { data: designs, error, isLoading, mutate } = useSWR(designsUrl, fetcher);
+  const { data: orders, error: ordersError, isLoading: ordersIsLoading, mutate: ordersMutate } = useSWR(ordersURL, fetcher);
+  
   useEffect(() => {
     if (user) {
       setProfileData({
@@ -60,16 +70,13 @@ export default function ProfileComponent() {
         address: user.address || '',
         bio: user.bio || ''
       });
-      if (data) {
-        console.log(data);
-        setUserDesigns(data);
-      }
+      
       if (error) {
         console.error('Error fetching data:', error);
         toast.error('Error fetching data');
       }
     }
-  }, [user, data]);
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -150,6 +157,7 @@ export default function ProfileComponent() {
             <TabsList className="mb-6">
               <TabsTrigger value="profile" onClick={() => setActiveTab("profile")}>Profile</TabsTrigger>
               <TabsTrigger value="designs" onClick={() => setActiveTab("designs")}>My Designs</TabsTrigger>
+              <TabsTrigger value="orders" onClick={() => setActiveTab("orders")}>Purchase History</TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
               <div className="flex flex-col md:flex-row gap-8">
@@ -279,9 +287,13 @@ export default function ProfileComponent() {
                   <div className="flex justify-center py-12">
                     <SyncLoader color="#8B4513" />
                   </div>
-                ) : userDesigns.filter(design => !design.is_added_to_cart).length > 0 ? (
+                ) : error ? (
+                  <div className="py-4 text-center">
+                    <p className="text-red-500">Unable to load designs. Please try again later.</p>
+                  </div>
+                ) : designs && designs.filter(design => !design.is_added_to_cart).length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {userDesigns
+                    {designs
                       .filter(design => !design.is_added_to_cart)
                       .map((design, index) => (
                         <Card key={design.id || `design-${index}`} className="overflow-hidden">
@@ -354,6 +366,74 @@ export default function ProfileComponent() {
                     </Link>
                   </div>
                 )}
+              </div>
+            </TabsContent>
+            <TabsContent value="orders">
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-medium text-[#3c2415]">Purchase History</h3>
+                </div>
+                {ordersIsLoading ? 
+                  <div className="flex justify-center py-12">
+                    <SyncLoader color="#8B4513" />
+                  </div>  
+                  : ordersError ? (
+                    <div className="py-4 text-center">
+                      <p className="text-red-500">Unable to load orders. {ordersError.status === 422 ? 'The server could not process the request.' : 'Please try again later.'}</p>
+                    </div>
+                  ) : (
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
+                    {orders && orders.length > 0 ? (
+                        orders.map((order, index) => {
+                          const currencySymbol = getSymbolFromCurrency(order.currency);
+                          return (
+                              <div key={order.id || `order-${index}`} className="mb-4">
+                                <h3 className="text-lg font-medium text-[#3c2415] mb-2">Order #{order.order_id}</h3>
+                                <div className='flex gap-4'>
+                                  <p>Status: {order.status.toUpperCase()}</p>
+                                  <p>Date: {new Date(order.created_at).toLocaleDateString()}</p>
+                                </div>
+                                <p>Total: {currencySymbol}{order.total_price}</p>
+                                <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button variant="outline" size="sm" className="mt-2"> View Order</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                  <DialogHeader>
+                                    <DialogTitle>Order Details</DialogTitle>
+                                    <DialogDescription>
+                                      Order #{order.order_id}
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <div className="grid gap-4 py-4">
+                                      {order.items.map((item, index) => {
+                                        return (  
+                                          <div key={`item-${index}`} className="flex gap-4 items-center">
+                                            <p>{item.product_name}</p>
+                                            <p>x{item.quantity}</p>
+                                            <p className='ml-auto'>{item.price * item.quantity}</p>
+                                          </div>
+                                          
+                                        )
+                                      })}
+                                      <div className='flex'>
+                                        <p>Total:</p>
+                                        <p className='ml-auto'>{currencySymbol}{order.total_price}</p>
+                                      </div>
+                                      
+                                 
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
+                            </div>
+                          );
+                        })
+                    
+                      ) : (
+                        <p>No orders found.</p>
+                      )}
+                    </div>
+                  )}
               </div>
             </TabsContent>
           </Tabs>
