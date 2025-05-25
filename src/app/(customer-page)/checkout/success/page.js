@@ -47,7 +47,7 @@ function CheckoutSuccess() {
   };
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container mx-auto py-25 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-4">Payment Successful!</h1>
@@ -85,7 +85,7 @@ function CheckoutSuccess() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {receipt.line_items?.map((item, index) => (
+                    {receipt.line_items?.data?.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell>{item.description}</TableCell>
                         <TableCell>{item.quantity}</TableCell>
@@ -134,8 +134,13 @@ function CheckoutSuccess() {
           </div>
         )}
         
-        <div className="text-center mt-6">
+        <div className="flex gap-2 justify-center text-center mt-6">
           <Link href="/" legacyBehavior>
+            <a className="bg-[var(--white)] text-[var(--primary-color)] border border-[var(--orimary-color)] px-6 py-3 rounded hover:bg-[var(--white)]/30">
+              Back to Home
+            </a>
+          </Link>
+          <Link href="/catalog" legacyBehavior>
             <a className="bg-[var(--primary-color)] text-white px-6 py-3 rounded hover:bg-[var(--secondary-color)]">
               Continue Shopping
             </a>
