@@ -1,7 +1,5 @@
 "use server"
 
-import { revalidatePath } from "next/cache";
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;  
 
 const fetchWithCredentials = async (url, options = {}) => {
@@ -142,3 +140,12 @@ export const fetchCustomerDesigns = async () => {
     }
 }
 
+export const fetchAllOrders = async() => {
+    try{
+        const response = await fetchWithCredentials('/get_all_orders');
+        return response;
+    }catch (error) {
+        console.error('Error fetching all orders:', error);
+        throw error;
+    }
+}

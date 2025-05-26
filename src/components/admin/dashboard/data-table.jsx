@@ -26,8 +26,10 @@ export function DataTable({
   data,
   sorting,
   setSorting,
+  columnVisibility,
   columnFilters,
   setColumnFilters,
+  setColumnVisibility
 }) {
   const table = useReactTable({
     data,
@@ -38,9 +40,11 @@ export function DataTable({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
-      columnFilters
+      columnFilters,
+      columnVisibility,
     },
   })
   return (

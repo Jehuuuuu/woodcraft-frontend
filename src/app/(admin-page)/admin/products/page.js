@@ -1,5 +1,5 @@
 import ProductTable from "@/components/admin/products/ProductPage";
-import { ProductColumns } from "../customers/product-columns";
+import { ProductColumns } from "./product-columns";
 import { fetchProducts } from "@/actions/api";
 
 export default async function ProductPage() {
