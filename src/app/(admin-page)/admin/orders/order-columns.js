@@ -244,10 +244,9 @@ export const OrderColumns= [
                         <div key={index} className="border rounded-lg p-4 space-y-2">
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
-                              <h4 className="font-semibold">{item.product_name || 'Custom Design'}</h4>
+                              <h4 className="font-semibold">{item.product_name || item.customer_design}</h4>
                               <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                               <p className="text-sm text-gray-600">Unit Price: {order.currency} {item.price}</p>
-                              <p className="text-sm font-medium">Total: {order.currency} {(item.quantity * item.price).toFixed(2)}</p>
                             </div>
                             {item.design_image && (
                               <div className="ml-4">

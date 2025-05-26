@@ -402,23 +402,23 @@ export default function ProfileComponent() {
                                   <DialogHeader>
                                     <DialogTitle>Order Details</DialogTitle>
                                     <DialogDescription>
-                                      Order #{order.order_id}
+                                      Order ID #{order.order_id}
                                     </DialogDescription>
                                   </DialogHeader>
                                   <div className="grid gap-4 py-4">
                                       {order.items.map((item, index) => {
                                         return (  
                                           <div key={`item-${index}`} className="flex gap-4 items-center">
-                                            <p>{item.product_name}</p>
+                                            <p>{item.product_name || item.customer_design || 'Custom Design'}</p>
                                             <p>x{item.quantity}</p>
                                             <p className='ml-auto'>{item.price * item.quantity}</p>
                                           </div>
                                           
                                         )
                                       })}
-                                      <div className='flex'>
-                                        <p>Total:</p>
-                                        <p className='ml-auto'>{currencySymbol}{order.total_price}</p>
+                                      <div className='flex border-t border-black pt-4 mt-4'>
+                                        <p className='font-bold !text-black'>Total:</p>
+                                        <p className='ml-auto font-bold !text-black'>{currencySymbol}{order.total_price}</p>
                                       </div>
                                       
                                  
