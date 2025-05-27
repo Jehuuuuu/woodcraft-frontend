@@ -1,10 +1,9 @@
 export async function POST(request) {
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   try {
     const body = await request.json();
     
     // First get the CSRF token
-    const csrfResponse = await fetch(`${apiURL}/set-csrf-token`, {
+    const csrfResponse = await fetch('https://woodcraft-backend.onrender.com/api/set-csrf-token', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +32,8 @@ export async function POST(request) {
       });
     }
     
-    const response = await fetch(`${apiURL}/initiate_task_id`, {
+    // Now make the actual API call with the token and cookies
+    const response = await fetch('https://woodcraft-backend.onrender.com/api/initiate_task_id', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ const fetchWithCredentials = async (url, options = {}) => {
 
 const fetchWithProxy = async (proxyEndpoint, body, method) => {
     try {
-        const res = await fetch(`/api/${proxyEndpoint}`, {
+        const res = await fetch(`${API_URL}${proxyEndpoint}`, {
             method,
             headers: {
                 "Content-Type": "application/json",
