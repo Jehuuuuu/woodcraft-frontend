@@ -431,60 +431,28 @@ export default function ConfiguratorClient(props){
                                 className="flex flex-col items-center justify-between rounded-md border-2 border-[var(--border-color)] bg-popover p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
                               >
                                 <RadioGroupItem value="minimal" id="minimal" className="sr-only" />
-                                <div className="aspect-square w-full relative mb-2">
-                                  <Image
-                                    src="/placeholder.svg?height=100&width=100"
-                                    alt="Minimal decoration style"
-                                    fill
-                                    className="object-cover rounded-md"
-                                  />
-                                </div>
-                                <span className="text-center">Minimal</span>
+                                <span className="text-center text-lg">Minimal</span>
                               </Label>
                               <Label
                                 htmlFor="carved"
                                 className="flex flex-col items-center justify-between rounded-md border-2 border-[var(--border-color)] bg-popover p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
                               >
                                 <RadioGroupItem value="carved" id="carved" className="sr-only" />
-                                <div className="aspect-square w-full relative mb-2">
-                                  <Image
-                                    src="/placeholder.svg?height=100&width=100"
-                                    alt="Carved decoration style"
-                                    fill
-                                    className="object-cover rounded-md"
-                                  />
-                                </div>
-                                <span className="text-center">Carved</span>
+                                <span className="text-center text-lg">Carved</span>
                               </Label>
                               <Label
                                 htmlFor="inlaid"
                                 className="flex flex-col items-center justify-between rounded-md border-2 border-[var(--border-color)] bg-popover p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
                               >
                                 <RadioGroupItem value="inlaid" id="inlaid" className="sr-only" />
-                                <div className="aspect-square w-full relative mb-2">
-                                  <Image
-                                    src="/placeholder.svg?height=100&width=100"
-                                    alt="Inlaid decoration style"
-                                    fill
-                                    className="object-cover rounded-md"
-                                  />
-                                </div>
-                                <span className="text-center">Inlaid</span>
+                                <span className="text-center text-lg">Inlaid</span>
                               </Label>
                               <Label
                                 htmlFor="painted"
                                 className="flex flex-col items-center justify-between rounded-md border-2 border-[var(--border-color)] bg-popover p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
                               >
                                 <RadioGroupItem value="painted" id="painted" className="sr-only" />
-                                <div className="aspect-square w-full relative mb-2">
-                                  <Image
-                                    src="/placeholder.svg?height=100&width=100"
-                                    alt="Painted decoration style"
-                                    fill
-                                    className="object-cover rounded-md"
-                                  />
-                                </div>
-                                <span className="text-center">Painted</span>
+                                <span className="text-center text-lg">Painted</span>
                               </Label>
                             </RadioGroup>
                           </div>
