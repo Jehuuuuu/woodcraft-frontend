@@ -99,7 +99,7 @@ export const initiateModelGeneration = async (design_description, decoration_typ
 export const checkTaskStatus = async (task_id) => {
    try {
         // Use GET with query parameters instead of POST with body
-        const response = await fetch(`/api/get_task_status?task_id=${task_id}`, {
+        const response = await fetch(`${API_URL}/get_task_status?task_id=${task_id}`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

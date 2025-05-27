@@ -318,7 +318,7 @@ export default function ProfileComponent() {
                                 <span className="font-medium">Type:</span> {design.decoration_type}
                               </div>
                               <div>
-                                <span className="font-medium">Price:</span> ₱{design.final_price ? design.final_price.toFixed(2) : design.estimated_price?.toFixed(2)}
+                                <span className="font-medium">Price:</span> ₱{design.final_price ? design.final_price : design.estimated_price}
                               </div>
                               <div>
                                 <span className="font-medium">Status:</span> {design.status ? design.status : "Pending"}
