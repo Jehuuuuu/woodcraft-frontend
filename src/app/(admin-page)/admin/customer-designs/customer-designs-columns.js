@@ -196,7 +196,7 @@ export const CustomerDesignColumns = [
             if (response.ok){
               toast.success("Design approved successfully.");
               setOpen(false); 
-              router.refresh();
+              router.push('/admin/customer-designs');
               return response;
             }else{
                 toast.error("Error approving design.");

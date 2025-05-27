@@ -204,7 +204,7 @@ export const OrderColumns= [
             })
             if (response.ok){
               setOpen(false); 
-              router.refresh();
+              router.push('/admin/orders');
               toast.success("Order status updated successfully.");
               return response;
             }else{
