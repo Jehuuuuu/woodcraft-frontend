@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { useAuthStore } from "@/store/authStore"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { mutate } from "swr"
 export const CustomerDesignColumns = [
   {
     accessorKey: "name",
@@ -158,7 +158,6 @@ export const CustomerDesignColumns = [
         const [open2, setOpen2] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
         const { setCsrfToken } = useAuthStore();
-        const router = useRouter();
 
         const open3DModel = () => {
           if (design.model_url) {
@@ -181,6 +180,11 @@ export const CustomerDesignColumns = [
         setIsLoading(true);
         try{
             const csrfToken = await setCsrfToken();
+            mutate('/admin/customer-designs', async(currentData) => {
+              return currentData.map((item) => {
+                return item.id === design_id ? {...item, status:'approved', final_price} : item
+              })
+            }, false)
             const response = await fetch (`${API_URL}/approve_design/${design_id}`,
             {
                 method: "PUT",
@@ -194,16 +198,17 @@ export const CustomerDesignColumns = [
                 })
             })
             if (response.ok){
+              mutate('/admin/customer-designs')
               toast.success("Design approved successfully.");
               setOpen(false); 
-              router.push('/admin/customer-designs')
-              router.refresh();
               return response;
             }else{
-                toast.error("Error approving design.");
-                throw new Error(response.statusText);        
+              mutate('/admin/customer-designs')
+              toast.error("Error approving design.");
+              throw new Error(response.statusText);        
             }
         }catch(error){
+            mutate('/admin/customer-designs')
             console.error("Error approving design:", error);
             toast.error("Error approving design.");
         }
@@ -214,8 +219,15 @@ export const CustomerDesignColumns = [
         setIsLoading(true);
         try{
             const csrfToken = await setCsrfToken();
+            mutate('/admin/customer-designs', async (currentData) => {
+              return currentData.map((item) => {
+                return item.id === design_id 
+                  ? {...item, status: 'rejected', message} 
+                  : item;
+              });
+            }, false);
             const response = await fetch (`${API_URL}/reject_design/${design_id}`,
-            {
+            { 
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -227,15 +239,17 @@ export const CustomerDesignColumns = [
                 })
             })
             if (response.ok){
+              mutate('/admin/customer-designs')
               toast.success("Design rejected successfully.");
               setOpen2(false); 
-              router.refresh();
               return response;
             }else{
-                toast.error("Error rejecting design.");
-                throw new Error(response.statusText);        
+              mutate('/admin/customer-designs')
+              toast.error("Error rejecting design.");
+              throw new Error(response.statusText);        
             }
         }catch(error){
+            mutate('/admin/customer-designs')
             console.error("Error rejecting design:", error);
             toast.error("Error rejecting design.");
         }
@@ -279,6 +293,7 @@ export const CustomerDesignColumns = [
                                     placeholder='Enter final price'
                                     className='mt-2'
                                     onChange={(e) => setFinalPrice(e.target.value)}
+                                    required
                                 />
                                 <Button type="submit" variant="outline" className="mt-4 bg-primary text-white hover:bg-primary/90 hover:text-primary-foreground">
                                     Approve

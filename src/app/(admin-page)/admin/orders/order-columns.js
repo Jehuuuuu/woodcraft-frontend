@@ -1,4 +1,5 @@
 "use client"
+
 import { useState } from "react"
 import { MoreHorizontal } from "lucide-react"
 import { ArrowUpDown } from "lucide-react"
@@ -29,7 +30,6 @@ import {
 } from "@/components/ui/select"
 import { toast } from "sonner"
 import { useAuthStore } from "@/store/authStore"
-import { useRouter } from "next/navigation"
 import { mutate } from "swr"
 
 export const OrderColumns= [
@@ -62,7 +62,11 @@ export const OrderColumns= [
           </Button>
         )
       },
-},
+    cell: ({ row }) => {
+      const name = row.getValue("name") || "No name provided";
+      return <div>{name}</div>;
+    }
+  },
   {
     accessorKey: "email",
     header: ({ column }) => {
@@ -188,7 +192,6 @@ export const OrderColumns= [
         const [itemsOpen, setItemsOpen] = useState(false); // Add state for items dialog
         const [status, setStatus] = useState(order.status);
         const { setCsrfToken } = useAuthStore();
-        const router = useRouter();
         const API_URL = process.env.NEXT_PUBLIC_API_URL;
         
         const updateStatus = async (order_id) => {
@@ -216,12 +219,10 @@ export const OrderColumns= [
             
             if (response.ok) {
               setOpen(false);
-              // Revalidate to ensure we have the latest data
               mutate('/admin/orders');
               toast.success("Order status updated successfully.");
               return response;
             } else {
-              // Revert optimistic update if API call fails
               mutate('/admin/orders');
               toast.error("Error updating order status.");
               throw new Error(response.statusText);
