@@ -36,6 +36,14 @@ export const getCSRFTokenfromCookie = () => {
 export const useAuthStore = create(persist((set, get) => ({
 user: null,
 isAuthenticated: false,
+_hasHydrated: false, 
+
+setHasHydrated: (state) => {
+    set({
+        _hasHydrated: state
+    });
+},
+
 totalCartItems: 0,
 
 setCsrfToken: async() => {
@@ -255,5 +263,13 @@ getCartItems: async() => {
 {
     name: "auth-storage",
     storage: createJSONStorage(() => localStorage),
+    onRehydrateStorage: () => (state, error) => {
+        if (!error) {
+          state.setHasHydrated(true);
+        } else {
+          console.error("Rehydrate error:", error);
+        }
+      }
+      
 }));
 

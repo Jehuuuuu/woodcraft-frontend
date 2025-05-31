@@ -30,6 +30,7 @@ import {
 import { toast } from "sonner"
 import { useAuthStore } from "@/store/authStore"
 import { useRouter } from "next/navigation"
+import { mutate } from "swr"
 
 export const OrderColumns= [
   {
@@ -191,8 +192,18 @@ export const OrderColumns= [
         const API_URL = process.env.NEXT_PUBLIC_API_URL;
         
         const updateStatus = async (order_id) => {
-          try{
-            const csrfToken = await setCsrfToken()
+          try {
+            const csrfToken = await setCsrfToken();
+            
+            // Optimistic update - update local data immediately
+            mutate('/admin/orders', async (currentData) => {
+              return currentData.map(order => 
+                order.order_id === order_id 
+                  ? { ...order, status } 
+                  : order
+              );
+            }, false); // false means don't revalidate yet
+            
             const response = await fetch(`${API_URL}/update_order_status/${order_id}`, {
               method: "PUT",
               headers: {
@@ -201,19 +212,25 @@ export const OrderColumns= [
               },
               credentials: "include",
               body: JSON.stringify({ status }),
-            })
-            if (response.ok){
-              setOpen(false); 
-              router.push('/admin/orders');
+            });
+            
+            if (response.ok) {
+              setOpen(false);
+              // Revalidate to ensure we have the latest data
+              mutate('/admin/orders');
               toast.success("Order status updated successfully.");
               return response;
-            }else{
-                toast.error("Error approving design.");
-                throw new Error(response.statusText);        
+            } else {
+              // Revert optimistic update if API call fails
+              mutate('/admin/orders');
+              toast.error("Error updating order status.");
+              throw new Error(response.statusText);
             }
-          }catch(error){
-            console.error("Error updating status:", error)
-            toast.error("Error updating status. Please try again later.")
+          } catch (error) {
+            // Revert optimistic update on error
+            mutate('/admin/orders');
+            console.error("Error updating status:", error);
+            toast.error("Error updating status. Please try again later.");
           }
         }
         

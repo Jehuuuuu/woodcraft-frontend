@@ -45,32 +45,32 @@ export function AppSidebar({
   ...props
 }) {
   const router = useRouter();
-  const { user } = useAuthStore();
-  const [loading, setLoading] = useState(true); 
+  const { user, _hasHydrated } = useAuthStore();
+  const [loading, setLoading] = useState(true);
 
-  useEffect( () => {
-    if (!user || !user?.is_admin) {
-        router.push("/login");
-    }else{
-        setLoading(false)
-        router.push('/admin');
+  useEffect(() => {
+    if (_hasHydrated) {
+        if (!user || !user?.is_admin) {
+            router.push("/login");
+        }else {
+            setLoading(false); 
+        }
     }
-  }, [user, router])
-
+  }, [user, _hasHydrated, router]);
 
   if (loading) {
-    return (
-      <div className="fixed inset-0 bg-white flex items-center justify-center z-[9999] w-screen h-screen">
-        <SyncLoader
-          color="#8B4513"
-          loading={loading}
-          cssOverride={override}
-          size={12}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
+       return (
+        <div className="fixed inset-0 bg-white flex items-center justify-center z-[9999] w-screen h-screen">
+          <SyncLoader
+            color="#8B4513"
+            loading={loading}
+            cssOverride={override}
+            size={12}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      );
   }
 
   if (!user) {
