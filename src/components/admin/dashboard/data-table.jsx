@@ -44,6 +44,8 @@ export function DataTable({
   data,
   categories,
   pathname,
+  formData,
+  setFormData,
   sorting,
   setSorting,
   columnVisibility,
@@ -56,6 +58,7 @@ export function DataTable({
     columns,
     categories,
     pathname,
+    setFormData,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -64,6 +67,7 @@ export function DataTable({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     state: {
+      formData,
       sorting,
       columnFilters,
       columnVisibility,
@@ -118,7 +122,7 @@ export function DataTable({
                       <SelectContent>
                         {categories.map((category) => {
                           return (
-                            <SelectItem key = {category.id} value={category.name}>
+                            <SelectItem key = {category.id} value={category.id}>
                               {category.name}
                             </SelectItem>
                           )
