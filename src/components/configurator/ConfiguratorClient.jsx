@@ -343,7 +343,7 @@ export default function ConfiguratorClient(props){
                       )}
                     </ErrorBoundary>
                     <ContactShadows position={[0, -1.5, 0]} opacity={0.4} scale={10} blur={1.5} far={2} />
-                    <Environment preset="sunset" />
+                    <Environment files="/assets/hdr/venice_sunset_1k.hdr"/>
                     <OrbitControls enableZoom={true} enablePan={true} makeDefault />
                   </Canvas>
                 </TabsContent>
@@ -432,6 +432,7 @@ export default function ConfiguratorClient(props){
                               >
                                 <RadioGroupItem value="minimal" id="minimal" className="sr-only" />
                                 <span className="text-center text-lg">Minimal</span>
+                                <span className="text-xs text-muted-foreground">Simple, clean design with no extra ornamentation.</span>
                               </Label>
                               <Label
                                 htmlFor="carved"
@@ -439,6 +440,7 @@ export default function ConfiguratorClient(props){
                               >
                                 <RadioGroupItem value="carved" id="carved" className="sr-only" />
                                 <span className="text-center text-lg">Carved</span>
+                                <span className="text-xs text-muted-foreground">Features intricate carved patterns or motifs.</span>
                               </Label>
                               <Label
                                 htmlFor="inlaid"
@@ -446,6 +448,7 @@ export default function ConfiguratorClient(props){
                               >
                                 <RadioGroupItem value="inlaid" id="inlaid" className="sr-only" />
                                 <span className="text-center text-lg">Inlaid</span>
+                                <span className="text-xs text-muted-foreground">Decorated with contrasting materials set into the surface.</span>
                               </Label>
                               <Label
                                 htmlFor="painted"
@@ -453,6 +456,7 @@ export default function ConfiguratorClient(props){
                               >
                                 <RadioGroupItem value="painted" id="painted" className="sr-only" />
                                 <span className="text-center text-lg">Painted</span>
+                                <span className="text-xs text-muted-foreground">Finished with painted designs or color accents.</span>
                               </Label>
                             </RadioGroup>
                           </div>
