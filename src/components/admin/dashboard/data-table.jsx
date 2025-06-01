@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -20,10 +20,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Label } from "@/components/ui/label"
 export function DataTable({
   columns,
   data,
+  categories,
+  pathname,
   sorting,
   setSorting,
   columnVisibility,
@@ -34,6 +54,8 @@ export function DataTable({
   const table = useReactTable({
     data,
     columns,
+    categories,
+    pathname,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -49,7 +71,7 @@ export function DataTable({
   })
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
           <Input
             placeholder="Search..."
             value={(table.getColumn("name")?.getFilterValue()) ?? ""}
@@ -58,6 +80,137 @@ export function DataTable({
             }
             className="max-w-sm"
           />
+         {pathname === "/admin/products" && (
+          <Dialog className>
+            <form>
+            <DialogTrigger asChild >
+            <Button
+              variant = "outline"
+              className="bg-[var(--primary)] text-white hover:bg-[var(--primary)]/90 hover:text-white"
+            >Add Product
+            </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Product</DialogTitle>
+              </DialogHeader>
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="productname"
+                      className="w-[25%]"
+                    >Product Name </Label>
+                    <Input
+                      id="productname"
+                      placeholder="Product Name"
+                      className="mt-1 w-[75%]"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="category"
+                      className="w-[25%]"
+                    >Category </Label>
+                    <Select id="category">
+                      <SelectTrigger className="w-[75%]">
+                        <SelectValue placeholder="Select Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => {
+                          return (
+                            <SelectItem key = {category.id} value={category.name}>
+                              {category.name}
+                            </SelectItem>
+                          )
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="description"
+                      className="w-[25%]"
+                    >Description </Label>
+                    <Input
+                      id="description"
+                      placeholder="Description"
+                      className="mt-1 w-[75%]"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="price"
+                      className="w-[25%]"
+                    >Price </Label>
+                    <Input
+                      id="price"
+                      placeholder="Price"
+                      type="number"
+                      step="0.01"
+                      className="mt-1 w-[75%]"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="stock"
+                      className="w-[25%]"
+                    >Stock </Label>
+                    <Input
+                      id="stock"
+                      placeholder="Stock"
+                      type="number"
+                      className="mt-1 w-[75%]"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="featured"
+                      className="w-[25%]"
+                    >Featured </Label>
+                    <Input
+                      id="featured"
+                      type="checkbox"
+                      className="mt-1 h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="image"
+                      className="w-[25%]"
+                    >Image </Label>
+                    <Input
+                      id="image"
+                      type="file"
+                      className="mt-1 w-[75%]"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Label
+                      htmlFor="default_material"
+                      className="w-[25%]"
+                    >Default Material </Label>
+                    <Input
+                      id="default_material"
+                      placeholder="Default Material"
+                      defaultValue="oak"
+                      className="mt-1 w-[75%]"
+                    />
+                  </div>
+              <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+            </DialogContent>
+            </form>
+          </Dialog>)}
         </div>
       <div className="rounded-md border">
         <Table>

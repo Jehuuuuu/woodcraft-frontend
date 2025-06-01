@@ -139,6 +139,14 @@ export const fetchCustomerDesigns = async () => {
         throw error;
     }
 }
+export const fetchCustomers = async () => {
+    try{
+        return fetchWithCredentials('/get_customers');
+    } catch (error) {
+        console.error('Error fetching customers:', error);
+        throw error;
+    }
+}
 
 export const fetchAllOrders = async() => {
     try{
