@@ -44,8 +44,14 @@ export function DataTable({
   data,
   categories,
   pathname,
+  open,
+  setOpen,
   formData,
   setFormData,
+  handleInputChange,
+  handleFileChange,
+  areAnyFieldsEmpty, 
+  handleSubmit,
   sorting,
   setSorting,
   columnVisibility,
@@ -58,7 +64,12 @@ export function DataTable({
     columns,
     categories,
     pathname,
+    setOpen,
     setFormData,
+    handleInputChange,
+    handleFileChange,
+    areAnyFieldsEmpty,
+    handleSubmit,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -69,13 +80,14 @@ export function DataTable({
     state: {
       formData,
       sorting,
+      open,
       columnFilters,
       columnVisibility,
     },
   })
   return (
     <div>
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center py-4">
           <Input
             placeholder="Search..."
             value={(table.getColumn("name")?.getFilterValue()) ?? ""}
@@ -85,44 +97,47 @@ export function DataTable({
             className="max-w-sm"
           />
          {pathname === "/admin/products" && (
-          <Dialog className>
-            <form>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild >
             <Button
               variant = "outline"
-              className="bg-[var(--primary)] text-white hover:bg-[var(--primary)]/90 hover:text-white"
+              className="ml-auto bg-[var(--primary)] text-white hover:bg-[var(--primary)]/90 hover:text-white"
             >Add Product
             </Button>
             </DialogTrigger>
+           
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Add Product</DialogTitle>
               </DialogHeader>
+              
                   <div className="flex gap-4">
                     <Label
-                      htmlFor="productname"
+                      htmlFor="name"
                       className="w-[25%]"
                     >Product Name </Label>
                     <Input
-                      id="productname"
+                      id="name"
                       placeholder="Product Name"
                       className="mt-1 w-[75%]"
+                      onChange={handleInputChange}
+                      required
                     />
                   </div>
                   
                   <div className="flex gap-4">
                     <Label
-                      htmlFor="category"
+                      htmlFor="category_id"
                       className="w-[25%]"
                     >Category </Label>
-                    <Select id="category">
+                    <Select id="category_id" required onValueChange={value => handleInputChange({ target: { id: "category_id", value } }) }>
                       <SelectTrigger className="w-[75%]">
                         <SelectValue placeholder="Select Category" />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((category) => {
                           return (
-                            <SelectItem key = {category.id} value={category.id}>
+                            <SelectItem key = {category.id} value={category.id} >
                               {category.name}
                             </SelectItem>
                           )
@@ -140,6 +155,8 @@ export function DataTable({
                       id="description"
                       placeholder="Description"
                       className="mt-1 w-[75%]"
+                      onChange={handleInputChange}
+                      required
                     />
                   </div>
                   
@@ -154,6 +171,8 @@ export function DataTable({
                       type="number"
                       step="0.01"
                       className="mt-1 w-[75%]"
+                      onChange={handleInputChange}
+                      required
                     />
                   </div>
                   
@@ -167,6 +186,8 @@ export function DataTable({
                       placeholder="Stock"
                       type="number"
                       className="mt-1 w-[75%]"
+                      onChange={handleInputChange}
+                      required
                     />
                   </div>
                   
@@ -179,6 +200,8 @@ export function DataTable({
                       id="featured"
                       type="checkbox"
                       className="mt-1 h-4 w-4"
+                      onChange={handleInputChange}
+                      required
                     />
                   </div>
                   
@@ -191,6 +214,8 @@ export function DataTable({
                       id="image"
                       type="file"
                       className="mt-1 w-[75%]"
+                      onChange={handleFileChange}
+                      required
                     />
                   </div>
                   
@@ -204,16 +229,18 @@ export function DataTable({
                       placeholder="Default Material"
                       defaultValue="oak"
                       className="mt-1 w-[75%]"
+                      onChange={handleInputChange}
+                      required
                     />
                   </div>
               <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" onClick={handleSubmit} disabled={areAnyFieldsEmpty()}>Add</Button>
           </DialogFooter>
+            
             </DialogContent>
-            </form>
           </Dialog>)}
         </div>
       <div className="rounded-md border">

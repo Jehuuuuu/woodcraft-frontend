@@ -278,7 +278,6 @@ export const ProductColumns= [
                 </form>
               </DialogContent>
             </Dialog>
-            {/* Delete Dialog */}
             <Dialog>
               <DialogTrigger asChild>
                 <DropdownMenuItem onSelect={(e)=> e.preventDefault()}>Delete Product</DropdownMenuItem>
