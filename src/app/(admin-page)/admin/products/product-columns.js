@@ -22,7 +22,9 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { fetchCategories } from "@/actions/api"
+import { useState, useEffect } from "react"
 export const ProductColumns= [
   {
     accessorKey: "category_name",
@@ -131,6 +133,19 @@ export const ProductColumns= [
     id: "actions",
     cell: ({ row }) => {
       const product = row.original;
+      const [categories, setCategories] = useState([]);
+      useEffect(() => {
+        const getCategories = async () => {
+          try {
+            const fetchedCategories = await fetchCategories();
+            setCategories(fetchedCategories);
+          } catch (error) {
+            console.error('Error fetching categories:', error);
+          }
+        };
+        
+        getCategories();
+      }, []);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -167,7 +182,7 @@ export const ProductColumns= [
                       />
                     </div>
                   
-                    {/* <div className="flex gap-4">
+                    <div className="flex gap-4">
                       <Label
                         htmlFor="category"
                         className="w-[25%]"
@@ -186,7 +201,7 @@ export const ProductColumns= [
                           })}
                         </SelectContent>
                       </Select>
-                    </div> */}
+                    </div>
                   
                     <div className="flex gap-4">
                       <Label

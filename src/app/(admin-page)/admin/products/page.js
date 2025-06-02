@@ -1,6 +1,6 @@
 import ProductTable from "@/components/admin/products/ProductTable";
 import { ProductColumns } from "./product-columns";
-import { fetchCategories, fetchProducts } from "@/actions/api";
+import { fetchCategories } from "@/actions/api";
 
 export default async function ProductPage() {
     const categories = await fetchCategories();
