@@ -13,14 +13,17 @@ import ProductDialog from './ProductDialog';
 import { useAuthStore } from '@/store/authStore';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
+import { fetchCategories, fetchProducts } from '@/actions/api';
+import { SyncLoader } from 'react-spinners';
 
 
-export default function ProductCatalog({ products = [], categories = []}) {
+export default function ProductCatalog() {
   const router = useRouter();
   const [favorites, setFavorites] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedMaterial, setSelectedMaterial] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [priceRange, setPriceRange] = useState([0]);
   const [inStock, setInStock] = useState(false);
   const [onSale, setOnSale] = useState(false);
@@ -33,9 +36,47 @@ export default function ProductCatalog({ products = [], categories = []}) {
   const {user, setCsrfToken} = useAuthStore();
   const maxPrice = 10000; 
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
+  const {data:categories, categoriesError, isCategoriesLoading} = useSWR(`/categories`, async() => {
+    try{
+      const categories = await fetchCategories();
+      return categories || [];
+     }catch(error){
+      console.error("Error fetching orders:", error);
+      return []; 
+    }
+  });
+  const {data:products, productsError, isProductsLoading} = useSWR(`/catalog`, async() => {
+    try{
+      const products = await fetchProducts();
+      return products || [];
+     }catch(error){
+      console.error("Error fetching orders:", error);
+      return []; 
+  } 
+  });
+ 
+  if(isCategoriesLoading || isProductsLoading){
+    return(
+      <div className="flex justify-center items-center h-screen bg-[var(--background)]">
+      <SyncLoader color="#8B4513" size={12} />
+    </div>
+    )
+  }
+  
+  if(categoriesError || productsError){
+    return(
+      <div className="flex justify-center items-center h-screen bg-[var(--background)]">
+        <p>Error loading categories or products</p>
+      </div>
+    )
+  }
+
   useEffect(() => {
-    let filtered = [...products];
+    if (!Array.isArray(products)) return;
     
+    let filtered = [...products];
+
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(product => 
         selectedCategories.includes(product.category)
@@ -189,7 +230,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
                 >
                   All
                 </div>
-                {categories.map(category => (
+                {Array.isArray(categories) && categories.map(category => (
                   <div 
                     key={category.id} 
                     className={`cursor-pointer py-1 px-2 rounded hover:bg-gray-100 ${
@@ -269,7 +310,7 @@ export default function ProductCatalog({ products = [], categories = []}) {
           <p className="text-sm text-gray-500 mb-4">Showing {filteredProducts.length} products</p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
+            {Array.isArray(filteredProducts) && filteredProducts.map((product) => (
               <div 
                 key={product.id} 
                 className="group relative p-5 rounded-lg overflow-hidden transition-all duration-300 ease-in-out bg-white hover:shadow-md"

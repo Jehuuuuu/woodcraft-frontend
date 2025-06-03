@@ -83,6 +83,11 @@ const [formData, setFormData] = useState({
       });
       setOpen(false);
       mutate();
+      // Promise.all([
+      //   mutate(`${API_URL}/products`, undefined, { revalidate: true }),
+      //   mutate(`${API_URL}/product_stats`, undefined, { revalidate: true }),
+      // ]);
+      
       toast.success("Product created successfully");
     } catch (error) {
       mutate();

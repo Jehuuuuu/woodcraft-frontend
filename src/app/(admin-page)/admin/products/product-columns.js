@@ -201,7 +201,7 @@ export const ProductColumns = (categories) => [
           setOpen(false);
           if(response.ok){
             mutate('/admin/products');
-            toast.success("Product editing successfully");
+            toast.success("Product edited successfully");
           }else{
             toast.error("Error editing product.")
             console.error(response.status)
