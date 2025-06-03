@@ -121,7 +121,6 @@ export function DataTable({
                       placeholder="Product Name"
                       className="mt-1 w-[75%]"
                       onChange={handleInputChange}
-                      required
                     />
                   </div>
                   
@@ -130,7 +129,7 @@ export function DataTable({
                       htmlFor="category_id"
                       className="w-[25%]"
                     >Category </Label>
-                    <Select id="category_id" required onValueChange={value => handleInputChange({ target: { id: "category_id", value } }) }>
+                    <Select id="category_id" onValueChange={value => handleInputChange({ target: { id: "category_id", value } }) }>
                       <SelectTrigger className="w-[75%]">
                         <SelectValue placeholder="Select Category" />
                       </SelectTrigger>
@@ -156,7 +155,7 @@ export function DataTable({
                       placeholder="Description"
                       className="mt-1 w-[75%]"
                       onChange={handleInputChange}
-                      required
+                    
                     />
                   </div>
                   
@@ -172,7 +171,7 @@ export function DataTable({
                       step="0.01"
                       className="mt-1 w-[75%]"
                       onChange={handleInputChange}
-                      required
+                    
                     />
                   </div>
                   
@@ -187,7 +186,7 @@ export function DataTable({
                       type="number"
                       className="mt-1 w-[75%]"
                       onChange={handleInputChange}
-                      required
+                    
                     />
                   </div>
                   
@@ -201,7 +200,7 @@ export function DataTable({
                       type="checkbox"
                       className="mt-1 h-4 w-4"
                       onChange={handleInputChange}
-                      required
+                    
                     />
                   </div>
                   
@@ -215,7 +214,7 @@ export function DataTable({
                       type="file"
                       className="mt-1 w-[75%]"
                       onChange={handleFileChange}
-                      required
+                    
                     />
                   </div>
                   
@@ -230,7 +229,7 @@ export function DataTable({
                       defaultValue="oak"
                       className="mt-1 w-[75%]"
                       onChange={handleInputChange}
-                      required
+                    
                     />
                   </div>
               <DialogFooter>

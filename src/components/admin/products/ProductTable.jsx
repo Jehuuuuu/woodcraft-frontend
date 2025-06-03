@@ -8,7 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "sonner";
-export default function CustomerTable({columns, categories}) {
+import { ProductColumns } from "@/app/(admin-page)/admin/products/product-columns";
+export default function CustomerTable({categories}) {
+const columns = ProductColumns(categories); 
 const pathname = usePathname();
 const {data, isLoading, error, mutate} = useSWR('/admin/products', async()=>{
     try{
@@ -84,6 +86,7 @@ const [formData, setFormData] = useState({
       toast.success("Product created successfully");
     } catch (error) {
       mutate();
+      toast.error("Error creating product. Please try again later");
       console.error("Error creating product:", error);
     }
   };
