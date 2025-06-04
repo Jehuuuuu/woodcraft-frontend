@@ -20,6 +20,7 @@ import { SyncLoader } from 'react-spinners';
 
 export default function ProductCatalog() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [favorites, setFavorites] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedMaterial, setSelectedMaterial] = useState([]);
@@ -49,28 +50,13 @@ export default function ProductCatalog() {
   const {data:products, productsError, isProductsLoading} = useSWR(`/catalog`, async() => {
     try{
       const products = await fetchProducts();
-      return products || [];
+      setIsLoading(false);
+      return products;
      }catch(error){
       console.error("Error fetching orders:", error);
       return []; 
   } 
   });
- 
-  if(isCategoriesLoading || isProductsLoading){
-    return(
-      <div className="flex justify-center items-center h-screen bg-[var(--background)]">
-      <SyncLoader color="#8B4513" size={12} />
-    </div>
-    )
-  }
-  
-  if(categoriesError || productsError){
-    return(
-      <div className="flex justify-center items-center h-screen bg-[var(--background)]">
-        <p>Error loading categories or products</p>
-      </div>
-    )
-  }
 
   useEffect(() => {
     if (!Array.isArray(products)) return;
@@ -114,6 +100,21 @@ export default function ProductCatalog() {
     setFilteredProducts(filtered);
   }, [selectedCategories, priceRange, inStock, onSale, searchQuery, selectedMaterial, products]);
   
+  if(isLoading || isCategoriesLoading || isProductsLoading){
+    return(
+      <div className="flex justify-center items-center h-screen bg-[var(--background)]">
+      <SyncLoader color="#8B4513" size={12} />
+      </div>
+    )
+  }
+  if(categoriesError || productsError){
+    return(
+      <div className="flex justify-center items-center h-screen bg-[var(--background)]">
+        <p>Error loading categories or products</p>
+      </div>
+    )
+  }
+
   const toggleFavorite = (productId) => {
     setFavorites(prev => 
       prev.includes(productId) 

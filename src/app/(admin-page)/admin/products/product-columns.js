@@ -200,7 +200,10 @@ export const ProductColumns = (categories) => [
           })
           setOpen(false);
           if(response.ok){
-            mutate('/admin/products');
+            Promise.all([
+              mutate('/admin/products'),
+              mutate('/catalog'),
+            ]);
             toast.success("Product edited successfully");
           }else{
             toast.error("Error editing product.")
@@ -220,7 +223,10 @@ export const ProductColumns = (categories) => [
           })
             console.log(response)
             setDeleteOpen(false);
-            mutate('/admin/products');
+            Promise.all([
+              mutate('/admin/products'),
+              mutate('/catalog'),
+            ]);
             if(response.ok){
              toast.success("Product deleted successfully");
             }else{
