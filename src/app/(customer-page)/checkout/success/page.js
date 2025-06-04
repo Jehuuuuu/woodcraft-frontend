@@ -127,7 +127,7 @@ function CheckoutSuccess() {
       </head>
       <body>
         <div class="receipt-header">
-          <h1>WoodCraft</h1>
+          <h1>Hufano Handicraft</h1>
           <p>Order Receipt</p>
           <p>Order Reference: ${sessionId}</p>
           <p>Date: ${new Date(receipt?.created * 1000).toLocaleString()}</p>
