@@ -1,4 +1,6 @@
 import { ChartAreaInteractive } from "@/components/admin/dashboard/chart-area-interactive"
+import { ChartCategoryPie } from "@/components/admin/dashboard/chart-category-pie"
+import { ChartSalesBar } from "@/components/admin/dashboard/chart-sales-bar"
 import { SectionCards } from "@/components/admin/dashboard/section-cards"
 
 export default function AdminDashboard() {
@@ -9,6 +11,10 @@ export default function AdminDashboard() {
                 <SectionCards />
                 <div className="px-4 lg:px-6">
                   <ChartAreaInteractive />
+                </div>
+                <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2 lg:px-6">
+                  <ChartCategoryPie />
+                  <ChartSalesBar />
                 </div>
               </div>
             </div>

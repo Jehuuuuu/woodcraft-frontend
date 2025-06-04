@@ -4,6 +4,8 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Printer } from "lucide-react";
 
 function CheckoutSuccess() {
   const searchParams = useSearchParams();
@@ -46,6 +48,164 @@ function CheckoutSuccess() {
     }).format(amount / 100); // Stripe amounts are in cents
   };
 
+  const handlePrintReceipt = () => {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    
+    // Generate the receipt HTML content
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Receipt - WoodCraft Order</title>
+        <meta charset="utf-8">
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+          }
+          .receipt-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+          }
+          .receipt-header h1 {
+            margin-bottom: 5px;
+          }
+          .section {
+            margin-bottom: 20px;
+          }
+          .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+          }
+          th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+          }
+          th {
+            font-weight: bold;
+          }
+          .text-right {
+            text-align: right;
+          }
+          .totals {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+          }
+          .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+          }
+          .grand-total {
+            font-weight: bold;
+            font-size: 1.2em;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+          }
+          .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt-header">
+          <h1>WoodCraft</h1>
+          <p>Order Receipt</p>
+          <p>Order Reference: ${sessionId}</p>
+          <p>Date: ${new Date(receipt?.created * 1000).toLocaleString()}</p>
+        </div>
+        
+        <div class="section">
+          <div class="section-title">Customer Information</div>
+          <p>${receipt?.customer_details?.name || 'N/A'}</p>
+          <p>${receipt?.customer_details?.email || 'N/A'}</p>
+        </div>
+        
+        <div class="section">
+          <div class="section-title">Items Purchased</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th class="text-right">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${receipt?.line_items?.data?.map(item => `
+                <tr>
+                  <td>${item.description}</td>
+                  <td>${item.quantity}</td>
+                  <td class="text-right">${formatCurrency(item.amount_total, receipt.currency)}</td>
+                </tr>
+              `).join('') || ''}
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="totals">
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span>${formatCurrency(receipt?.amount_subtotal, receipt?.currency)}</span>
+          </div>
+          ${receipt?.total_details?.amount_shipping > 0 ? `
+            <div class="total-row">
+              <span>Shipping:</span>
+              <span>${formatCurrency(receipt.total_details.amount_shipping, receipt.currency)}</span>
+            </div>
+          ` : ''}
+          ${receipt?.total_details?.amount_tax > 0 ? `
+            <div class="total-row">
+              <span>Tax:</span>
+              <span>${formatCurrency(receipt.total_details.amount_tax, receipt.currency)}</span>
+            </div>
+          ` : ''}
+          <div class="total-row grand-total">
+            <span>Total:</span>
+            <span>${formatCurrency(receipt?.amount_total, receipt?.currency)}</span>
+          </div>
+        </div>
+        
+        <div class="footer">
+          <p>Thank you for your purchase!</p>
+          <p>For any questions, please contact our customer support.</p>
+        </div>
+      </body>
+      </html>
+    `;
+    
+    // Write the content to the new window
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    
+    // Wait for the content to load before printing
+    printWindow.onload = function() {
+      printWindow.print();
+      // Close the window after printing (optional)
+      // printWindow.onafterprint = function() {
+      //   printWindow.close();
+      // };
+    };
+  };
+
   return (
     <div className="container mx-auto py-25 px-4">
       <div className="max-w-3xl mx-auto">
@@ -66,7 +226,19 @@ function CheckoutSuccess() {
         ) : receipt ? (
           <Card className="mb-8">
             <CardContent className="pt-6">
-              <h2 className="text-xl font-semibold mb-4">Order Receipt</h2>
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-xl font-semibold">Order Receipt</h2>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handlePrintReceipt}
+                  disabled={!receipt}
+                  className="flex items-center gap-2"
+                >
+                  <Printer className="h-4 w-4" />
+                  Print Receipt
+                </Button>
+              </div>
               
               <div className="mb-6">
                 <h3 className="font-medium text-gray-700 mb-2">Customer Information</h3>

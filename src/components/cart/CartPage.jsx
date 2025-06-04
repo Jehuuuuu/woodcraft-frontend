@@ -4,7 +4,7 @@ import CartItems from "@/components/cart/CartItems";
 export default function Cart() {
     return(
         <div className="container py-22 px-8 bg-[var(--background)] lg:px-16">
-      <div className="max-w-6xl mx-aut  o">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl font-serif font-bold text-[#3c2415]">Shopping Cart</h1>
           <p className="text-gray-600">Review and manage your selected items</p>
