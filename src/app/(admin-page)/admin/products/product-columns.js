@@ -352,7 +352,7 @@ export const ProductColumns = (categories) => [
                           id="featured"
                           type="checkbox"
                           className="mt-1 h-4 w-4"
-                          defaultValue={product.featured}
+                          checked={product.featured ? "checked" : ""}
                           onChange = {handleInputChange}
                         />
                       </div>

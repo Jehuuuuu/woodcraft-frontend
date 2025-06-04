@@ -84,7 +84,7 @@ export default function FeaturedProducts() {
               </div>
               <div className="p-4">
                 <h3 className="text-lg font-medium text-[#3c2415] mb-2">{product.name}</h3>
-                <p className="text-[#8B4513] font-bold">${product.price}</p>
+                <p className="text-[#8B4513] font-bold">₱{product.price}</p>
               </div>
               </div>
           ))}
