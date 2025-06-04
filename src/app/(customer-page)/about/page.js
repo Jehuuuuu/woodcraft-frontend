@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function About() {
@@ -30,7 +31,13 @@ export default function About() {
           
           <div className="bg-[#f9f5f0] p-8 rounded-lg">
             <div className="relative h-96 w-full bg-[#e6dfd5] rounded-lg flex items-center justify-center">
-              <span className="text-[#8B4513] font-serif text-lg">Workshop Image Placeholder</span>
+              <Image
+              src={'/workshop/workshop-image.jpg'}
+              alt={'Workshop Image'}
+              width={500}
+              height={100}
+              className='rounded-md h-96 object-cover'
+              />
             </div>
           </div>
         </div>
@@ -102,30 +109,45 @@ export default function About() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Team Member 1 */}
             <div className="text-center">
               <div className="relative h-64 w-full bg-[#f0e6d9] rounded-lg mb-4 flex items-center justify-center">
-                <span className="text-[#8B4513] font-serif">Photo Placeholder</span>
+              <Image
+               src={'/workshop/founder.jpg'}
+               alt={'Founder Image'}
+               width={400}
+               height={100}
+               className='rounded-md h-64 object-cover'
+               />
               </div>
-              <h3 className="text-xl font-serif font-semibold text-[#3c2415]">Antonio Hufano</h3>
+              <h3 className="text-xl font-serif font-semibold text-[#3c2415]">Jojit Hufano</h3>
               <p className="text-[#8B4513]">Founder & Master Craftsman</p>
             </div>
             
-            {/* Team Member 2 */}
             <div className="text-center">
               <div className="relative h-64 w-full bg-[#f0e6d9] rounded-lg mb-4 flex items-center justify-center">
-                <span className="text-[#8B4513] font-serif">Photo Placeholder</span>
+              <Image
+               src={'/workshop/designer.jpg'}
+               alt={'Designer Image'}
+               width={500}
+               height={100}
+               className='rounded-md h-64 object-contain'
+               />
               </div>
-              <h3 className="text-xl font-serif font-semibold text-[#3c2415]">Maria Hufano</h3>
+              <h3 className="text-xl font-serif font-semibold text-[#3c2415]">Irene Opena</h3>
               <p className="text-[#8B4513]">Design Director</p>
             </div>
             
-            {/* Team Member 3 */}
             <div className="text-center">
               <div className="relative h-64 w-full bg-[#f0e6d9] rounded-lg mb-4 flex items-center justify-center">
-                <span className="text-[#8B4513] font-serif">Photo Placeholder</span>
+              <Image
+               src={'/workshop/worker.jpg'}
+               alt={'Worker Image'}
+               width={400}
+               height={100}
+               className='rounded-md h-64 object-cover'
+               />
               </div>
-              <h3 className="text-xl font-serif font-semibold text-[#3c2415]">Carlos Mendoza</h3>
+              <h3 className="text-xl font-serif font-semibold text-[#3c2415]">Berou Nocalan</h3>
               <p className="text-[#8B4513]">Senior Woodworker</p>
             </div>
           </div>

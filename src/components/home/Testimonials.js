@@ -69,11 +69,11 @@ export default function Testimonials() {
           ))}
         </div>
         
-        <div className="text-center mt-8">
+        {/* <div className="text-center mt-8">
           <button className="border border-[#8B4513] text-[#8B4513] px-6 py-3 rounded hover:bg-[#f0e6d9] transition-colors">
             Read More Reviews
           </button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

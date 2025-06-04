@@ -67,7 +67,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="text-lg font-medium text-[#3c2415] mb-1">Our Workshop</h3>
-                  <p className="text-gray-600">123 Woodcraft Lane, Artisan District<br />San Francisco, CA 94103</p>
+                  <p className="text-gray-600">SINAGTALA GATE 2 ARCO, Greenvalley, Sinagtala 2,<br />Bacoor, Cavite, Philippines</p> 
                 </div>
               </div>
               
