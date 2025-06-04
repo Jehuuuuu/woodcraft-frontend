@@ -189,7 +189,7 @@ export const ProductColumns = (categories) => [
             }
           });
           form.append('product_id', product_id);
-          console.log(form)
+          console.log("FormData contents:", Array.from(form.entries())); 
           const response = await fetch(`${API_URL}/edit_product/${product_id}`, {
             method: "POST",
             headers: {
@@ -265,11 +265,11 @@ export const ProductColumns = (categories) => [
                   <div className="space-y-4 py-4">
                     <div className="flex gap-4">
                         <Label
-                          htmlFor="productname"
+                          htmlFor="name"
                           className="w-[25%]"
                         >Product Name </Label>
                         <Input
-                          id="productname"
+                          id="name"
                           placeholder="Product Name"
                           className="mt-1 w-[75%]"
                           defaultValue={product.name}
