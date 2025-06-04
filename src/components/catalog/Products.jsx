@@ -21,6 +21,7 @@ import { SyncLoader } from 'react-spinners';
 export default function ProductCatalog() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [quantity, setQuantity] = useState(0);
   const [favorites, setFavorites] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedMaterial, setSelectedMaterial] = useState([]);
@@ -370,13 +371,14 @@ export default function ProductCatalog() {
                       <span className="sr-only">Quick view</span>
                     </Button>
                     
-                        <Button
+                      <Button
                       size="icon"
                       className="rounded-full h-10 w-10 bg-[var(--primary-color)] hover:bg-[var(--primary-color)]/90"
                       onClick={() => {
+                          setQuantity(prev => prev + 1)
                           handleAddToCart(user?.id, product?.id, 1)
                       }}
-                      disabled={inStock === 0}
+                      disabled={inStock === 0 || !product || product?.stock <= quantity}
                     >
                       <ShoppingCart className="h-5 w-5" />
                       <span className="sr-only">Add to cart</span>
@@ -386,6 +388,7 @@ export default function ProductCatalog() {
                
                 <div className="mt-3">
                   <Badge variant="outline">{categories.find((category)=> category.id === product.category)?.name}</Badge>
+                  {product.is_best_seller && (<Badge variant="outline">Best Seller</Badge>)}
                   <Link href={`/product/${product.id}`} className="mt-1 block">
                     <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
                   </Link>

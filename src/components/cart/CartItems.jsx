@@ -209,23 +209,23 @@ export default function CartItems() {
             }),
         });
 
-        const data = await response.json();
-        console.log("Checkout response:", data);
-        
-        if (response.ok && data.url) {
-            // Redirect to Stripe Checkout
-            window.location.href = data.url;
-        } else {
-            console.error("Checkout error:", data.error);
-            toast.error("Could not initiate checkout. Please try again.");
+            const data = await response.json();
+            console.log("Checkout response:", data);
+            
+            if (response.ok && data.url) {
+                // Redirect to Stripe Checkout
+                window.location.href = data.url;
+            } else {
+                console.error("Checkout error:", data.error);
+                toast.error("Could not initiate checkout. Please try again.");
+            }
+        } catch (error) {
+            console.error("Checkout error:", error);
+            toast.error("An error occurred during checkout. Please try again.");
+        } finally {
+            setIsProcessingCheckout(false);
         }
-    } catch (error) {
-        console.error("Checkout error:", error);
-        toast.error("An error occurred during checkout. Please try again.");
-    } finally {
-        setIsProcessingCheckout(false);
-    }
-};
+    };
 
 
 
@@ -304,6 +304,7 @@ export default function CartItems() {
                   size="icon" 
                   className="h-8 w-8 rounded-md"
                   onClick={() => incrementQuantity(item.cart_item_id_num)}
+                  disabled={isUpdating || item.quantity >= item.product.stock}
                 >
                   <Plus size={16} />
                 </Button>
@@ -342,10 +343,10 @@ export default function CartItems() {
               <span className="text-gray-600">Shipping</span>
               <span className="font-medium">₱150.00</span>
             </div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <span className="text-gray-600">Tax</span>
               <span className="font-medium">₱{(calculateSubtotal() * 0.12).toFixed(2)}</span>
-            </div>
+            </div> */}
           </div>
           
           <div className="border-t pt-4 mb-6">

@@ -148,11 +148,13 @@ export default function ProductDialog({product, category, open, onOpenChange}){
                           variant="ghost" 
                           size="icon" 
                           className="h-8 w-8 rounded-l-none"
-                          onClick={incrementQuantity}
+                          onClick={product?.stock > quantity ? incrementQuantity : () => {}}
                         >
                           <Plus size={16} />
                         </Button>
+                        
                       </div>
+                      <p className="mt-1 ml-2 text-sm text-amber-600">Only {product?.stock} left in stock</p>
                     </div>
                     {loading && <p className="text-sm text-gray-500">Adding to cart...</p>}
                     <Button 
