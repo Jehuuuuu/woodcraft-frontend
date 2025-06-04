@@ -57,7 +57,7 @@ function CheckoutSuccess() {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Receipt - WoodCraft Order</title>
+        <title>Receipt - Hufano Handicraft Order</title>
         <meta charset="utf-8">
         <style>
           body {
@@ -135,8 +135,8 @@ function CheckoutSuccess() {
         
         <div class="section">
           <div class="section-title">Customer Information</div>
-          <p>${receipt?.customer_details?.name || 'N/A'}</p>
-          <p>${receipt?.customer_details?.email || 'N/A'}</p>
+          <p>Name: ${receipt?.customer_details?.name || 'N/A'}</p>
+          <p>Email: ${receipt?.customer_details?.email || 'N/A'}</p>
         </div>
         
         <div class="section">
