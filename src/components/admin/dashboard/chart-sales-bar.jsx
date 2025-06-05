@@ -9,10 +9,17 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardAction
 } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
-const salesData = [
+// Add these imports at the top
+import { Button } from "@/components/ui/button"
+import { IconPrinter, IconTable } from "@tabler/icons-react"
+import { printElement, exportToCSV } from "@/utils/exportUtils"
+
+// Export the salesData so it can be used by the DashboardActions component
+export const salesData = [
   { month: "Jan", sales: 4000 },
   { month: "Feb", sales: 3000 },
   { month: "Mar", sales: 2000 },
@@ -42,9 +49,27 @@ export function ChartSalesBar() {
         <CardDescription>
           Sales performance by month
         </CardDescription>
+        <CardAction>
+          <div className="flex gap-2">
+            {/* <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => printElement('sales-chart', 'Monthly Sales Chart')}
+            >
+              <IconPrinter className="h-4 w-4" />
+            </Button> */}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => exportToCSV(salesData, 'sales-data')}
+            >
+              <IconTable className="h-4 w-4" />
+            </Button>
+          </div>
+        </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
+        <ChartContainer id="sales-chart" config={chartConfig} className="aspect-auto h-[250px] w-full">
           <BarChart data={salesData}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis 

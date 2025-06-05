@@ -159,3 +159,3113 @@ button{
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+  
+  .dashboard-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .dashboard-content, .dashboard-content * {
+    visibility: visible;
+  }
+}
