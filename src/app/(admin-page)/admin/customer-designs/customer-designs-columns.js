@@ -265,8 +265,8 @@ export const CustomerDesignColumns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={open3DModel}>View 3D Model</DropdownMenuItem>
-            <DropdownMenuItem onClick={openImage}>View Image</DropdownMenuItem>
+            {/* <DropdownMenuItem onClick={open3DModel}>View 3D Model</DropdownMenuItem>
+            <DropdownMenuItem onClick={openImage}>View Image</DropdownMenuItem> */}
             <DropdownMenuSeparator />
             {design.status !== 'approved' && (
                 <Dialog open={open} onOpenChange={setOpen}>
