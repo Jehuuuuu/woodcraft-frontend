@@ -221,7 +221,7 @@ export default function Contact() {
       </section>
       
       {/* Map Section */}
-      <section className="py-16 px-8 md:px-16 bg-[#fcfaf8]">
+      {/* <section className="py-16 px-8 md:px-16 bg-[#fcfaf8]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-serif font-bold text-[#3c2415] mb-4">Visit Our Workshop</h2>
@@ -234,7 +234,7 @@ export default function Contact() {
             <span className="text-[#8B4513] font-serif text-lg">Map Placeholder</span>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

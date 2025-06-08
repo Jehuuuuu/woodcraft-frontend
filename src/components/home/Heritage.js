@@ -1,3 +1,4 @@
+import Image from "next/image";
 export default function Heritage() {
   return (
     <section className="py-16 px-8 md:px-16 bg-[#faf8f5] ">
@@ -57,7 +58,13 @@ export default function Heritage() {
         
         <div className="relative">
           <div className="bg-yellow-300 h-80 w-full rounded-lg">  
-            {/* This would be replaced with an actual image */}
+            <Image 
+            src="/workshop/woodcraft-excellence.jpg"
+            width={400}
+            height={400}
+            alt="Hufano Handicraft Facilty"
+            className="object-cover h-full w-full rounded-lg"
+            />
             <div className="absolute bottom-0 right-0 bg-white p-4 rounded-tl-lg">
               <div className="text-4xl font-bold text-[#8B4513]">30+</div>
               <div className="text-sm text-gray-600">Years of Excellence</div>
