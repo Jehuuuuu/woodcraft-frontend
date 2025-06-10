@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+// const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 export default function CartItems() {
   const { user, setCsrfToken } = useAuthStore();
@@ -392,7 +392,7 @@ export default function CartItems() {
               <Button 
                 className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors"
                 onClick={handleCheckout}
-                disabled={isUpdating || isProcessingCheckout || cartItems.length === 0}
+{/*                 disabled={isUpdating || isProcessingCheckout || cartItems.length === 0} */}
               >
               {isProcessingCheckout ? "Processing..." :  ` Checkout with ${currency}`}
                
