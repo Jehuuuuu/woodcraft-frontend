@@ -304,7 +304,7 @@ export default function CartItems() {
                   size="icon" 
                   className="h-8 w-8 rounded-md"
                   onClick={() => incrementQuantity(item.cart_item_id_num)}
-                  disabled={isUpdating || item.quantity >= item.product.stock}
+                  // disabled={isUpdating || item.quantity >= item.product.stock}
                 >
                   <Plus size={16} />
                 </Button>
