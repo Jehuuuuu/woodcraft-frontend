@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { SyncLoader } from "react-spinners";
-import { User, Mail, Phone, MapPin, Edit, Save, Palette, PlusCircle } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Edit, Save, Palette, PlusCircle, PersonStanding, ChevronDownIcon, Calendar1} from 'lucide-react';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingCart } from 'lucide-react';
@@ -25,13 +25,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export default function ProfileComponent() {
   const { user, setCsrfToken } = useAuthStore();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [date, setDate] = useState(null);
   const [isRendering, setIsRendering] = useState(true);
+  const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState("profile");
   const [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
@@ -57,7 +69,7 @@ export default function ProfileComponent() {
     return data;
   };
 
-  const { data: designs, error, isLoading, mutate } = useSWR(designsUrl, fetcher);
+  const { data: designs, error, isLoading : designsIsLoading, mutate } = useSWR(designsUrl, fetcher);
   const { data: orders, error: ordersError, isLoading: ordersIsLoading, mutate: ordersMutate } = useSWR(ordersURL, fetcher);
   
   useEffect(() => {
@@ -131,7 +143,7 @@ export default function ProfileComponent() {
     }
   };
 
-  if (isRendering) {
+  if (isRendering || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <SyncLoader
@@ -155,9 +167,9 @@ export default function ProfileComponent() {
         <CardContent>
           <Tabs defaultValue="profile" className="w-full">
             <TabsList className="mb-6">
-              <TabsTrigger value="profile" onClick={() => setActiveTab("profile")}>Profile</TabsTrigger>
-              <TabsTrigger value="designs" onClick={() => setActiveTab("designs")}>My Designs</TabsTrigger>
-              <TabsTrigger value="orders" onClick={() => setActiveTab("orders")}>Purchase History</TabsTrigger>
+              <TabsTrigger value="profile">Profile</TabsTrigger>
+              <TabsTrigger value="designs">My Designs</TabsTrigger>
+              <TabsTrigger value="orders">Purchase History</TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
               <div className="flex flex-col md:flex-row gap-8">
@@ -240,7 +252,58 @@ export default function ProfileComponent() {
                         className="mt-1"
                       />
                     </div>
-                    <div className="mb-6">
+                    <div className='flex gap-[10%]'>
+                        <div>
+                          <Label><PersonStanding size={16} className="text-[#8B4513]"/>Gender</Label>
+                          <RadioGroup defaultValue="comfortable">
+                            <div className='flex gap-3 mt-2'>
+                              <div className="flex items-center gap-2">
+                                <RadioGroupItem value="default" id="r1" className="w-5 h-5" disabled={!isEditing}/>
+                                <Label htmlFor="r1">Male</Label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <RadioGroupItem value="comfortable" id="r2" className="w-5 h-5" disabled={!isEditing}/>
+                                <Label htmlFor="r2">Female</Label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <RadioGroupItem value="compact" id="r3" className="w-5 h-5" disabled={!isEditing}/>
+                                <Label htmlFor="r3">Other</Label>
+                              </div>
+                            </div>
+                          </RadioGroup>
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                          <Label htmlFor="date" className="px-1">
+                          <Calendar1 size={16} className="text-[#8B4513]"/>Date of birth
+                          </Label>
+                          <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                id="date"
+                                className="w-48 justify-between font-normal"
+                                disabled={!isEditing}
+                              >
+                                {date ? date.toLocaleDateString() : "Select date"}
+                                <ChevronDownIcon />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={date}
+                                captionLayout="dropdown"
+                                onSelect={(date) => {
+                                  setDate(date)
+                                  setOpen(false)
+                                }}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                    </div>
+                    
+                    {/* <div className="mb-6">
                       <Label htmlFor="bio">About Me</Label>
                       <Textarea
                         id="bio"
@@ -251,9 +314,9 @@ export default function ProfileComponent() {
                         className="mt-1"
                         rows={4}
                       />
-                    </div>
+                    </div> */}
                     {isEditing && (
-                      <div className="flex gap-4 justify-end">
+                      <div className="flex gap-4 justify-end mt-5">
                         <Button
                           type="button"
                           variant="outline"
@@ -283,7 +346,7 @@ export default function ProfileComponent() {
                     </Button>
                   </Link>
                 </div>
-                {isLoading ? (
+                {designsIsLoading ? (
                   <div className="flex justify-center py-12">
                     <SyncLoader color="#8B4513" />
                   </div>
