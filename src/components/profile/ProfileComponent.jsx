@@ -415,10 +415,14 @@ export default function ProfileComponent() {
                               captionLayout="dropdown"
                               onSelect={(selectedDate) => {
                                 if (selectedDate) {
-                                  const simpleDate = selectedDate
-                                    .toISOString()
-                                    .slice(0, 10);
-                                  setDate(simpleDate);
+                                  const year = selectedDate.getFullYear();
+                                  const month = String(
+                                    selectedDate.getMonth() + 1
+                                  ).padStart(2, "0");
+                                  const day = String(
+                                    selectedDate.getDate()
+                                  ).padStart(2, "0");
+                                  setDate(`${year}-${month}-${day}`);
                                 }
                                 setOpen(false);
                               }}
