@@ -1,25 +1,26 @@
-"use client"
+"use client";
 import useSWR from "swr";
 import { DataTable } from "../dashboard/data-table";
 import { useState } from "react";
 import { fetchAllOrders } from "@/actions/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import { usePathname } from "next/navigation";
 
-export default function OrdersTable({columns}) {
-  const [sorting, setSorting] = useState([])
-  const [columnFilters, setColumnFilters] = useState([])
+export default function OrdersTable({ columns }) {
+  const [sorting, setSorting] = useState([]);
+  const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({
     currency: false,
-    items: false 
+    items: false,
   });
-
-  const {data, error, isLoading} = useSWR('/admin/orders', async () => {
+  const pathname = usePathname();
+  const { data, error, isLoading } = useSWR("/admin/orders", async () => {
     try {
       const data = await fetchAllOrders();
-      return data || []; 
+      return data || [];
     } catch (error) {
       console.error("Error fetching orders:", error);
-      return []; 
+      return [];
     }
   });
 
@@ -28,7 +29,6 @@ export default function OrdersTable({columns}) {
       <div className="space-y-10 py-10">
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-80 w-full" />
-        
       </div>
     );
   }
@@ -38,9 +38,10 @@ export default function OrdersTable({columns}) {
   }
 
   return (
-    <DataTable 
+    <DataTable
       columns={columns}
-      data={data || []} // Ensure data is never undefined
+      data={data || []}
+      pathname={pathname}
       sorting={sorting}
       columnVisibility={columnVisibility}
       setSorting={setSorting}
