@@ -52,34 +52,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ProfileComponent() {
   const { user, setCsrfToken } = useAuthStore();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState(null);
   const [isRendering, setIsRendering] = useState(true);
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    bio: "",
-  });
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-    setIsRendering(false);
-  }, [user, router]);
-
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const designsUrl = user?.id
     ? `${apiURL}/get_customer_designs?user=${user.id}`
     : null;
@@ -87,9 +69,17 @@ export default function ProfileComponent() {
     ? `${apiURL}/get_customer_orders?user_id=${user.id}`
     : null;
   const fetcher = async (url) => {
-    const response = await fetch(url);
+    const csrfToken = await setCsrfToken();
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+    });
     const data = await response.json();
-    return data;
+    return data || [];
   };
   const {
     data: designs,
@@ -101,26 +91,29 @@ export default function ProfileComponent() {
     data: orders,
     error: ordersError,
     isLoading: ordersIsLoading,
-    mutate: ordersMutate,
   } = useSWR(ordersURL, fetcher);
+  const {
+    data: customerData,
+    error: customerError,
+    isLoading: customerLoading,
+    mutate: customerMutate,
+  } = useSWR(`${apiURL}/user`, fetcher);
+  const [date, setDate] = useState(customerData?.dateOfBirth);
+  const [gender, setGender] = useState(customerData.gender);
+  const [profileData, setProfileData] = useState({
+    first_name: customerData.firstName || "",
+    last_name: customerData.lastName || "",
+    email: customerData.email || "",
+    phone_number: customerData.phoneNumber || "",
+    address: customerData.address || "",
+  });
 
   useEffect(() => {
-    if (user) {
-      setProfileData({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        address: user.address || "",
-        bio: user.bio || "",
-      });
-
-      if (error) {
-        console.error("Error fetching data:", error);
-        toast.error("Error fetching data");
-      }
+    if (!user) {
+      router.push("/login");
     }
-  }, [user]);
+    setIsRendering(false);
+  }, [user, router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -132,13 +125,44 @@ export default function ProfileComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
+    const formData = new FormData();
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const csrfToken = await setCsrfToken();
+      formData.append("first_name", profileData.first_name);
+      formData.append("last_name", profileData.last_name);
+      formData.append("email", profileData.email);
+      formData.append("phone_number", profileData.phone_number);
+      formData.append("address", profileData.address);
+      formData.append("gender", gender);
+      formData.append("date_of_birth", date);
+      const response = await fetch(
+        `${API_URL}/update_customer_info/${user.id}`,
+        {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+          },
+          body: formData,
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        customerMutate();
+        toast.success("Profile updated successfully");
+      } else {
+        toast.error("Error updating profile");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      customerMutate();
+      toast.error("Error updating profile");
+    } finally {
+      formData.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
       setIsEditing(false);
-      toast.success("Profile updated successfully");
-    }, 1000);
+    }
   };
 
   const handleDesignToCart = async (user, design_id) => {
@@ -175,7 +199,7 @@ export default function ProfileComponent() {
     }
   };
 
-  if (isRendering || isLoading) {
+  if (isRendering || isLoading || customerLoading || ordersIsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <SyncLoader
@@ -211,20 +235,20 @@ export default function ProfileComponent() {
               <div className="flex flex-col md:flex-row gap-8">
                 <div className="md:w-1/3 flex flex-col items-center">
                   <div className="bg-[#f0e6d9] rounded-full p-12 mb-4">
-                    <Input
+                    {/* <Input
                       type="file"
                       id="profile-picture"
                       className="hidden"
                       disabled={!isEditing}
-                    />
+                    /> */}
                     <label htmlFor="profile-picture">
                       <div className="bg-[#f0e6d9] rounded-full  relative">
                         <User size={64} className="text-[#8B4513] " />
-                        {isEditing && (
+                        {/* {isEditing && (
                           <span className="absolute right-[-15] bottom-0.5 cursor-pointer">
                             <Pencil size={20} />
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </label>
                   </div>
@@ -241,22 +265,22 @@ export default function ProfileComponent() {
                   <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                       <div>
-                        <Label htmlFor="firstName">First Name</Label>
+                        <Label htmlFor="first_name">First Name</Label>
                         <Input
-                          id="firstName"
-                          name="firstName"
-                          value={profileData.firstName}
+                          id="first_name"
+                          name="first_name"
+                          defaultValue={customerData.firstName}
                           onChange={handleChange}
                           disabled={!isEditing}
                           className="mt-1"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="lastName">Last Name</Label>
+                        <Label htmlFor="last_name">Last Name</Label>
                         <Input
-                          id="lastName"
-                          name="lastName"
-                          value={profileData.lastName}
+                          id="last_name"
+                          name="last_name"
+                          defaultValue={customerData.lastName}
                           onChange={handleChange}
                           disabled={!isEditing}
                           className="mt-1"
@@ -275,24 +299,26 @@ export default function ProfileComponent() {
                         id="email"
                         name="email"
                         type="email"
-                        value={profileData.email}
+                        defaultValue={customerData.email}
                         onChange={handleChange}
-                        disabled={true}
+                        disabled={!isEditing}
                         className="mt-1"
                       />
                     </div>
                     <div className="mb-4">
                       <Label
-                        htmlFor="phone"
+                        htmlFor="phone_number"
                         className="flex items-center gap-2"
                       >
                         <Phone size={16} className="text-[#8B4513]" /> Phone
                         Number
                       </Label>
                       <Input
-                        id="phone"
-                        name="phone"
-                        value={profileData.phone}
+                        id="phone_number"
+                        name="phone_number"
+                        defaultValue={customerData.phoneNumber}
+                        type="tel"
+                        maxLength="11"
                         onChange={handleChange}
                         disabled={!isEditing}
                         className="mt-1"
@@ -308,7 +334,7 @@ export default function ProfileComponent() {
                       <Textarea
                         id="address"
                         name="address"
-                        value={profileData.address}
+                        defaultValue={customerData.address || ""}
                         onChange={handleChange}
                         disabled={!isEditing}
                         className="mt-1"
@@ -323,7 +349,10 @@ export default function ProfileComponent() {
                           />
                           Gender
                         </Label>
-                        <RadioGroup>
+                        <RadioGroup
+                          value={gender}
+                          onValueChange={(value) => setGender(value)}
+                        >
                           <div className="flex gap-3 mt-2">
                             <div className="flex items-center gap-2">
                               <RadioGroupItem
@@ -368,7 +397,11 @@ export default function ProfileComponent() {
                               className="w-48 justify-between font-normal"
                               disabled={!isEditing}
                             >
-                              {date ? date.toLocaleDateString() : "Select date"}
+                              {date
+                                ? date
+                                : customerData.dateOfBirth
+                                ? customerData.dateOfBirth
+                                : "Select Date"}
                               <ChevronDownIcon />
                             </Button>
                           </PopoverTrigger>
@@ -380,8 +413,13 @@ export default function ProfileComponent() {
                               mode="single"
                               selected={date}
                               captionLayout="dropdown"
-                              onSelect={(date) => {
-                                setDate(date);
+                              onSelect={(selectedDate) => {
+                                if (selectedDate) {
+                                  const simpleDate = selectedDate
+                                    .toISOString()
+                                    .slice(0, 10);
+                                  setDate(simpleDate);
+                                }
                                 setOpen(false);
                               }}
                             />

@@ -1,8 +1,7 @@
-import ProfileComponent from "@/components/profile/ProfileComponent";
-import ProtectedPage from '@/utils/protectedPage';
+import ProfileProtectPage from "@/components/profile/ProfileProtectPage";
 
 export default function ProfilePage() {
   return (
-      <ProfileComponent />
+      <ProfileProtectPage />
   );
 }
