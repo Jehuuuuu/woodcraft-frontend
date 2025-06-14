@@ -99,13 +99,13 @@ export default function ProfileComponent() {
     mutate: customerMutate,
   } = useSWR(`${apiURL}/user`, fetcher);
   const [date, setDate] = useState(customerData?.dateOfBirth);
-  const [gender, setGender] = useState(customerData.gender);
+  const [gender, setGender] = useState(customerData?.gender);
   const [profileData, setProfileData] = useState({
-    first_name: customerData.firstName || "",
-    last_name: customerData.lastName || "",
-    email: customerData.email || "",
-    phone_number: customerData.phoneNumber || "",
-    address: customerData.address || "",
+    first_name: customerData?.firstName || "",
+    last_name: customerData?.lastName || "",
+    email: customerData?.email || "",
+    phone_number: customerData?.phoneNumber || "",
+    address: customerData?.address || "",
   });
 
   useEffect(() => {
