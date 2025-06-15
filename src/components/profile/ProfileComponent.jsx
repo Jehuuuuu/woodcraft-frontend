@@ -115,6 +115,29 @@ export default function ProfileComponent() {
     setIsRendering(false);
   }, [user, router]);
 
+  useEffect(() => {
+    if (!customerData) return;
+
+    setIsLoading(true);
+
+    try {
+      setDate(customerData.dateOfBirth);
+      setGender(customerData.gender);
+      setProfileData({
+        first_name: customerData.firstName,
+        last_name: customerData.lastName,
+        email: customerData.email,
+        phone_number: customerData.phoneNumber,
+        address: customerData.address,
+      });
+    } catch (e) {
+      console.error("Error", e);
+      toast.error("Error fetching customer data");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [customerData]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prev) => ({
