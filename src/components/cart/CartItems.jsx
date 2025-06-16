@@ -30,7 +30,7 @@ export default function CartItems() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currency, setCurrency] = useState("PHP");
-  const [paymentMethod, setPaymentMethod] = useState("cashOnDelivery");
+  const [paymentMethod, setPaymentMethod] = useState("cash_on_delivery");
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
   const router = useRouter();
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -419,12 +419,12 @@ export default function CartItems() {
               onValueChange={(value) => setPaymentMethod(value)}
             >
               <Label
-                htmlFor="cashOnDelivery"
+                htmlFor="cash_on_delivery"
                 className="flex flex-col items-center justify-between rounded-md border-2 p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
               >
                 <RadioGroupItem
-                  value="cashOnDelivery"
-                  id="cashOnDelivery"
+                  value="cash_on_delivery"
+                  id="cash_on_delivery"
                   className={"sr-only"}
                 ></RadioGroupItem>
                 <Truck />
@@ -448,12 +448,12 @@ export default function CartItems() {
                 <span className="text-sm">(Visa, MasterCard, etc.)</span>
               </Label>
               <Label
-                htmlFor="gCash"
+                htmlFor="gcash"
                 className="flex flex-col border-2 rounded-md items-center justify-between p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
               >
                 <RadioGroupItem
-                  value="gCash"
-                  id="gCash"
+                  value="gcash"
+                  id="gcash"
                   className={"sr-only"}
                 ></RadioGroupItem>
                 <Image

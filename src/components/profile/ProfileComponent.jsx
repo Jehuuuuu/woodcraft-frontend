@@ -801,10 +801,15 @@ export default function ProfileComponent() {
                                       ).toLocaleDateString()}
                                     </p>
                                   </div>
-                                  <p>
-                                    Total: {currencySymbol}
-                                    {order.total_price}
-                                  </p>
+                                  <div className="flex gap-4">
+                                    <p>
+                                      Total: {currencySymbol}
+                                      {order.total_price}
+                                    </p>
+                                    <p>
+                                      Payment Method: {order.payment_method}
+                                    </p>
+                                  </div>
                                   <Dialog>
                                     <DialogTrigger asChild>
                                       <Button
@@ -889,10 +894,15 @@ export default function ProfileComponent() {
                                       ).toLocaleDateString()}
                                     </p>
                                   </div>
-                                  <p>
-                                    Total: {currencySymbol}
-                                    {order.total_price}
-                                  </p>
+                                  <div className="flex gap-4">
+                                    <p>
+                                      Total: {currencySymbol}
+                                      {order.total_price}
+                                    </p>
+                                    <p>
+                                      Payment Method: {order.payment_method}
+                                    </p>
+                                  </div>
                                   <Dialog>
                                     <DialogTrigger asChild>
                                       <Button
@@ -977,10 +987,15 @@ export default function ProfileComponent() {
                                       ).toLocaleDateString()}
                                     </p>
                                   </div>
-                                  <p>
-                                    Total: {currencySymbol}
-                                    {order.total_price}
-                                  </p>
+                                  <div className="flex gap-4">
+                                    <p>
+                                      Total: {currencySymbol}
+                                      {order.total_price}
+                                    </p>
+                                    <p>
+                                      Payment Method: {order.payment_method}
+                                    </p>
+                                  </div>
                                   <Dialog>
                                     <DialogTrigger asChild>
                                       <Button
@@ -1065,10 +1080,15 @@ export default function ProfileComponent() {
                                       ).toLocaleDateString()}
                                     </p>
                                   </div>
-                                  <p>
-                                    Total: {currencySymbol}
-                                    {order.total_price}
-                                  </p>
+                                  <div className="flex gap-4">
+                                    <p>
+                                      Total: {currencySymbol}
+                                      {order.total_price}
+                                    </p>
+                                    <p>
+                                      Payment Method: {order.payment_method}
+                                    </p>
+                                  </div>
                                   <Dialog>
                                     <DialogTrigger asChild>
                                       <Button
@@ -1153,10 +1173,15 @@ export default function ProfileComponent() {
                                       ).toLocaleDateString()}
                                     </p>
                                   </div>
-                                  <p>
-                                    Total: {currencySymbol}
-                                    {order.total_price}
-                                  </p>
+                                  <div className="flex gap-4">
+                                    <p>
+                                      Total: {currencySymbol}
+                                      {order.total_price}
+                                    </p>
+                                    <p>
+                                      Payment Method: {order.payment_method}
+                                    </p>
+                                  </div>
                                   <Dialog>
                                     <DialogTrigger asChild>
                                       <Button
