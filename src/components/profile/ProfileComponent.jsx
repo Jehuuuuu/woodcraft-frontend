@@ -381,7 +381,7 @@ export default function ProfileComponent() {
                               <RadioGroupItem
                                 value="male"
                                 id="r1"
-                                className="w-5 h-5"
+                                className="w-5 h-5 sr-only"
                                 disabled={!isEditing}
                               />
                               <Label htmlFor="r1">Male</Label>

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Minus, Trash2 } from "lucide-react";
+import { Plus, Minus, Trash2, Truck } from "lucide-react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { useAuthStore } from "@/store/authStore";
@@ -30,6 +30,7 @@ export default function CartItems() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currency, setCurrency] = useState("PHP");
+  const [paymentMethod, setPaymentMethod] = useState("cashOnDelivery");
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
   const router = useRouter();
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -410,7 +411,61 @@ export default function CartItems() {
               </span>
             </div>
           </div>
-
+          <div>
+            <h1 className="text-xl">Payment Methods</h1>
+            <RadioGroup
+              className={"grid grid-cols-3 py-4"}
+              value={paymentMethod}
+              onValueChange={(value) => setPaymentMethod(value)}
+            >
+              <Label
+                htmlFor="cashOnDelivery"
+                className="flex flex-col items-center justify-between rounded-md border-2 p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
+              >
+                <RadioGroupItem
+                  value="cashOnDelivery"
+                  id="cashOnDelivery"
+                  className={"sr-only"}
+                ></RadioGroupItem>
+                <Truck />
+                <span className="text-sm">Cash on Delivery</span>
+              </Label>
+              <Label
+                htmlFor="stripe"
+                className="flex flex-col items-center justify-between rounded-md border-2 p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
+              >
+                <RadioGroupItem
+                  value="stripe"
+                  id="stripe"
+                  className={"sr-only"}
+                ></RadioGroupItem>
+                <Image
+                  src={"/Stripe_Logo.svg"}
+                  alt="stripe_logo"
+                  width={60}
+                  height={30}
+                />
+                <span className="text-sm">(Visa, MasterCard, etc.)</span>
+              </Label>
+              <Label
+                htmlFor="gCash"
+                className="flex flex-col border-2 rounded-md items-center justify-between p-4 hover:bg-[var(--light-bg)] hover:text-[var(--text-dark)] [&:has([data-state=checked])]:border-[var(--primary-color)]"
+              >
+                <RadioGroupItem
+                  value="gCash"
+                  id="gCash"
+                  className={"sr-only"}
+                ></RadioGroupItem>
+                <Image
+                  src={"/GCash_logo.svg"}
+                  alt="GCash_logo"
+                  width={100}
+                  height={30}
+                />
+                <span className="text-sm">GCash</span>
+              </Label>
+            </RadioGroup>
+          </div>
           <Dialog>
             <DialogTrigger className="w-full bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors py-2 px-4 rounded-md">
               Proceed to Checkout
