@@ -53,6 +53,7 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import AddressForm from "./Addresses";
 
 export default function ProfileComponent() {
   const { user, setCsrfToken } = useAuthStore();
@@ -251,7 +252,8 @@ export default function ProfileComponent() {
           <Tabs defaultValue="profile" className="w-full">
             <TabsList className="mb-6">
               <TabsTrigger value="profile">Profile</TabsTrigger>
-              <TabsTrigger value="designs">My Designs</TabsTrigger>
+              <TabsTrigger value="addresses">Addresses</TabsTrigger>
+              <TabsTrigger value="designs">Designs</TabsTrigger>
               <TabsTrigger value="orders">Purchase History</TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
@@ -264,7 +266,7 @@ export default function ProfileComponent() {
                       className="hidden"
                       disabled={!isEditing}
                     /> */}
-                    <label htmlFor="profile-picture">
+                    <Label htmlFor="profile-picture">
                       <div className="bg-[#f0e6d9] rounded-full  relative">
                         <User size={64} className="text-[#8B4513] " />
                         {/* {isEditing && (
@@ -273,7 +275,7 @@ export default function ProfileComponent() {
                           </span>
                         )} */}
                       </div>
-                    </label>
+                    </Label>
                   </div>
                   {!isEditing && (
                     <Button
@@ -381,7 +383,7 @@ export default function ProfileComponent() {
                               <RadioGroupItem
                                 value="male"
                                 id="r1"
-                                className="w-5 h-5 sr-only"
+                                className="w-5 h-5"
                                 disabled={!isEditing}
                               />
                               <Label htmlFor="r1">Male</Label>
@@ -488,11 +490,36 @@ export default function ProfileComponent() {
                 </div>
               </div>
             </TabsContent>
+            <TabsContent value="addresses">
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-medium text-[#3c2415]">
+                    My Addresses
+                  </h3>
+                  <Dialog>
+                    <DialogTrigger className="rounded-md px-4 py-[0.65rem] bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors ">
+                      <Label className="cursor-pointer">
+                        <PlusCircle size={16} className="mr-1" /> Add New
+                        Address
+                      </Label>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogTitle>New Address</DialogTitle>
+                      <DialogDescription>
+                        Add a new shipping address by filling out the form
+                        below.
+                      </DialogDescription>
+                      <AddressForm />
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </div>
+            </TabsContent>
             <TabsContent value="designs">
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h3 className="text-xl font-medium text-[#3c2415]">
-                    Your Custom Designs
+                    My Custom Designs
                   </h3>
                   <Link href="/configurator">
                     <Button className="bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors">
