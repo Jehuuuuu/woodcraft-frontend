@@ -20,7 +20,7 @@ function CheckoutSuccess() {
     } else {
       setLoading(false);
     }
-  }, [sessionId]);
+  }, [fetchReceiptData, sessionId]);
 
   const fetchReceiptData = async () => {
     try {

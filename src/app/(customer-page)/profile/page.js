@@ -1,6 +1,6 @@
 import ProfileProtectPage from "@/components/profile/ProfileProtectPage";
 
-export default function ProfilePage() {
+export default async function ProfilePage() { 
   return (
       <ProfileProtectPage />
   );

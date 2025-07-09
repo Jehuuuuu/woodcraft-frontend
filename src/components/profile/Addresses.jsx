@@ -1,4 +1,4 @@
-import { useForm } from "@tanstack/react-form";
+import { useForm, useStore } from "@tanstack/react-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Form } from "../ui/form";
@@ -22,8 +22,12 @@ import {
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
+import regions from "./region.json";
+import cities from "./city.json";
+import barangays from "./barangay.json";
+import provinces from "./province.json";
 
-export default function AddressForm() {
+export default function AddressForm({ setAddressOpen }) {
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -38,8 +42,28 @@ export default function AddressForm() {
     },
     onSubmit: ({ value }) => {
       console.log(value);
+      console.log(province);
+      console.log(provinceSelected);
+      console.log(provinceByCode);
     },
   });
+  const region = useStore(form.store, (state) => state.values.region);
+  const regionSelected = region
+    ? regions.find((r) => r.region_name === region)
+    : null;
+  const regionByCode = regionSelected ? regionSelected.region_code : null;
+  const province = useStore(form.store, (state) => state.values.province);
+  const provinceSelected = province
+    ? provinces.find((p) => p.province_name === province)
+    : null;
+  const provinceByCode = provinceSelected
+    ? provinceSelected.province_code
+    : null;
+  const city = useStore(form.store, (state) => state.values.city);
+  const citySelected = cities.find((c) => c.city_name === city);
+  const cityByCode = citySelected ? citySelected.city_code : null;
+  const barangay = useStore(form.store, (state) => state.values.barangay);
+  const errors = useStore(form.store, (state) => state.errorMap);
   return (
     <Form
       onSubmit={(e) => {
@@ -91,7 +115,10 @@ export default function AddressForm() {
       <Drawer>
         <DrawerTrigger asChild>
           <Button variant="outline" className={"w-full"}>
-            <span>Region, Province, City, Barangay</span>
+            <span className="text-wrap">
+              {region ? region : "Region"}, {province ? province : "Province"},{" "}
+              {city ? city : "City"}, {barangay ? barangay : "Barangay"}
+            </span>
           </Button>
         </DrawerTrigger>
         <DrawerContent>
@@ -105,6 +132,13 @@ export default function AddressForm() {
             <div>
               <form.Field
                 name="region"
+                listeners={{
+                  onChange: () => {
+                    form.setFieldValue("province", "");
+                    form.setFieldValue("city", "");
+                    form.setFieldValue("barangay", "");
+                  },
+                }}
                 children={(field) => (
                   <Select
                     name="region"
@@ -120,9 +154,14 @@ export default function AddressForm() {
                       <SelectValue placeholder="Region" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
+                      {regions.map((region) => (
+                        <SelectItem
+                          key={region.psgc_code}
+                          value={region.region_name}
+                        >
+                          {region.region_name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
@@ -131,11 +170,18 @@ export default function AddressForm() {
             <div>
               <form.Field
                 name="province"
+                listeners={{
+                  onChange: () => {
+                    form.setFieldValue("city", "");
+                    form.setFieldValue("barangay", "");
+                  },
+                }}
                 children={(field) => (
                   <Select
                     name="province"
                     id="province"
                     value={field.state.value}
+                    disabled={!region}
                     onBlur={field.handleBlur}
                     onValueChange={(value) => {
                       field.handleChange(value);
@@ -146,11 +192,20 @@ export default function AddressForm() {
                       <SelectValue placeholder="Province" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bacoor">Bacoor</SelectItem>
-                      <SelectItem value="cavite">Cavite</SelectItem>
-                      <SelectItem value="manila">Manila</SelectItem>
-                      <SelectItem value="taraw">Taraw</SelectItem>
-                      <SelectItem value="zambales">Zambales</SelectItem>
+                      {provinces
+                        .filter(
+                          (province) => province.region_code === regionByCode
+                        )
+                        .map((province) => {
+                          return (
+                            <SelectItem
+                              key={province.psgc_code}
+                              value={province.province_name}
+                            >
+                              {province.province_name}
+                            </SelectItem>
+                          );
+                        })}
                     </SelectContent>
                   </Select>
                 )}
@@ -159,11 +214,17 @@ export default function AddressForm() {
             <div>
               <form.Field
                 name="city"
+                listeners={{
+                  onChange: () => {
+                    form.setFieldValue("barangay", "");
+                  },
+                }}
                 children={(field) => (
                   <Select
                     name="city"
                     id="city"
                     value={field.state.value}
+                    disabled={!province}
                     onBlur={field.handleBlur}
                     onValueChange={(value) => {
                       field.handleChange(value);
@@ -174,8 +235,18 @@ export default function AddressForm() {
                       <SelectValue placeholder="City" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="imus">Imus</SelectItem>
-                      <SelectItem value="dasma">Dasma</SelectItem>
+                      {cities
+                        .filter((city) => city.province_code === provinceByCode)
+                        .map((city) => {
+                          return (
+                            <SelectItem
+                              key={city.psgc_code}
+                              value={city.city_name}
+                            >
+                              {city.city_name}
+                            </SelectItem>
+                          );
+                        })}
                     </SelectContent>
                   </Select>
                 )}
@@ -188,6 +259,7 @@ export default function AddressForm() {
                   <Select
                     name="barangay"
                     id="barangay"
+                    disabled={!city}
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onValueChange={(value) => {
@@ -199,8 +271,18 @@ export default function AddressForm() {
                       <SelectValue placeholder="Barangay" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="barangay1">Barangay143</SelectItem>
-                      <SelectItem value="barangay2">Barangay2</SelectItem>
+                      {barangays
+                        .filter((barangay) => barangay.city_code === cityByCode)
+                        .map((barangay) => {
+                          return (
+                            <SelectItem
+                              key={barangay.brgy_code}
+                              value={barangay.brgy_name}
+                            >
+                              {barangay.brgy_name}
+                            </SelectItem>
+                          );
+                        })}
                     </SelectContent>
                   </Select>
                 )}
@@ -271,7 +353,14 @@ export default function AddressForm() {
           </div>
         )}
       />
-      <Button type="submit" className="w-full">
+      <Button
+        type="submit"
+        className="w-full"
+        onClick={() => {
+          form.handleSubmit();
+          setAddressOpen(false);
+        }}
+      >
         Save Address
       </Button>
     </Form>

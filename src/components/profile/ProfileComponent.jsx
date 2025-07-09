@@ -62,6 +62,7 @@ export default function ProfileComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRendering, setIsRendering] = useState(true);
   const [open, setOpen] = useState(false);
+  const [addressOpen, setAddressOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const designsUrl = user?.id
     ? `${apiURL}/get_customer_designs?user=${user.id}`
@@ -496,7 +497,7 @@ export default function ProfileComponent() {
                   <h3 className="text-xl font-medium text-[#3c2415]">
                     My Addresses
                   </h3>
-                  <Dialog>
+                  <Dialog open={addressOpen} onOpenChange={setAddressOpen}>
                     <DialogTrigger className="rounded-md px-4 py-[0.65rem] bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors ">
                       <Label className="cursor-pointer">
                         <PlusCircle size={16} className="mr-1" /> Add New
@@ -509,7 +510,7 @@ export default function ProfileComponent() {
                         Add a new shipping address by filling out the form
                         below.
                       </DialogDescription>
-                      <AddressForm />
+                      <AddressForm setAddressOpen={setAddressOpen} />
                     </DialogContent>
                   </Dialog>
                 </div>
