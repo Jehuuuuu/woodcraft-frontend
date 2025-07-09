@@ -26,6 +26,7 @@ import regions from "./region.json";
 import cities from "./city.json";
 import barangays from "./barangay.json";
 import provinces from "./province.json";
+import zipcodes from "./zipcodes.json";
 
 export default function AddressForm({ setAddressOpen }) {
   const form = useForm({
@@ -63,6 +64,7 @@ export default function AddressForm({ setAddressOpen }) {
   const citySelected = cities.find((c) => c.city_name === city);
   const cityByCode = citySelected ? citySelected.city_code : null;
   const barangay = useStore(form.store, (state) => state.values.barangay);
+  const zipCode = Object.keys(zipcodes).find((z) => zipcodes[z] === city);
   const errors = useStore(form.store, (state) => state.errorMap);
   return (
     <Form
@@ -307,12 +309,12 @@ export default function AddressForm({ setAddressOpen }) {
               type={"number"}
               name="postalCode"
               id="postalCode"
+              placeholder={zipCode}
               value={field.state.value}
-              onBlur={field.handleBlur}
+              className={"mt-1"}
               onChange={(e) => {
                 field.handleChange(e.target.value);
               }}
-              className={"mt-1"}
             />
           </div>
         )}
