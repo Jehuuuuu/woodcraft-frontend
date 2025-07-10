@@ -1,9 +1,10 @@
-export default async function getSuggestions(query){
-const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`
+export default async function getSuggestions(query, lat, long){
+const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(long)}&limit=10`
 try{
     const response =  await fetch(url);
     if (!response.ok) {
-        throw new Error("Error fetching suggestions");
+        const errorText = await response.text(); 
+        throw new Error(`Error fetching suggestions: ${errorText}`);
       }
     const data = await response.json()
     return data.features.map((feature) => ({

@@ -1,4 +1,5 @@
 import { useForm, useStore } from "@tanstack/react-form";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Form } from "../ui/form";
@@ -40,6 +41,8 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
+import getLongLat from "@/lib/geocoder";
+
 export default function AddressForm({ setAddressOpen }) {
   const form = useForm({
     defaultValues: {
@@ -53,10 +56,12 @@ export default function AddressForm({ setAddressOpen }) {
       street: "",
       isDefault: false,
     },
-    onSubmit: ({ value }) => {
+    onSubmit: async ({ value }) => {
       console.log(value);
       console.log(data);
       console.log(streetAddress);
+      console.log(latitude);
+      console.log(longitude);
     },
   });
   const region = useStore(form.store, (state) => state.values.region);
@@ -81,11 +86,15 @@ export default function AddressForm({ setAddressOpen }) {
     (state) => state.values.postalCode
   );
   const streetAddress = useStore(form.store, (state) => state.values.street);
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
   const errors = useStore(form.store, (state) => state.errorMap);
   const { data } = useQuery({
-    queryKey: ["street", streetAddress],
-    queryFn: ({ queryKey }) => getSuggestions(queryKey[1]),
+    queryKey: ["street", streetAddress, latitude, longitude],
+    queryFn: ({ queryKey }) =>
+      getSuggestions(queryKey[1], queryKey[2], queryKey[3]),
     enabled: streetAddress.length > 3,
+    staleTime: 5 * 1000,
   });
   return (
     <Form
@@ -287,6 +296,17 @@ export default function AddressForm({ setAddressOpen }) {
                     onBlur={field.handleBlur}
                     onValueChange={(value) => {
                       field.handleChange(value);
+                      (async () => {
+                        try {
+                          const data = await getLongLat(city, province, region);
+                          if (data) {
+                            setLatitude(data.lat);
+                            setLongitude(data.lon);
+                          }
+                        } catch (error) {
+                          console.error(error);
+                        }
+                      })();
                     }}
                     className={"mt-1"}
                   >
@@ -354,7 +374,8 @@ export default function AddressForm({ setAddressOpen }) {
                 value={streetAddress}
                 name="street"
                 onValueChange={(value) => field.handleChange(value)}
-                placeholder="Type a command or search..."
+                placeholder="Type your address here..."
+                disabled={!postalCodeField}
               />
               <CommandList>
                 {/* <CommandEmpty>No results found.</CommandEmpty> */}
