@@ -54,9 +54,18 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import AddressForm from "./Addresses";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function ProfileComponent() {
   const { user, setCsrfToken } = useAuthStore();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 10000,
+      },
+    },
+  });
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -510,7 +519,9 @@ export default function ProfileComponent() {
                         Add a new shipping address by filling out the form
                         below.
                       </DialogDescription>
-                      <AddressForm setAddressOpen={setAddressOpen} />
+                      <QueryClientProvider client={queryClient}>
+                        <AddressForm setAddressOpen={setAddressOpen} />
+                      </QueryClientProvider>
                     </DialogContent>
                   </Dialog>
                 </div>

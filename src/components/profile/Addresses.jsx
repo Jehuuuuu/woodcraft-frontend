@@ -27,7 +27,19 @@ import cities from "./city.json";
 import barangays from "./barangay.json";
 import provinces from "./province.json";
 import zipcodes from "./zipcodes.json";
-
+import getSuggestions from "@/lib/autocomplete";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
 export default function AddressForm({ setAddressOpen }) {
   const form = useForm({
     defaultValues: {
@@ -43,9 +55,8 @@ export default function AddressForm({ setAddressOpen }) {
     },
     onSubmit: ({ value }) => {
       console.log(value);
-      console.log(province);
-      console.log(provinceSelected);
-      console.log(provinceByCode);
+      console.log(data);
+      console.log(streetAddress);
     },
   });
   const region = useStore(form.store, (state) => state.values.region);
@@ -65,7 +76,17 @@ export default function AddressForm({ setAddressOpen }) {
   const cityByCode = citySelected ? citySelected.city_code : null;
   const barangay = useStore(form.store, (state) => state.values.barangay);
   const zipCode = Object.keys(zipcodes).find((z) => zipcodes[z] === city);
+  const postalCodeField = useStore(
+    form.store,
+    (state) => state.values.postalCode
+  );
+  const streetAddress = useStore(form.store, (state) => state.values.street);
   const errors = useStore(form.store, (state) => state.errorMap);
+  const { data } = useQuery({
+    queryKey: ["street", streetAddress],
+    queryFn: ({ queryKey }) => getSuggestions(queryKey[1]),
+    enabled: streetAddress.length > 3,
+  });
   return (
     <Form
       onSubmit={(e) => {
@@ -308,10 +329,12 @@ export default function AddressForm({ setAddressOpen }) {
             <Input
               type={"number"}
               name="postalCode"
+              disabled={!barangay}
               id="postalCode"
               placeholder={zipCode}
               value={field.state.value}
               className={"mt-1"}
+              onBlur={field.handleBlur}
               onChange={(e) => {
                 field.handleChange(e.target.value);
               }}
@@ -323,25 +346,43 @@ export default function AddressForm({ setAddressOpen }) {
         name="street"
         children={(field) => (
           <div>
-            <Label htmlFor="street">Street Name, Building, House No.</Label>
-            <Textarea
-              type={"text"}
-              name="street"
-              id="street"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => {
-                field.handleChange(e.target.value);
-              }}
-              className={"mt-1"}
-            />
+            <Label htmlFor="street" className={"mb-2"}>
+              Street Name, Building, House No.
+            </Label>
+            <Command>
+              <CommandInput
+                value={streetAddress}
+                name="street"
+                onValueChange={(value) => field.handleChange(value)}
+                placeholder="Type a command or search..."
+              />
+              <CommandList>
+                {/* <CommandEmpty>No results found.</CommandEmpty> */}
+                {/* <CommandGroup heading="Suggestions"></CommandGroup> */}
+                {streetAddress.length > 3
+                  ? data?.map((suggestion) => {
+                      return (
+                        <CommandItem
+                          key={suggestion.lat}
+                          value={suggestion.name}
+                          onSelect={() => {
+                            field.handleChange(suggestion.name); // update form state
+                          }}
+                        >
+                          {suggestion.name}
+                        </CommandItem>
+                      );
+                    })
+                  : null}
+              </CommandList>
+            </Command>
           </div>
         )}
       />
       <form.Field
         name="isDefault"
         children={(field) => (
-          <div className="flex gap-2">
+          <div className="flex gap-2 mt-4">
             <Checkbox
               name="isDefault"
               id="isDefault"
