@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import DraggableMarker from "./LocationMarker";
+import LocateButton from "./LocateButton";
 
 // Fix default icon path issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -25,6 +26,7 @@ export default function Map({ lat, lon, setLatitude, setLongitude }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <LocateButton setLatitude={setLatitude} setLongitude={setLongitude} />
         <DraggableMarker
           position={position}
           setLatitude={setLatitude}

@@ -1,5 +1,5 @@
 import { useRef, useMemo } from "react";
-import { Marker, Popup } from "react-leaflet";
+import { Marker, Popup, useMapEvents } from "react-leaflet";
 
 export default function DraggableMarker({
   position,
@@ -20,6 +20,7 @@ export default function DraggableMarker({
     }),
     []
   );
+
   return (
     <Marker
       draggable={true}
