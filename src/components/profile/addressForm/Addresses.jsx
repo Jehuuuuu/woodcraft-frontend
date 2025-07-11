@@ -58,6 +58,8 @@ export default function AddressForm({ setAddressOpen }) {
     },
     onSubmit: async ({ value }) => {
       console.log(value);
+      console.log(latitude);
+      console.log(longitude);
     },
   });
   const region = useStore(form.store, (state) => state.values.region);
@@ -413,7 +415,12 @@ export default function AddressForm({ setAddressOpen }) {
       />
       {latitude && longitude && (
         <div className="border-2 my-2 " style={{ height: "250px" }}>
-          <Map lat={latitude} lon={longitude} />
+          <Map
+            lat={latitude}
+            lon={longitude}
+            setLatitude={setLatitude}
+            setLongitude={setLongitude}
+          />
         </div>
       )}
       <form.Field
