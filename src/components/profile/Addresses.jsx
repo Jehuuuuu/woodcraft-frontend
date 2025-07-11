@@ -386,7 +386,7 @@ export default function AddressForm({ setAddressOpen }) {
                       return (
                         <CommandItem
                           key={suggestion.id}
-                          value={`${suggestion.name} - ${suggestion.postcode}`}
+                          value={`${suggestion.name} - ${suggestion.id}`}
                           onSelect={() => {
                             field.handleChange(suggestion.name);
                           }}

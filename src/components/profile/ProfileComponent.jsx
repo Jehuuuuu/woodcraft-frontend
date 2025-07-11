@@ -62,7 +62,7 @@ export default function ProfileComponent() {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
-        staleTime: 10000,
+        staleTime: Infinity,
       },
     },
   });
