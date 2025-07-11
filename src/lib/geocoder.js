@@ -10,6 +10,10 @@ try{
         throw new Error("Error fetching longlat");
     }
     const data = await response.json();
+    if (!data || data.length === 0) {
+        console.error("No results found from Nominatim for this query");
+        return null; 
+      }
     return {
         lat: data[0].lat,
         lon: data[0].lon,

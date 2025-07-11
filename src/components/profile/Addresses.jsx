@@ -21,7 +21,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import regions from "./region.json";
 import cities from "./city.json";
@@ -32,16 +31,13 @@ import getSuggestions from "@/lib/autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import {
   Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
+  CommandEmpty,
 } from "@/components/ui/command";
 import getLongLat from "@/lib/geocoder";
+import { useDebounce } from "use-debounce";
 
 export default function AddressForm({ setAddressOpen }) {
   const form = useForm({
@@ -86,14 +82,15 @@ export default function AddressForm({ setAddressOpen }) {
     (state) => state.values.postalCode
   );
   const streetAddress = useStore(form.store, (state) => state.values.street);
+  const [debouncedStreetAddress] = useDebounce(streetAddress, 500);
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
   const errors = useStore(form.store, (state) => state.errorMap);
   const { data } = useQuery({
-    queryKey: ["street", streetAddress, latitude, longitude],
+    queryKey: ["street", debouncedStreetAddress, latitude, longitude],
     queryFn: ({ queryKey }) =>
       getSuggestions(queryKey[1], queryKey[2], queryKey[3]),
-    enabled: streetAddress.length > 3,
+    enabled: debouncedStreetAddress.length > 3,
     staleTime: 5 * 1000,
   });
   return (
@@ -298,10 +295,14 @@ export default function AddressForm({ setAddressOpen }) {
                       field.handleChange(value);
                       (async () => {
                         try {
-                          const data = await getLongLat(city, province, region);
-                          if (data) {
-                            setLatitude(data.lat);
-                            setLongitude(data.lon);
+                          const longLat = await getLongLat(
+                            city,
+                            province,
+                            region
+                          );
+                          if (longLat) {
+                            setLatitude(longLat.lat);
+                            setLongitude(longLat.lon);
                           }
                         } catch (error) {
                           console.error(error);
@@ -378,19 +379,29 @@ export default function AddressForm({ setAddressOpen }) {
                 disabled={!postalCodeField}
               />
               <CommandList>
-                {/* <CommandEmpty>No results found.</CommandEmpty> */}
+                <CommandEmpty>No suggestions found.</CommandEmpty>
                 {/* <CommandGroup heading="Suggestions"></CommandGroup> */}
                 {streetAddress.length > 3
                   ? data?.map((suggestion) => {
                       return (
                         <CommandItem
-                          key={suggestion.lat}
-                          value={suggestion.name}
+                          key={suggestion.id}
+                          value={`${suggestion.name} - ${suggestion.postcode}`}
                           onSelect={() => {
-                            field.handleChange(suggestion.name); // update form state
+                            field.handleChange(suggestion.name);
                           }}
                         >
-                          {suggestion.name}
+                          <div>{suggestion.name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {[
+                              suggestion.type,
+                              suggestion.city,
+                              suggestion.country,
+                              suggestion.postcode,
+                            ]
+                              .filter(Boolean)
+                              .join(", ")}
+                          </div>
                         </CommandItem>
                       );
                     })
