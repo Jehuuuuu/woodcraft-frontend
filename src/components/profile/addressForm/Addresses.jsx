@@ -1,15 +1,15 @@
 import { useForm, useStore } from "@tanstack/react-form";
 import { useState } from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Form } from "../ui/form";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
+import { Form } from "../../ui/form";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectValue,
   SelectItem,
-} from "../ui/select";
+} from "../../ui/select";
 import {
   Drawer,
   DrawerClose,
@@ -20,8 +20,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
+import { Button } from "../../ui/button";
+import { Checkbox } from "../../ui/checkbox";
 import regions from "./region.json";
 import cities from "./city.json";
 import barangays from "./barangay.json";
@@ -38,6 +38,10 @@ import {
 } from "@/components/ui/command";
 import getLongLat from "@/lib/geocoder";
 import { useDebounce } from "use-debounce";
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("./Map"), {
+  ssr: false,
+});
 
 export default function AddressForm({ setAddressOpen }) {
   const form = useForm({
@@ -54,10 +58,6 @@ export default function AddressForm({ setAddressOpen }) {
     },
     onSubmit: async ({ value }) => {
       console.log(value);
-      console.log(data);
-      console.log(streetAddress);
-      console.log(latitude);
-      console.log(longitude);
     },
   });
   const region = useStore(form.store, (state) => state.values.region);
@@ -116,7 +116,7 @@ export default function AddressForm({ setAddressOpen }) {
                 onChange={(e) => {
                   field.handleChange(e.target.value);
                 }}
-                className={"mt-1"}
+                className={"my-2"}
               />
             </div>
           )}
@@ -135,7 +135,7 @@ export default function AddressForm({ setAddressOpen }) {
                 onChange={(e) => {
                   field.handleChange(e.target.value);
                 }}
-                className={"mt-1"}
+                className={"my-2"}
               />
             </div>
           )}
@@ -143,7 +143,7 @@ export default function AddressForm({ setAddressOpen }) {
       </div>
       <Drawer>
         <DrawerTrigger asChild>
-          <Button variant="outline" className={"w-full"}>
+          <Button variant="outline" className={"w-full my-2"}>
             <span className="text-wrap">
               {region ? region : "Region"}, {province ? province : "Province"},{" "}
               {city ? city : "City"}, {barangay ? barangay : "Barangay"}
@@ -354,7 +354,7 @@ export default function AddressForm({ setAddressOpen }) {
               id="postalCode"
               placeholder={zipCode}
               value={field.state.value}
-              className={"mt-1"}
+              className={"my-2"}
               onBlur={field.handleBlur}
               onChange={(e) => {
                 field.handleChange(e.target.value);
@@ -367,7 +367,7 @@ export default function AddressForm({ setAddressOpen }) {
         name="street"
         children={(field) => (
           <div>
-            <Label htmlFor="street" className={"mb-2"}>
+            <Label htmlFor="street" className={"my-2"}>
               Street Name, Building, House No.
             </Label>
             <Command>
@@ -386,7 +386,7 @@ export default function AddressForm({ setAddressOpen }) {
                       return (
                         <CommandItem
                           key={suggestion.id}
-                          value={`${suggestion.name} - ${suggestion.id}`}
+                          value={`${suggestion.name} - ${suggestion.lat} - ${suggestion.lon} - ${suggestion.id}`}
                           onSelect={() => {
                             field.handleChange(suggestion.name);
                           }}
@@ -411,10 +411,15 @@ export default function AddressForm({ setAddressOpen }) {
           </div>
         )}
       />
+      {latitude && longitude && (
+        <div className="border-2 my-2 " style={{ height: "250px" }}>
+          <Map lat={latitude} lon={longitude} />
+        </div>
+      )}
       <form.Field
         name="isDefault"
         children={(field) => (
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 my-2">
             <Checkbox
               name="isDefault"
               id="isDefault"
@@ -428,9 +433,10 @@ export default function AddressForm({ setAddressOpen }) {
           </div>
         )}
       />
+
       <Button
         type="submit"
-        className="w-full"
+        className="w-full my-2"
         onClick={() => {
           form.handleSubmit();
           setAddressOpen(false);

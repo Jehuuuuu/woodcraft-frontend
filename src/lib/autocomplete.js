@@ -1,5 +1,5 @@
 export default async function getSuggestions(query, lat, long){
-let url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=10`;
+let url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=en&limit=10`;
 
 if (lat && long) {
       url += `&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(long)}`;

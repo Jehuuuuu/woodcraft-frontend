@@ -53,7 +53,7 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import AddressForm from "./Addresses";
+import AddressForm from "./addressForm/Addresses";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function ProfileComponent() {
@@ -513,15 +513,19 @@ export default function ProfileComponent() {
                         Address
                       </Label>
                     </DialogTrigger>
-                    <DialogContent>
-                      <DialogTitle>New Address</DialogTitle>
-                      <DialogDescription>
-                        Add a new shipping address by filling out the form
-                        below.
-                      </DialogDescription>
-                      <QueryClientProvider client={queryClient}>
-                        <AddressForm setAddressOpen={setAddressOpen} />
-                      </QueryClientProvider>
+                    <DialogContent className="max-h-[95vh] flex flex-col">
+                      <div className="flex flex-col px-2 gap-2">
+                        <DialogTitle>New Address</DialogTitle>
+                        <DialogDescription>
+                          Add a new shipping address by filling out the form
+                          below.
+                        </DialogDescription>
+                      </div>
+                      <div className="overflow-y-auto flex-1 px-2">
+                        <QueryClientProvider client={queryClient}>
+                          <AddressForm setAddressOpen={setAddressOpen} />
+                        </QueryClientProvider>
+                      </div>
                     </DialogContent>
                   </Dialog>
                 </div>

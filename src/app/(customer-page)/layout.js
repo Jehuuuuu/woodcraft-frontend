@@ -1,5 +1,6 @@
 import { Inter, Playfair_Display } from "next/font/google";
 import "../globals.css"
+import 'leaflet/dist/leaflet.css'
 import NavigationWrapper from "../../components/layouts/NavigationWrapper";
 import { Toaster } from "@/components/ui/sonner"
 
