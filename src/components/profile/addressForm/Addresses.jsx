@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm, useStore } from "@tanstack/react-form";
 import { useState } from "react";
 import { Input } from "../../ui/input";
@@ -90,13 +92,19 @@ export default function AddressForm({ setAddressOpen }) {
   );
   const streetAddress = useStore(form.store, (state) => state.values.street);
   const [debouncedStreetAddress] = useDebounce(streetAddress, 500);
+  const [stopSearching, setStopSearching] = useState(false);
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
   const errors = useStore(form.store, (state) => state.errorMap);
   const { data } = useQuery({
     queryKey: ["street", debouncedStreetAddress, latitude, longitude],
-    queryFn: ({ queryKey }) =>
-      getSuggestions(queryKey[1], queryKey[2], queryKey[3]),
+    queryFn: async ({ queryKey }) => {
+      if (!stopSearching) {
+        return await getSuggestions(queryKey[1], queryKey[2], queryKey[3]);
+      }
+      return [];
+    },
+
     enabled: debouncedStreetAddress.length > 3,
     staleTime: 5 * 1000,
   });
@@ -193,30 +201,33 @@ export default function AddressForm({ setAddressOpen }) {
                   },
                 }}
                 children={(field) => (
-                  <Select
-                    name="region"
-                    id="region"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onValueChange={(value) => {
-                      field.handleChange(value);
-                    }}
-                    className={"mt-1"}
-                  >
-                    <SelectTrigger className={"w-full"}>
-                      <SelectValue placeholder="Region" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {regions.map((region) => (
-                        <SelectItem
-                          key={region.psgc_code}
-                          value={region.region_name}
-                        >
-                          {region.region_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <>
+                    <Select
+                      name="region"
+                      id="region"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onValueChange={(value) => {
+                        field.handleChange(value);
+                      }}
+                      className={"mt-1"}
+                    >
+                      <SelectTrigger className={"w-full"}>
+                        <SelectValue placeholder="Region" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {regions.map((region) => (
+                          <SelectItem
+                            key={region.psgc_code}
+                            value={region.region_name}
+                          >
+                            {region.region_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FieldInfo field={field} />
+                  </>
                 )}
               />
             </div>
@@ -230,37 +241,40 @@ export default function AddressForm({ setAddressOpen }) {
                   },
                 }}
                 children={(field) => (
-                  <Select
-                    name="province"
-                    id="province"
-                    value={field.state.value}
-                    disabled={!region}
-                    onBlur={field.handleBlur}
-                    onValueChange={(value) => {
-                      field.handleChange(value);
-                    }}
-                    className={"mt-1"}
-                  >
-                    <SelectTrigger className={"w-full"}>
-                      <SelectValue placeholder="Province" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {provinces
-                        .filter(
-                          (province) => province.region_code === regionByCode
-                        )
-                        .map((province) => {
-                          return (
-                            <SelectItem
-                              key={province.psgc_code}
-                              value={province.province_name}
-                            >
-                              {province.province_name}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select>
+                  <>
+                    <Select
+                      name="province"
+                      id="province"
+                      value={field.state.value}
+                      disabled={!region}
+                      onBlur={field.handleBlur}
+                      onValueChange={(value) => {
+                        field.handleChange(value);
+                      }}
+                      className={"mt-1"}
+                    >
+                      <SelectTrigger className={"w-full"}>
+                        <SelectValue placeholder="Province" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {provinces
+                          .filter(
+                            (province) => province.region_code === regionByCode
+                          )
+                          .map((province) => {
+                            return (
+                              <SelectItem
+                                key={province.psgc_code}
+                                value={province.province_name}
+                              >
+                                {province.province_name}
+                              </SelectItem>
+                            );
+                          })}
+                      </SelectContent>
+                    </Select>
+                    <FieldInfo field={field} />
+                  </>
                 )}
               />
             </div>
@@ -273,35 +287,40 @@ export default function AddressForm({ setAddressOpen }) {
                   },
                 }}
                 children={(field) => (
-                  <Select
-                    name="city"
-                    id="city"
-                    value={field.state.value}
-                    disabled={!province}
-                    onBlur={field.handleBlur}
-                    onValueChange={(value) => {
-                      field.handleChange(value);
-                    }}
-                    className={"mt-1"}
-                  >
-                    <SelectTrigger className={"w-full"}>
-                      <SelectValue placeholder="City" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {cities
-                        .filter((city) => city.province_code === provinceByCode)
-                        .map((city) => {
-                          return (
-                            <SelectItem
-                              key={city.psgc_code}
-                              value={city.city_name}
-                            >
-                              {city.city_name}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select>
+                  <>
+                    <Select
+                      name="city"
+                      id="city"
+                      value={field.state.value}
+                      disabled={!province}
+                      onBlur={field.handleBlur}
+                      onValueChange={(value) => {
+                        field.handleChange(value);
+                      }}
+                      className={"mt-1"}
+                    >
+                      <SelectTrigger className={"w-full"}>
+                        <SelectValue placeholder="City" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities
+                          .filter(
+                            (city) => city.province_code === provinceByCode
+                          )
+                          .map((city) => {
+                            return (
+                              <SelectItem
+                                key={city.psgc_code}
+                                value={city.city_name}
+                              >
+                                {city.city_name}
+                              </SelectItem>
+                            );
+                          })}
+                      </SelectContent>
+                    </Select>
+                    <FieldInfo field={field} />
+                  </>
                 )}
               />
             </div>
@@ -406,7 +425,10 @@ export default function AddressForm({ setAddressOpen }) {
               <CommandInput
                 value={streetAddress}
                 name="street"
-                onValueChange={(value) => field.handleChange(value)}
+                onValueChange={(value) => {
+                  field.handleChange(value);
+                  setStopSearching(false);
+                }}
                 placeholder="Type your address here..."
                 disabled={!postalCodeField}
               />
@@ -422,6 +444,7 @@ export default function AddressForm({ setAddressOpen }) {
                           value={`${suggestion.name} - ${suggestion.lat} - ${suggestion.lon} - ${suggestion.id}`}
                           onSelect={() => {
                             field.handleChange(suggestion.name);
+                            setStopSearching(true);
                           }}
                         >
                           <div>{suggestion.name}</div>
