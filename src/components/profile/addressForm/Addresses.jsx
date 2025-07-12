@@ -39,6 +39,9 @@ import {
 import getLongLat from "@/lib/geocoder";
 import { useDebounce } from "use-debounce";
 import dynamic from "next/dynamic";
+import FieldInfo, { AddressSchema } from "./schema/addressSchema";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
 });
@@ -56,10 +59,12 @@ export default function AddressForm({ setAddressOpen }) {
       street: "",
       isDefault: false,
     },
+    validators: {
+      onSubmit: AddressSchema,
+      // onChange: AddressSchema,
+    },
     onSubmit: async ({ value }) => {
-      console.log(value);
-      console.log(latitude);
-      console.log(longitude);
+      setAddressOpen(false);
     },
   });
   const region = useStore(form.store, (state) => state.values.region);
@@ -100,9 +105,24 @@ export default function AddressForm({ setAddressOpen }) {
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        form.handleSubmit;
+        form.handleSubmit();
       }}
     >
+      <form.Subscribe
+        selector={(state) => [state.errors]}
+        children={([errors]) =>
+          errors && errors.length > 0 ? (
+            <div className="mb-3">
+              <Alert variant={"destructive"}>
+                <AlertTitle>Form Error</AlertTitle>
+                <AlertDescription>
+                  All fields are required. Please provide valid details.
+                </AlertDescription>
+              </Alert>
+            </div>
+          ) : null
+        }
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <form.Field
           name="fullName"
@@ -120,6 +140,7 @@ export default function AddressForm({ setAddressOpen }) {
                 }}
                 className={"my-2"}
               />
+              <FieldInfo field={field} />
             </div>
           )}
         />
@@ -139,6 +160,7 @@ export default function AddressForm({ setAddressOpen }) {
                 }}
                 className={"my-2"}
               />
+              <FieldInfo field={field} />
             </div>
           )}
         />
@@ -287,50 +309,55 @@ export default function AddressForm({ setAddressOpen }) {
               <form.Field
                 name="barangay"
                 children={(field) => (
-                  <Select
-                    name="barangay"
-                    id="barangay"
-                    disabled={!city}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onValueChange={(value) => {
-                      field.handleChange(value);
-                      (async () => {
-                        try {
-                          const longLat = await getLongLat(
-                            city,
-                            province,
-                            region
-                          );
-                          if (longLat) {
-                            setLatitude(longLat.lat);
-                            setLongitude(longLat.lon);
+                  <>
+                    <Select
+                      name="barangay"
+                      id="barangay"
+                      disabled={!city}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onValueChange={(value) => {
+                        field.handleChange(value);
+                        (async () => {
+                          try {
+                            const longLat = await getLongLat(
+                              city,
+                              province,
+                              region
+                            );
+                            if (longLat) {
+                              setLatitude(longLat.lat);
+                              setLongitude(longLat.lon);
+                            }
+                          } catch (error) {
+                            console.error(error);
                           }
-                        } catch (error) {
-                          console.error(error);
-                        }
-                      })();
-                    }}
-                    className={"mt-1"}
-                  >
-                    <SelectTrigger className={"w-full"}>
-                      <SelectValue placeholder="Barangay" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {barangays
-                        .filter((barangay) => barangay.city_code === cityByCode)
-                        .map((barangay) => {
-                          return (
-                            <SelectItem
-                              key={barangay.brgy_code}
-                              value={barangay.brgy_name}
-                            >
-                              {barangay.brgy_name}
-                            </SelectItem>
-                          );
-                        })}
-                    </SelectContent>
-                  </Select>
+                        })();
+                      }}
+                      className={"mt-1"}
+                    >
+                      <SelectTrigger className={"w-full"}>
+                        <SelectValue placeholder="Barangay" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {barangays
+                          .filter(
+                            (barangay) => barangay.city_code === cityByCode
+                          )
+                          .map((barangay) => {
+                            return (
+                              <SelectItem
+                                key={barangay.brgy_code}
+                                value={barangay.brgy_name}
+                              >
+                                {barangay.brgy_name}
+                              </SelectItem>
+                            );
+                          })}
+                      </SelectContent>
+                    </Select>
+                    <FieldInfo field={field} />
+                  </>
                 )}
               />
             </div>
@@ -344,6 +371,7 @@ export default function AddressForm({ setAddressOpen }) {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+
       <form.Field
         name="postalCode"
         children={(field) => (
@@ -362,6 +390,7 @@ export default function AddressForm({ setAddressOpen }) {
                 field.handleChange(e.target.value);
               }}
             />
+            <FieldInfo field={field} />
           </div>
         )}
       />
@@ -372,6 +401,7 @@ export default function AddressForm({ setAddressOpen }) {
             <Label htmlFor="street" className={"my-2"}>
               Street Name, Building, House No.
             </Label>
+
             <Command>
               <CommandInput
                 value={streetAddress}
@@ -380,6 +410,7 @@ export default function AddressForm({ setAddressOpen }) {
                 placeholder="Type your address here..."
                 disabled={!postalCodeField}
               />
+
               <CommandList>
                 <CommandEmpty>No suggestions found.</CommandEmpty>
                 {/* <CommandGroup heading="Suggestions"></CommandGroup> */}
@@ -410,6 +441,7 @@ export default function AddressForm({ setAddressOpen }) {
                   : null}
               </CommandList>
             </Command>
+            <FieldInfo field={field} />
           </div>
         )}
       />
@@ -441,16 +473,25 @@ export default function AddressForm({ setAddressOpen }) {
         )}
       />
 
-      <Button
-        type="submit"
-        className="w-full my-2"
-        onClick={() => {
-          form.handleSubmit();
-          setAddressOpen(false);
-        }}
-      >
-        Save Address
-      </Button>
+      <form.Subscribe
+        selector={(state) => [
+          state.isSubmitting,
+          state.canSubmit,
+          state.errors,
+        ]}
+        children={([isSubmitting, canSubmit]) => (
+          <Button
+            type="submit"
+            disabled={!canSubmit || isSubmitting}
+            className={"w-full my-2"}
+            onClick={() => {
+              form.handleSubmit();
+            }}
+          >
+            {isSubmitting ? "Saving..." : "Save Address"}
+          </Button>
+        )}
+      />
     </Form>
   );
 }
