@@ -2,7 +2,7 @@ import * as z from 'zod';
 import parsePhoneNumber from "libphonenumber-js";
 
 export const AddressSchema = z.object({
-    fullName: z.string().min(2, "Full name must be at least 2 characters"),
+    fullName: z.string().min(2, "Full name must be at least 2 characters").regex(/[:digit:]/, " Full name must be valid"),
     phoneNumber: z.string().transform((value, ctx) => {
         const phoneNumber = parsePhoneNumber(value, {
           defaultCountry: "PH",

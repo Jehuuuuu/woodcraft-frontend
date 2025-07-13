@@ -43,12 +43,14 @@ import { useDebounce } from "use-debounce";
 import dynamic from "next/dynamic";
 import FieldInfo, { AddressSchema } from "./schema/addressSchema";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useAuthStore } from "@/store/authStore";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
 });
 
 export default function AddressForm({ setAddressOpen }) {
+  const { user, setCsrfToken } = useAuthStore();
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -59,14 +61,46 @@ export default function AddressForm({ setAddressOpen }) {
       barangay: "",
       postalCode: "",
       street: "",
-      isDefault: false,
+      isDefault: true,
     },
     validators: {
       onSubmit: AddressSchema,
       // onChange: AddressSchema,
     },
     onSubmit: async ({ value }) => {
-      setAddressOpen(false);
+      const userId = user.id;
+      const address = `${value.street}, ${value.barangay}, ${value.city}, ${value.province}, ${value.region}, ${value.postalCode}`;
+      const apiURL = process.env.NEXT_PUBLIC_API_URL;
+      const csrfToken = await setCsrfToken();
+      try {
+        const response = await fetch(`${apiURL}/create_customer_address`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            customer_name: value.fullName,
+            customer_phone_number: value.phoneNumber,
+            customer_address: address,
+            is_default: value.isDefault,
+            latitude: latitude,
+            longitude: longitude,
+          }),
+          credentials: "include",
+        });
+        console.log(value);
+        if (response.ok) {
+          setAddressOpen(false);
+        } else {
+          console.error(response.status);
+          setError("Error creating address, Please try again.");
+        }
+      } catch (e) {
+        console.error(e);
+        setError("Error creating address, Please try again.");
+      }
     },
   });
   const region = useStore(form.store, (state) => state.values.region);
@@ -92,6 +126,7 @@ export default function AddressForm({ setAddressOpen }) {
   );
   const streetAddress = useStore(form.store, (state) => state.values.street);
   const [debouncedStreetAddress] = useDebounce(streetAddress, 500);
+  const [error, setError] = useState(null);
   const [stopSearching, setStopSearching] = useState(false);
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
@@ -108,13 +143,7 @@ export default function AddressForm({ setAddressOpen }) {
     staleTime: 5 * 1000,
   });
   return (
-    <Form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-    >
+    <Form>
       <form.Subscribe
         selector={(state) => [state.errors]}
         children={([errors]) =>
@@ -123,13 +152,23 @@ export default function AddressForm({ setAddressOpen }) {
               <Alert variant={"destructive"}>
                 <AlertTitle>Form Error</AlertTitle>
                 <AlertDescription>
-                  All fields are required. Please provide valid details.
+                  All fields are required. Please provide valid details
                 </AlertDescription>
               </Alert>
             </div>
           ) : null
         }
       />
+      {error && (
+        <div className="mb-3">
+          <Alert variant={"destructive"}>
+            <AlertTitle>Form Error</AlertTitle>
+            <AlertDescription>
+              All fields are required. Please provide valid details
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <form.Field
           name="fullName"
@@ -439,7 +478,7 @@ export default function AddressForm({ setAddressOpen }) {
                   ? data?.map((suggestion) => {
                       return (
                         <CommandItem
-                          key={suggestion.id}
+                          key={`${suggestion.id}-${suggestion.name}-${suggestion.lat}-${suggestion.long}`}
                           value={`${suggestion.name} - ${suggestion.lat} - ${suggestion.lon} - ${suggestion.id}`}
                           onSelect={() => {
                             field.handleChange(suggestion.name);
@@ -485,9 +524,9 @@ export default function AddressForm({ setAddressOpen }) {
               name="isDefault"
               id="isDefault"
               value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => {
-                field.handleChange(e.target.value);
+              checked={field.state.value}
+              onCheckedChange={(checked) => {
+                field.handleChange(checked);
               }}
             />
             <Label htmlFor="isDefault">Set as Default Address</Label>
@@ -506,7 +545,9 @@ export default function AddressForm({ setAddressOpen }) {
             type="submit"
             disabled={!canSubmit || isSubmitting}
             className={"w-full my-2"}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               form.handleSubmit();
             }}
           >
