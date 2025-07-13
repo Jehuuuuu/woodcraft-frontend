@@ -95,7 +95,6 @@ export default function AddressForm({ setAddressOpen }) {
   const [stopSearching, setStopSearching] = useState(false);
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
-  const errors = useStore(form.store, (state) => state.errorMap);
   const { data } = useQuery({
     queryKey: ["street", debouncedStreetAddress, latitude, longitude],
     queryFn: async ({ queryKey }) => {
