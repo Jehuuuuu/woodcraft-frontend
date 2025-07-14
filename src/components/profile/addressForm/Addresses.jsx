@@ -44,6 +44,7 @@ import dynamic from "next/dynamic";
 import FieldInfo, { AddressSchema } from "./schema/addressSchema";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuthStore } from "@/store/authStore";
+import { mutate } from "swr";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
@@ -72,6 +73,7 @@ export default function AddressForm({ setAddressOpen }) {
       const address = `${value.street}, ${value.barangay}, ${value.city}, ${value.province}, ${value.region}, ${value.postalCode}`;
       const apiURL = process.env.NEXT_PUBLIC_API_URL;
       const csrfToken = await setCsrfToken();
+      console.log(value);
       try {
         const response = await fetch(`${apiURL}/create_customer_address`, {
           method: "POST",
@@ -90,7 +92,7 @@ export default function AddressForm({ setAddressOpen }) {
           }),
           credentials: "include",
         });
-        console.log(value);
+        mutate("/profile");
         if (response.ok) {
           setAddressOpen(false);
         } else {
@@ -385,6 +387,9 @@ export default function AddressForm({ setAddressOpen }) {
                             if (longLat) {
                               setLatitude(longLat.lat);
                               setLongitude(longLat.lon);
+                            } else {
+                              setLatitude("14.5995");
+                              setLongitude("120.9842");
                             }
                           } catch (error) {
                             console.error(error);

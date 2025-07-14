@@ -51,10 +51,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 import AddressForm from "./addressForm/Addresses";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Badge } from "@/components/ui/badge";
 
 export default function ProfileComponent() {
   const { user, setCsrfToken } = useAuthStore();
@@ -73,12 +72,16 @@ export default function ProfileComponent() {
   const [open, setOpen] = useState(false);
   const [addressOpen, setAddressOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const addressURL = user?.id
+    ? `${apiURL}/get_customer_address/${user.id}`
+    : null;
   const designsUrl = user?.id
     ? `${apiURL}/get_customer_designs?user=${user.id}`
     : null;
   const ordersURL = user?.id
     ? `${apiURL}/get_customer_orders?user_id=${user.id}`
     : null;
+
   const fetcher = async (url) => {
     const csrfToken = await setCsrfToken();
     const response = await fetch(url, {
@@ -93,6 +96,12 @@ export default function ProfileComponent() {
     return data || [];
   };
   const {
+    data: addressesData,
+    error: addressesError,
+    isLoading: addressesIsLoading,
+  } = useSWR(addressURL, fetcher);
+
+  const {
     data: designs,
     error,
     isLoading: designsIsLoading,
@@ -103,6 +112,7 @@ export default function ProfileComponent() {
     error: ordersError,
     isLoading: ordersIsLoading,
   } = useSWR(ordersURL, fetcher);
+
   const {
     data: customerData,
     error: customerError,
@@ -233,7 +243,13 @@ export default function ProfileComponent() {
     }
   };
 
-  if (isRendering || isLoading || customerLoading || ordersIsLoading) {
+  if (
+    isRendering ||
+    isLoading ||
+    customerLoading ||
+    ordersIsLoading ||
+    addressesIsLoading
+  ) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <SyncLoader
@@ -523,12 +539,71 @@ export default function ProfileComponent() {
                       </div>
                       <div className="overflow-y-auto flex-1 px-2">
                         <QueryClientProvider client={queryClient}>
-                          <AddressForm setAddressOpen={setAddressOpen} />
+                          <AddressForm
+                            setAddressOpen={setAddressOpen}
+                            addressMutate={addressMutate}
+                          />
                         </QueryClientProvider>
                       </div>
                     </DialogContent>
                   </Dialog>
                 </div>
+                {addressesIsLoading ? (
+                  <div className="flex justify-center py-12">
+                    <SyncLoader color="#8B4513" />
+                  </div>
+                ) : addressesError ? (
+                  <div className="py-4 text-center">
+                    <p className="text-red-500">
+                      Unable to load addresses. Please try again later.
+                    </p>
+                  </div>
+                ) : addressesData ? (
+                  addressesData.addresses
+                    .sort((a, b) => b.is_default - a.is_default)
+                    .map((address) => {
+                      return (
+                        <Card key={address.id}>
+                          <CardHeader>
+                            <div className="flex justify-between items-center">
+                              <CardTitle>
+                                <div className="flex items-center">
+                                  {address.customer_name} |{" "}
+                                  {address.customer_phone_number}
+                                  {address.is_default && (
+                                    <Badge
+                                      className={"mx-2 bg-[#8B4513] text-white"}
+                                    >
+                                      Default
+                                    </Badge>
+                                  )}
+                                </div>
+                              </CardTitle>
+                              <div className="flex gap-2">
+                                {!address.is_default && (
+                                  <Button variant="outline" size="sm">
+                                    Set as default
+                                  </Button>
+                                )}
+
+                                <Button variant="default" size="sm">
+                                  Edit
+                                </Button>
+                                <Button variant="destructive" size="sm">
+                                  Delete
+                                </Button>
+                              </div>
+                            </div>
+                            <CardDescription className={"mt-2"}>
+                              {address.customer_address}
+                            </CardDescription>
+                          </CardHeader>
+                        </Card>
+                      );
+                    })
+                ) : (
+                  <p>You don't have any addresses yet.</p>
+                )}
               </div>
             </TabsContent>
             <TabsContent value="designs">
