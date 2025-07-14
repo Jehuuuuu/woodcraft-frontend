@@ -39,7 +39,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -52,19 +51,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import AddressForm from "./addressForm/AddressForm";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 
 export default function ProfileComponent() {
   const { user, setCsrfToken } = useAuthStore();
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-      },
-    },
-  });
+  // const queryClient = new QueryClient({
+  //   defaultOptions: {
+  //     queries: {
+  //       refetchOnWindowFocus: false,
+  //       staleTime: Infinity,
+  //     },
+  //   },
+  // });
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -538,9 +537,9 @@ export default function ProfileComponent() {
                         </DialogDescription>
                       </div>
                       <div className="overflow-y-auto flex-1 px-2">
-                        <QueryClientProvider client={queryClient}>
-                          <AddressForm setAddressOpen={setAddressOpen} />
-                        </QueryClientProvider>
+                        {/* <QueryClientProvider client={queryClient}> */}
+                        <AddressForm setAddressOpen={setAddressOpen} />
+                        {/* </QueryClientProvider> */}
                       </div>
                     </DialogContent>
                   </Dialog>

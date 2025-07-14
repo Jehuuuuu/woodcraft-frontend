@@ -130,23 +130,23 @@ export default function AddressForm({ setAddressOpen }) {
     (state) => state.values.postalCode
   );
   const streetAddress = useStore(form.store, (state) => state.values.street);
-  const [debouncedStreetAddress] = useDebounce(streetAddress, 500);
+  // const [debouncedStreetAddress] = useDebounce(streetAddress, 500);
   const [error, setError] = useState(null);
-  const [stopSearching, setStopSearching] = useState(false);
+  // const [stopSearching, setStopSearching] = useState(false);
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
-  const { data } = useQuery({
-    queryKey: ["street", debouncedStreetAddress, latitude, longitude],
-    queryFn: async ({ queryKey }) => {
-      if (!stopSearching) {
-        return await getSuggestions(queryKey[1], queryKey[2], queryKey[3]);
-      }
-      return [];
-    },
+  // const { data } = useQuery({
+  //   queryKey: ["street", debouncedStreetAddress, latitude, longitude],
+  //   queryFn: async ({ queryKey }) => {
+  //     if (!stopSearching) {
+  //       return await getSuggestions(queryKey[1], queryKey[2], queryKey[3]);
+  //     }
+  //     return [];
+  //   },
 
-    enabled: debouncedStreetAddress.length > 3,
-    staleTime: 5 * 1000,
-  });
+  //   enabled: debouncedStreetAddress.length > 3,
+  //   staleTime: 5 * 1000,
+  // });
   return (
     <Form>
       <form.Subscribe
@@ -463,53 +463,18 @@ export default function AddressForm({ setAddressOpen }) {
         name="street"
         children={(field) => (
           <div>
-            <Label htmlFor="street" className={"my-2"}>
-              Street Name, Building, House No.
-            </Label>
-
-            <Command>
-              <CommandInput
-                value={streetAddress}
-                name="street"
-                onValueChange={(value) => {
-                  field.handleChange(value);
-                  setStopSearching(false);
-                }}
-                placeholder="Type your address here..."
-                disabled={!postalCodeField}
-              />
-
-              <CommandList>
-                <CommandEmpty>No suggestions found.</CommandEmpty>
-                {/* <CommandGroup heading="Suggestions"></CommandGroup> */}
-                {streetAddress.length > 3
-                  ? data?.map((suggestion) => {
-                      return (
-                        <CommandItem
-                          key={`${suggestion.id}-${suggestion.name}-${suggestion.lat}-${suggestion.long}`}
-                          value={`${suggestion.name} - ${suggestion.lat} - ${suggestion.lon} - ${suggestion.id}`}
-                          onSelect={() => {
-                            field.handleChange(suggestion.name);
-                            setStopSearching(true);
-                          }}
-                        >
-                          <div>{suggestion.name}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {[
-                              suggestion.type,
-                              suggestion.city,
-                              suggestion.country,
-                              suggestion.postcode,
-                            ]
-                              .filter(Boolean)
-                              .join(", ")}
-                          </div>
-                        </CommandItem>
-                      );
-                    })
-                  : null}
-              </CommandList>
-            </Command>
+            <Label htmlFor="street">Street Name, Building, House No.</Label>
+            <Input
+              type={"text"}
+              name="street"
+              id="street"
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => {
+                field.handleChange(e.target.value);
+              }}
+              className={"my-2"}
+            />
             <FieldInfo field={field} />
           </div>
         )}
