@@ -52,6 +52,10 @@ const Map = dynamic(() => import("./Map"), {
 
 export default function AddressForm({ setAddressOpen }) {
   const { user, setCsrfToken } = useAuthStore();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
+  const addressURL = user?.id
+    ? `${apiURL}/get_customer_address/${user.id}`
+    : null;
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -71,7 +75,6 @@ export default function AddressForm({ setAddressOpen }) {
     onSubmit: async ({ value }) => {
       const userId = user.id;
       const address = `${value.street}, ${value.barangay}, ${value.city}, ${value.province}, ${value.region}, ${value.postalCode}`;
-      const apiURL = process.env.NEXT_PUBLIC_API_URL;
       const csrfToken = await setCsrfToken();
       console.log(value);
       try {
@@ -92,7 +95,7 @@ export default function AddressForm({ setAddressOpen }) {
           }),
           credentials: "include",
         });
-        mutate("/profile");
+        mutate(addressURL);
         if (response.ok) {
           setAddressOpen(false);
         } else {
