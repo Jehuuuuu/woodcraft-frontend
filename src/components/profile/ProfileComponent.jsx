@@ -51,7 +51,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import AddressForm from "./addressForm/Addresses";
+import AddressForm from "./addressForm/AddressForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 
@@ -539,10 +539,7 @@ export default function ProfileComponent() {
                       </div>
                       <div className="overflow-y-auto flex-1 px-2">
                         <QueryClientProvider client={queryClient}>
-                          <AddressForm
-                            setAddressOpen={setAddressOpen}
-                            addressMutate={addressMutate}
-                          />
+                          <AddressForm setAddressOpen={setAddressOpen} />
                         </QueryClientProvider>
                       </div>
                     </DialogContent>
