@@ -31,6 +31,41 @@ export default function Designs() {
     error,
     isLoading: designsIsLoading,
   } = useSWR(designsUrl, fetcher);
+
+  const handleDesignToCart = async (user, design_id) => {
+    try {
+      if (!user || !design_id) {
+        toast.error("Invalid user or design");
+        throw new Error(user, design_id);
+      }
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const csrfToken = await setCsrfToken();
+      const quantity = 1;
+      const response = await fetch(`${API_URL}/add_design_to_cart`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({
+          user,
+          design_id,
+          quantity,
+        }),
+        credentials: "include",
+      });
+      if (response.ok) {
+        mutate();
+        toast.success("Design added to cart successfully");
+      } else {
+        toast.error("Error adding design to cart");
+      }
+    } catch (error) {
+      console.error("Error adding design to cart:", error);
+      toast.error("Error adding design to cart");
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

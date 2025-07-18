@@ -56,7 +56,6 @@ export default function ProfileComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRendering, setIsRendering] = useState(true);
   const [open, setOpen] = useState(false);
-  const [addressOpen, setAddressOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const fetcher = async (url) => {
@@ -166,40 +165,6 @@ export default function ProfileComponent() {
         console.log(`${key}:`, value);
       });
       setIsEditing(false);
-    }
-  };
-
-  const handleDesignToCart = async (user, design_id) => {
-    try {
-      if (!user || !design_id) {
-        toast.error("Invalid user or design");
-        throw new Error(user, design_id);
-      }
-      const API_URL = process.env.NEXT_PUBLIC_API_URL;
-      const csrfToken = await setCsrfToken();
-      const quantity = 1;
-      const response = await fetch(`${API_URL}/add_design_to_cart`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-        },
-        body: JSON.stringify({
-          user,
-          design_id,
-          quantity,
-        }),
-        credentials: "include",
-      });
-      if (response.ok) {
-        mutate();
-        toast.success("Design added to cart successfully");
-      } else {
-        toast.error("Error adding design to cart");
-      }
-    } catch (error) {
-      console.error("Error adding design to cart:", error);
-      toast.error("Error adding design to cart");
     }
   };
 
@@ -471,7 +436,7 @@ export default function ProfileComponent() {
               </div>
             </TabsContent>
             <TabsContent value="addresses">
-              <Addresses setAddressOpen={setAddressOpen} />
+              <Addresses />
             </TabsContent>
             <TabsContent value="designs">
               <Designs />

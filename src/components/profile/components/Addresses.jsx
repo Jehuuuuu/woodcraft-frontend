@@ -20,9 +20,24 @@ import { PlusCircle } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { SyncLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { mutate } from "swr";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useState } from "react";
 
-export default function Addresses(setAddressOpen) {
+export default function Addresses() {
   const { user, setCsrfToken } = useAuthStore();
+  const [addressOpen, setAddressOpen] = useState(false);
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const addressURL = user?.id
     ? `${apiURL}/get_customer_address/${user.id}`
@@ -47,11 +62,75 @@ export default function Addresses(setAddressOpen) {
     isLoading: addressesIsLoading,
   } = useSWR(addressURL, fetcher);
 
+  const setAsDefault = async (addressId) => {
+    try {
+      if (!user || !addressId) {
+        toast.error("Invalid user or address");
+        throw new Error(user, addressId);
+      }
+      const csrfToken = await setCsrfToken();
+      const response = await fetch(
+        `${apiURL}/set_default_address/${addressId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({
+            user,
+            address_id: addressId,
+          }),
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        mutate(addressURL);
+        toast.success("Default shipping address updated successfully");
+      } else {
+        toast.error("Error setting address as default");
+      }
+    } catch (error) {
+      console.error("Error setting address as default:", error);
+    }
+  };
+
+  const deleteAddress = async (addressId) => {
+    try {
+      if (!user || !addressId) {
+        toast.error("Invalid user or address");
+        throw new Error(user, addressId);
+      }
+      const csrfToken = await setCsrfToken();
+      const response = await fetch(
+        `${apiURL}/delete_customer_address/${addressId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      if (response.ok && !data.error) {
+        mutate(addressURL);
+        toast.success("Address deleted successfully");
+      } else {
+        console.error(response.statusText && data.error);
+        toast.error(data.error || "Error deleting address. Please try again");
+      }
+    } catch (error) {
+      console.error("Error deleting address:", error);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-medium text-[#3c2415]">My Addresses</h3>
-        <Dialog>
+        <Dialog open={addressOpen} onOpenChange={setAddressOpen}>
           <DialogTrigger className="rounded-md px-4 py-[0.65rem] bg-[var(--primary-color)] text-white hover:bg-[var(--secondary-color)] transition-colors ">
             <Label className="cursor-pointer">
               <PlusCircle size={16} className="mr-1" /> Add New Address
@@ -103,7 +182,11 @@ export default function Addresses(setAddressOpen) {
                     </CardTitle>
                     <div className="flex gap-2">
                       {!address.is_default && (
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setAsDefault(address.id)}
+                        >
                           Set as default
                         </Button>
                       )}
@@ -111,9 +194,35 @@ export default function Addresses(setAddressOpen) {
                       <Button variant="default" size="sm">
                         Edit
                       </Button>
-                      <Button variant="destructive" size="sm">
-                        Delete
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" size="sm">
+                            Delete
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Delete this address?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction asChild>
+                              <Button
+                                className={"bg-red-500 hover:bg-red-500/80"}
+                                size="sm"
+                                onClick={() => deleteAddress(address.id)}
+                              >
+                                Delete
+                              </Button>
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                   <CardDescription className={"mt-2"}>
