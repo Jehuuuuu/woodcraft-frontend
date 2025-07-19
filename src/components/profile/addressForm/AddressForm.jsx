@@ -1,17 +1,6 @@
 "use client";
 
-import { useForm, useStore } from "@tanstack/react-form";
-import { useState } from "react";
-import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
-import { Form } from "../../ui/form";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectValue,
-  SelectItem,
-} from "../../ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Drawer,
   DrawerClose,
@@ -22,51 +11,58 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import getLongLat from "@/lib/geocoder";
+import { useAuthStore } from "@/store/authStore";
+import { useForm, useStore } from "@tanstack/react-form";
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import { toast } from "sonner";
+import { mutate } from "swr";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
-import regions from "./region.json";
-import cities from "./city.json";
-import barangays from "./barangay.json";
-import provinces from "./province.json";
-import zipcodes from "./zipcodes.json";
-import getSuggestions from "@/lib/autocomplete";
-import { useQuery } from "@tanstack/react-query";
+import { Form } from "../../ui/form";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 import {
-  Command,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandEmpty,
-} from "@/components/ui/command";
-import getLongLat from "@/lib/geocoder";
-import { useDebounce } from "use-debounce";
-import dynamic from "next/dynamic";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../ui/select";
+import barangays from "./barangay.json";
+import cities from "./city.json";
+import provinces from "./province.json";
+import regions from "./region.json";
 import FieldInfo, { AddressSchema } from "./schema/addressSchema";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useAuthStore } from "@/store/authStore";
-import { mutate } from "swr";
+import zipcodes from "./zipcodes.json";
 
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
 });
 
-export default function AddressForm({ setAddressOpen }) {
+export default function AddressForm({
+  setAddressOpen,
+  address,
+  setEditAddressOpen,
+}) {
   const { user, setCsrfToken } = useAuthStore();
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const addressURL = user?.id
     ? `${apiURL}/get_customer_address/${user.id}`
     : null;
+
   const form = useForm({
     defaultValues: {
-      fullName: "",
-      phoneNumber: "",
-      region: "",
-      province: "",
-      city: "",
-      barangay: "",
-      postalCode: "",
-      street: "",
-      isDefault: true,
+      fullName: address?.customer_name || "",
+      phoneNumber: address?.customer_phone_number || "",
+      region: address?.region || "",
+      province: address?.province || "",
+      city: address?.city || "",
+      barangay: address?.barangay || "",
+      postalCode: address?.postal_code || "",
+      street: address?.street || "",
+      isDefault: address?.is_default || false,
     },
     validators: {
       onSubmit: AddressSchema,
@@ -74,33 +70,75 @@ export default function AddressForm({ setAddressOpen }) {
     },
     onSubmit: async ({ value }) => {
       const userId = user.id;
-      const address = `${value.street}, ${value.barangay}, ${value.city}, ${value.province}, ${value.region}, ${value.postalCode}`;
+      const full_address = `${value.street}, ${value.barangay}, ${value.city}, ${value.province}, ${value.region}, ${value.postalCode}`;
       const csrfToken = await setCsrfToken();
       console.log(value);
       try {
-        const response = await fetch(`${apiURL}/create_customer_address`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-          },
-          body: JSON.stringify({
-            user_id: userId,
-            customer_name: value.fullName,
-            customer_phone_number: value.phoneNumber,
-            customer_address: address,
-            is_default: value.isDefault,
-            latitude: latitude,
-            longitude: longitude,
-          }),
-          credentials: "include",
-        });
-        mutate(addressURL);
-        if (response.ok) {
-          setAddressOpen(false);
+        if (address.id) {
+          const response = await fetch(
+            `${apiURL}/update_customer_address/${address?.id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                customer_name: value.fullName,
+                customer_phone_number: value.phoneNumber,
+                region: value.region,
+                province: value.province,
+                city: value.city,
+                barangay: value.barangay,
+                postal_code: value.postalCode,
+                street: value.street,
+                customer_address: full_address,
+                is_default: value.isDefault,
+                latitude: latitude,
+                longitude: longitude,
+              }),
+            }
+          );
+          if (response.ok) {
+            mutate(addressURL);
+            toast.success("Address edited successfully");
+            setEditAddressOpen(false);
+          } else {
+            console.error(response.status, response.statusText);
+            toast.error("Error editing address, Please try again.");
+          }
         } else {
-          console.error(response.status);
-          setError("Error creating address, Please try again.");
+          const response = await fetch(`${apiURL}/create_customer_address`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken,
+            },
+            body: JSON.stringify({
+              user_id: userId,
+              customer_name: value.fullName,
+              customer_phone_number: value.phoneNumber,
+              region: value.region,
+              province: value.province,
+              city: value.city,
+              barangay: value.barangay,
+              postal_code: value.postalCode,
+              street: value.street,
+              customer_address: address,
+              is_default: value.isDefault,
+              latitude: latitude,
+              longitude: longitude,
+            }),
+            credentials: "include",
+          });
+          mutate(addressURL);
+          if (response.ok) {
+            setAddressOpen(false);
+          } else {
+            console.error(response.status, response.statusText);
+            setError("Error creating address, Please try again.");
+          }
         }
       } catch (e) {
         console.error(e);
@@ -133,8 +171,8 @@ export default function AddressForm({ setAddressOpen }) {
   // const [debouncedStreetAddress] = useDebounce(streetAddress, 500);
   const [error, setError] = useState(null);
   // const [stopSearching, setStopSearching] = useState(false);
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
+  const [latitude, setLatitude] = useState(address?.latitude || null);
+  const [longitude, setLongitude] = useState(address?.longitude || null);
   // const { data } = useQuery({
   //   queryKey: ["street", debouncedStreetAddress, latitude, longitude],
   //   queryFn: async ({ queryKey }) => {

@@ -1,5 +1,5 @@
-import { useRef, useMemo } from "react";
-import { Marker, Popup, useMapEvents } from "react-leaflet";
+import { useMemo, useRef } from "react";
+import { Marker, Popup } from "react-leaflet";
 
 export default function DraggableMarker({
   position,
@@ -13,8 +13,8 @@ export default function DraggableMarker({
         const marker = markerRef.current;
         if (marker != null) {
           const position = marker.getLatLng();
-          setLatitude(position.lat);
-          setLongitude(position.lng);
+          setLatitude(position.lat.toString());
+          setLongitude(position.lng.toString());
         }
       },
     }),

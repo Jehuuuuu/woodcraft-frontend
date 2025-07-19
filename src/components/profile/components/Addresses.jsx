@@ -1,27 +1,4 @@
 "use client";
-import AddressForm from "../addressForm/AddressForm";
-import { Badge } from "@/components/ui/badge";
-import useSWR from "swr";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { PlusCircle } from "lucide-react";
-import { useAuthStore } from "@/store/authStore";
-import { SyncLoader } from "react-spinners";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { mutate } from "swr";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,11 +10,34 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { useAuthStore } from "@/store/authStore";
+import { PlusCircle } from "lucide-react";
 import { useState } from "react";
+import { SyncLoader } from "react-spinners";
+import { toast } from "sonner";
+import useSWR, { mutate } from "swr";
+import AddressForm from "../addressForm/AddressForm";
 
 export default function Addresses() {
   const { user, setCsrfToken } = useAuthStore();
   const [addressOpen, setAddressOpen] = useState(false);
+  const [editAddressOpen, setEditAddressOpen] = useState(false);
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const addressURL = user?.id
     ? `${apiURL}/get_customer_address/${user.id}`
@@ -61,7 +61,6 @@ export default function Addresses() {
     error: addressesError,
     isLoading: addressesIsLoading,
   } = useSWR(addressURL, fetcher);
-
   const setAsDefault = async (addressId) => {
     try {
       if (!user || !addressId) {
@@ -190,10 +189,32 @@ export default function Addresses() {
                           Set as default
                         </Button>
                       )}
+                      <Dialog
+                        open={editAddressOpen}
+                        onOpenChange={setEditAddressOpen}
+                      >
+                        <DialogTrigger asChild>
+                          <Button variant="default" size="sm">
+                            Edit
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-h-[95vh] flex flex-col">
+                          <div className="flex flex-col px-2 gap-2">
+                            <DialogTitle>New Address</DialogTitle>
+                            <DialogDescription>
+                              Add a new shipping address by filling out the form
+                              below.
+                            </DialogDescription>
+                          </div>
+                          <div className="overflow-y-auto flex-1 px-2">
+                            <AddressForm
+                              address={address}
+                              setEditAddressOpen={setEditAddressOpen}
+                            />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
 
-                      <Button variant="default" size="sm">
-                        Edit
-                      </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="destructive" size="sm">

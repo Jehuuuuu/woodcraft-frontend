@@ -1,42 +1,41 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import useSWR from "swr";
-import { useAuthStore } from "@/store/authStore";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { SyncLoader } from "react-spinners";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Edit,
-  Save,
-  PersonStanding,
-  ChevronDownIcon,
-  Calendar1,
-} from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRouter } from "next/navigation";
-
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuthStore } from "@/store/authStore";
+import {
+  Calendar1,
+  ChevronDownIcon,
+  Edit,
+  Mail,
+  MapPin,
+  PersonStanding,
+  Phone,
+  Save,
+  User,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
+import { toast } from "sonner";
+import useSWR from "swr";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 // import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Addresses from "./components/Addresses";
 import Designs from "./components/CustomerDesigns";
